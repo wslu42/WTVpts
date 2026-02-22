@@ -413,6 +413,7 @@ export function renderManageEvents(state, userId) {
 
 export function renderSettings(state) {
   const hasPin = Boolean(state.settings.parent_pin_hash);
+  const syncUrl = String(state.settings?.github_sync_url || "");
 
   return `
     <section class="card">
@@ -429,6 +430,16 @@ export function renderSettings(state) {
         <button class="btn-secondary" data-action="import-json">Import Selected JSON</button>
       </div>
       <p class="muted">Import replaces the full current dataset.</p>
+    </section>
+
+    <section class="card">
+      <h2>GitHub Sync</h2>
+      <p class="muted">Save current data to your GitHub repo through Cloudflare Worker.</p>
+      <div class="inline-row">
+        <input id="github-sync-url" type="text" placeholder="https://your-worker.workers.dev" value="${escapeHtml(syncUrl)}" />
+        <button class="btn-secondary" data-action="save-sync-url">Save URL</button>
+        <button class="btn-primary" data-action="sync-github">Sync to GitHub</button>
+      </div>
     </section>
 
     <section class="card">

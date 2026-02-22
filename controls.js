@@ -158,7 +158,7 @@ export function createController(getState, setState, rerender) {
     rerender();
   }
 
-  function onGlobalClick(event) {
+  async function onGlobalClick(event) {
     const target = event.target.closest("[data-action]");
     if (!target) return;
     const action = target.getAttribute("data-action");
@@ -261,6 +261,55 @@ export function createController(getState, setState, rerender) {
       };
       reader.onerror = () => showToast("Could not read file.", true);
       reader.readAsText(file);
+      return;
+    }
+
+    if (action === "save-sync-url") {
+      const input = document.getElementById("github-sync-url");
+      const url = String(input?.value || "").trim();
+      if (url && !/^https?:\/\//i.test(url)) {
+        return showToast("Sync URL must start with http:// or https://", true);
+      }
+      const next = {
+        ...state,
+        settings: {
+          ...state.settings,
+          github_sync_url: url
+        }
+      };
+      applyState(next);
+      showToast(url ? "Sync URL saved." : "Sync URL cleared.");
+      return;
+    }
+
+    if (action === "sync-github") {
+      const endpoint = String(state.settings?.github_sync_url || "").trim();
+      if (!endpoint) {
+        return showToast("Set and save GitHub Sync URL first.", true);
+      }
+      try {
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ state })
+        });
+        let payload = null;
+        try {
+          payload = await res.json();
+        } catch {
+          payload = null;
+        }
+        if (!res.ok) {
+          const detail = payload?.error || payload?.detail || `Sync failed (${res.status})`;
+          return showToast(String(detail), true);
+        }
+        const shortCommit = payload?.commit ? ` (${String(payload.commit).slice(0, 7)})` : "";
+        showToast(`Synced to GitHub${shortCommit}`);
+      } catch {
+        showToast("Sync request failed. Check Worker URL/CORS/network.", true);
+      }
       return;
     }
 
