@@ -73,7 +73,8 @@ export function makeDefaultState() {
     ledger: [],
     settings: {
       active_user_id: "will",
-      parent_pin_hash: ""
+      parent_pin_hash: "",
+      sound_enabled: false
     }
   };
 }
