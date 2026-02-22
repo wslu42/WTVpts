@@ -1,0 +1,944 @@
+{
+  "version": 2,
+  "users": [
+    {
+      "id": "mom",
+      "name": "Mom"
+    },
+    {
+      "id": "dad",
+      "name": "Dad"
+    },
+    {
+      "id": "will",
+      "name": "Willow"
+    },
+    {
+      "id": "grandpa",
+      "name": "Grandpa"
+    },
+    {
+      "id": "grandma",
+      "name": "Grandma"
+    },
+    {
+      "id": "niece",
+      "name": "Niece"
+    }
+  ],
+  "events_by_user": {
+    "mom": [
+      {
+        "id": "eat_veg",
+        "title": "Finished a type of food",
+        "category": "Health",
+        "description": "Finished any type of food in the dish",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "drink_water",
+        "title": "Remind water",
+        "category": "Health",
+        "description": "Remind Mom or Dad to drink up a cup of water",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "set_table",
+        "title": "Clean the table",
+        "category": "Chores",
+        "description": "Table clean check passed.",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "tidy_room",
+        "title": "Tidy room",
+        "category": "Chores",
+        "description": "Room tidy check passed.",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "read_15",
+        "title": "Read 15 minutes",
+        "category": "Learning",
+        "description": "Book or educational reading.",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "math_practice",
+        "title": "Math practice 15 minutes",
+        "category": "Learning",
+        "description": "Completed assigned practice.",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "exercise",
+        "title": "Remind exercise",
+        "category": "Health",
+        "description": "Remind Mom or Dad to drink up to exercise",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "eat_8_pieces_of_fruits",
+        "title": "Eat 8 pieces of fruits",
+        "category": "Health",
+        "description": "Eat 8 pieces of fruits",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "help_categorize_cloth_for_washing",
+        "title": "Help categorize cloth for washing",
+        "category": "Chores",
+        "description": "Help categorize cloth for washing",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "help_cooking_a_dish",
+        "title": "Help cooking a dish",
+        "category": "Chores",
+        "description": "Help cooking a dish",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "play_with_willow_for_5_mins",
+        "title": "Play with Willow for 5 mins",
+        "category": "Chores",
+        "description": "Play with Willow for 5 mins",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "cook_a_type_of_dish",
+        "title": "Cook a type of dish",
+        "category": "Chores",
+        "description": "Cook a type of dish",
+        "points": 1,
+        "enabled": true
+      }
+    ],
+    "dad": [
+      {
+        "id": "eat_veg",
+        "title": "Finished a type of food",
+        "category": "Health",
+        "description": "Finished any type of food in the dish",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "drink_water",
+        "title": "Remind water",
+        "category": "Health",
+        "description": "Remind Mom or Dad to drink up a cup of water",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "set_table",
+        "title": "Clean the table",
+        "category": "Chores",
+        "description": "Table clean check passed.",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "tidy_room",
+        "title": "Tidy room",
+        "category": "Chores",
+        "description": "Room tidy check passed.",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "read_15",
+        "title": "Read 15 minutes",
+        "category": "Learning",
+        "description": "Book or educational reading.",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "math_practice",
+        "title": "Math practice 15 minutes",
+        "category": "Learning",
+        "description": "Completed assigned practice.",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "exercise",
+        "title": "Remind exercise",
+        "category": "Health",
+        "description": "Remind Mom or Dad to drink up to exercise",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "eat_8_pieces_of_fruits",
+        "title": "Eat 8 pieces of fruits",
+        "category": "Health",
+        "description": "Eat 8 pieces of fruits",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "help_categorize_cloth_for_washing",
+        "title": "Help categorize cloth for washing",
+        "category": "Chores",
+        "description": "Help categorize cloth for washing",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "help_cooking_a_dish",
+        "title": "Help cooking a dish",
+        "category": "Chores",
+        "description": "Help cooking a dish",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "play_with_willow_for_5_mins",
+        "title": "Play with Willow for 5 mins",
+        "category": "Chores",
+        "description": "Play with Willow for 5 mins",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "cook_a_type_of_fruit",
+        "title": "Prepare a type of fruit",
+        "category": "Chores",
+        "description": "Prepare a type of fruit",
+        "points": 1,
+        "enabled": true
+      }
+    ],
+    "will": [
+      {
+        "id": "eat_veg",
+        "title": "Finished a type of food",
+        "category": "Health",
+        "description": "Finished any type of food in the dish",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "drink_water",
+        "title": "Remind water",
+        "category": "Health",
+        "description": "Remind Mom or Dad to drink up a cup of water",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "set_table",
+        "title": "Clean the table",
+        "category": "Chores",
+        "description": "Table clean check passed.",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "tidy_room",
+        "title": "Tidy room",
+        "category": "Chores",
+        "description": "Room tidy check passed.",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "read_15",
+        "title": "Read 15 minutes",
+        "category": "Learning",
+        "description": "Book or educational reading.",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "math_practice",
+        "title": "Math practice 15 minutes",
+        "category": "Learning",
+        "description": "Completed assigned practice.",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "exercise",
+        "title": "Remind exercise",
+        "category": "Health",
+        "description": "Remind Mom or Dad to drink up to exercise",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "eat_8_pieces_of_fruits",
+        "title": "Eat 8 pieces of fruits",
+        "category": "Health",
+        "description": "Eat 8 pieces of fruits",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "help_categorize_cloth_for_washing",
+        "title": "Help categorize cloth for washing",
+        "category": "Chores",
+        "description": "Help categorize cloth for washing",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "help_cooking_a_dish",
+        "title": "Help cooking a dish",
+        "category": "Chores",
+        "description": "Help cooking a dish",
+        "points": 1,
+        "enabled": true
+      }
+    ],
+    "grandpa": [
+      {
+        "id": "eat_veg",
+        "title": "Finished a type of food",
+        "category": "Health",
+        "description": "Finished any type of food in the dish",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "drink_water",
+        "title": "Remind water",
+        "category": "Health",
+        "description": "Remind Mom or Dad to drink up a cup of water",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "set_table",
+        "title": "Clean the table",
+        "category": "Chores",
+        "description": "Table clean check passed.",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "tidy_room",
+        "title": "Tidy room",
+        "category": "Chores",
+        "description": "Room tidy check passed.",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "read_15",
+        "title": "Read 15 minutes",
+        "category": "Learning",
+        "description": "Book or educational reading.",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "math_practice",
+        "title": "Math practice 15 minutes",
+        "category": "Learning",
+        "description": "Completed assigned practice.",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "exercise",
+        "title": "Remind exercise",
+        "category": "Health",
+        "description": "Remind Mom or Dad to drink up to exercise",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "eat_8_pieces_of_fruits",
+        "title": "Eat 8 pieces of fruits",
+        "category": "Health",
+        "description": "Eat 8 pieces of fruits",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "help_categorize_cloth_for_washing",
+        "title": "Help categorize cloth for washing",
+        "category": "Chores",
+        "description": "Help categorize cloth for washing",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "help_cooking_a_dish",
+        "title": "Help cooking a dish",
+        "category": "Chores",
+        "description": "Help cooking a dish",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "pick_up_or_drop_off_willow",
+        "title": "Pick up or Drop off Willow",
+        "category": "Chores",
+        "description": "Pick up or Drop off Willow",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "cook_a_type_of_dish",
+        "title": "Cook a type of dish",
+        "category": "Chores",
+        "description": "Cook a type of dish",
+        "points": 1,
+        "enabled": true
+      }
+    ],
+    "grandma": [
+      {
+        "id": "eat_veg",
+        "title": "Finished a type of food",
+        "category": "Health",
+        "description": "Finished any type of food in the dish",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "drink_water",
+        "title": "Remind water",
+        "category": "Health",
+        "description": "Remind Mom or Dad to drink up a cup of water",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "set_table",
+        "title": "Clean the table",
+        "category": "Chores",
+        "description": "Table clean check passed.",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "tidy_room",
+        "title": "Tidy room",
+        "category": "Chores",
+        "description": "Room tidy check passed.",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "read_15",
+        "title": "Read 15 minutes",
+        "category": "Learning",
+        "description": "Book or educational reading.",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "math_practice",
+        "title": "Math practice 15 minutes",
+        "category": "Learning",
+        "description": "Completed assigned practice.",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "exercise",
+        "title": "Remind exercise",
+        "category": "Health",
+        "description": "Remind Mom or Dad to drink up to exercise",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "eat_8_pieces_of_fruits",
+        "title": "Eat 8 pieces of fruits",
+        "category": "Health",
+        "description": "Eat 8 pieces of fruits",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "help_categorize_cloth_for_washing",
+        "title": "Help categorize cloth for washing",
+        "category": "Chores",
+        "description": "Help categorize cloth for washing",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "help_cooking_a_dish",
+        "title": "Help cooking a dish",
+        "category": "Chores",
+        "description": "Help cooking a dish",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "cook_a_type_of_dish",
+        "title": "Cook a type of dish",
+        "category": "Chores",
+        "description": "Cook a type of dish",
+        "points": 1,
+        "enabled": true
+      }
+    ],
+    "niece": [
+      {
+        "id": "eat_veg",
+        "title": "Finished a type of food",
+        "category": "Health",
+        "description": "Finished any type of food in the dish",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "drink_water",
+        "title": "Remind water",
+        "category": "Health",
+        "description": "Remind Mom or Dad to drink up a cup of water",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "set_table",
+        "title": "Clean the table",
+        "category": "Chores",
+        "description": "Table clean check passed.",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "tidy_room",
+        "title": "Tidy room",
+        "category": "Chores",
+        "description": "Room tidy check passed.",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "read_15",
+        "title": "Read 15 minutes",
+        "category": "Learning",
+        "description": "Book or educational reading.",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "math_practice",
+        "title": "Math practice 15 minutes",
+        "category": "Learning",
+        "description": "Completed assigned practice.",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "exercise",
+        "title": "Remind exercise",
+        "category": "Health",
+        "description": "Remind Mom or Dad to drink up to exercise",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "eat_8_pieces_of_fruits",
+        "title": "Eat 8 pieces of fruits",
+        "category": "Health",
+        "description": "Eat 8 pieces of fruits",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "help_categorize_cloth_for_washing",
+        "title": "Help categorize cloth for washing",
+        "category": "Chores",
+        "description": "Help categorize cloth for washing",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "help_cooking_a_dish",
+        "title": "Help cooking a dish",
+        "category": "Chores",
+        "description": "Help cooking a dish",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "pick_up_or_drop_off_willow",
+        "title": "Pick up or Drop off Willow",
+        "category": "Chores",
+        "description": "Pick up or Drop off Willow",
+        "points": 1,
+        "enabled": true
+      }
+    ]
+  },
+  "rewards_by_user": {
+    "mom": [
+      {
+        "id": "minigame_1",
+        "title": "Play a mini game",
+        "category": "Game",
+        "cost": 1,
+        "unlock_at_total": 0,
+        "enabled": true
+      },
+      {
+        "id": "me_time_5",
+        "title": "Me time 5 min",
+        "category": "Me-time",
+        "cost": 1,
+        "unlock_at_total": 200,
+        "enabled": true
+      },
+      {
+        "id": "weekend_pick",
+        "title": "Pick weekend activity",
+        "category": "Family",
+        "cost": 1,
+        "unlock_at_total": 300,
+        "enabled": true
+      },
+      {
+        "id": "pick_family_dish",
+        "title": "Pick family dish",
+        "category": "Family",
+        "cost": 1,
+        "unlock_at_total": 100,
+        "enabled": true
+      }
+    ],
+    "dad": [
+      {
+        "id": "minigame_1",
+        "title": "Play a mini game",
+        "category": "Game",
+        "cost": 1,
+        "unlock_at_total": 0,
+        "enabled": true
+      },
+      {
+        "id": "me_time_5",
+        "title": "Me time 5 min",
+        "category": "Me-time",
+        "cost": 1,
+        "unlock_at_total": 200,
+        "enabled": true
+      },
+      {
+        "id": "weekend_pick",
+        "title": "Pick weekend activity",
+        "category": "Family",
+        "cost": 1,
+        "unlock_at_total": 300,
+        "enabled": true
+      },
+      {
+        "id": "pick_family_dish",
+        "title": "Pick family dish",
+        "category": "Family",
+        "cost": 1,
+        "unlock_at_total": 100,
+        "enabled": true
+      }
+    ],
+    "will": [
+      {
+        "id": "minigame_1",
+        "title": "Play a mini game",
+        "category": "Game",
+        "cost": 1,
+        "unlock_at_total": 0,
+        "enabled": true
+      },
+      {
+        "id": "me_time_5",
+        "title": "Me time 5 min",
+        "category": "Me-time",
+        "cost": 1,
+        "unlock_at_total": 200,
+        "enabled": true
+      },
+      {
+        "id": "weekend_pick",
+        "title": "Pick weekend activity",
+        "category": "Family",
+        "cost": 1,
+        "unlock_at_total": 300,
+        "enabled": true
+      },
+      {
+        "id": "pick_family_dish",
+        "title": "Pick family dish",
+        "category": "Family",
+        "cost": 1,
+        "unlock_at_total": 100,
+        "enabled": true
+      }
+    ],
+    "grandpa": [
+      {
+        "id": "minigame_1",
+        "title": "Play a mini game",
+        "category": "Game",
+        "cost": 1,
+        "unlock_at_total": 0,
+        "enabled": true
+      },
+      {
+        "id": "me_time_5",
+        "title": "Me time 5 min",
+        "category": "Me-time",
+        "cost": 1,
+        "unlock_at_total": 200,
+        "enabled": true
+      },
+      {
+        "id": "weekend_pick",
+        "title": "Pick weekend activity",
+        "category": "Family",
+        "cost": 1,
+        "unlock_at_total": 300,
+        "enabled": true
+      },
+      {
+        "id": "pick_family_dish",
+        "title": "Pick family dish",
+        "category": "Family",
+        "cost": 1,
+        "unlock_at_total": 100,
+        "enabled": true
+      }
+    ],
+    "grandma": [
+      {
+        "id": "minigame_1",
+        "title": "Play a mini game",
+        "category": "Game",
+        "cost": 1,
+        "unlock_at_total": 0,
+        "enabled": true
+      },
+      {
+        "id": "me_time_5",
+        "title": "Me time 5 min",
+        "category": "Me-time",
+        "cost": 1,
+        "unlock_at_total": 200,
+        "enabled": true
+      },
+      {
+        "id": "weekend_pick",
+        "title": "Pick weekend activity",
+        "category": "Family",
+        "cost": 1,
+        "unlock_at_total": 300,
+        "enabled": true
+      },
+      {
+        "id": "pick_family_dish",
+        "title": "Pick family dish",
+        "category": "Family",
+        "cost": 1,
+        "unlock_at_total": 100,
+        "enabled": true
+      }
+    ],
+    "niece": [
+      {
+        "id": "minigame_1",
+        "title": "Play a mini game",
+        "category": "Game",
+        "cost": 1,
+        "unlock_at_total": 0,
+        "enabled": true
+      },
+      {
+        "id": "me_time_5",
+        "title": "Me time 5 min",
+        "category": "Me-time",
+        "cost": 1,
+        "unlock_at_total": 200,
+        "enabled": true
+      },
+      {
+        "id": "weekend_pick",
+        "title": "Pick weekend activity",
+        "category": "Family",
+        "cost": 1,
+        "unlock_at_total": 300,
+        "enabled": true
+      },
+      {
+        "id": "pick_family_dish",
+        "title": "Pick family dish",
+        "category": "Family",
+        "cost": 1,
+        "unlock_at_total": 100,
+        "enabled": true
+      }
+    ]
+  },
+  "ledger": [
+    {
+      "id": "c81690cf-2c28-4301-ae35-617d2e42cb20",
+      "ts": 1771797304857,
+      "user_id": "mom",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "custom_quick",
+      "points": 5,
+      "note": "Quick add +5"
+    },
+    {
+      "id": "d8ad1d77-7222-4a68-8344-1fd638bb663c",
+      "ts": 1771797307153,
+      "user_id": "dad",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "custom_quick",
+      "points": 5,
+      "note": "Quick add +5"
+    },
+    {
+      "id": "c555776e-daa5-496d-b86c-e48989c97ed2",
+      "ts": 1771797308481,
+      "user_id": "grandpa",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "custom_quick",
+      "points": 5,
+      "note": "Quick add +5"
+    },
+    {
+      "id": "34b4662f-642f-4acd-8eef-b608a5ccce60",
+      "ts": 1771797431136,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "custom_quick",
+      "points": 157,
+      "note": "Quick add +157"
+    },
+    {
+      "id": "8e501f74-2fca-4c8c-a7d5-423a2a55ad78",
+      "ts": 1771797548289,
+      "user_id": "will",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "custom_quick",
+      "points": 123,
+      "note": "Quick adjust -123"
+    },
+    {
+      "id": "546a2d1c-06d0-46c9-93e3-4fb4bd1a850b",
+      "ts": 1771798013094,
+      "user_id": "mom",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "read_15",
+      "points": 2,
+      "note": "Read 15 minutes"
+    },
+    {
+      "id": "efe37c1d-0398-44e4-8f06-003a5e66920b",
+      "ts": 1771798840302,
+      "user_id": "mom",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "minigame_1",
+      "points": 1,
+      "note": "Play a mini game"
+    },
+    {
+      "id": "66695a43-d6dc-4bab-8357-fbcaed326e1c",
+      "ts": 1771798840832,
+      "user_id": "mom",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "minigame_1",
+      "points": 1,
+      "note": "Play a mini game"
+    },
+    {
+      "id": "bonus_grandma_1771799579761",
+      "ts": 1771799579761,
+      "user_id": "grandma",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "custom_bonus",
+      "points": 5,
+      "note": "Initial bonus +5"
+    },
+    {
+      "id": "bonus_niece_1771799579761",
+      "ts": 1771799579761,
+      "user_id": "niece",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "custom_bonus",
+      "points": 5,
+      "note": "Initial bonus +5"
+    },
+    {
+      "id": "c68d861c-7d99-4963-9031-a674bc0a2235",
+      "ts": 1771799965339,
+      "user_id": "dad",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "set_table",
+      "points": 2,
+      "note": "Clean the table"
+    },
+    {
+      "id": "a924c5c3-bb84-4aad-90e5-39432bd89a8a",
+      "ts": 1771799969127,
+      "user_id": "dad",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "minigame_1",
+      "points": 1,
+      "note": "Play a mini game"
+    },
+    {
+      "id": "0df355e5-54cf-43ef-9086-fe4c3b38dd48",
+      "ts": 1771799969705,
+      "user_id": "dad",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "minigame_1",
+      "points": 1,
+      "note": "Play a mini game"
+    },
+    {
+      "id": "8e8d2e28-ed5e-4210-b605-bdbe713f2c64",
+      "ts": 1771800053082,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_8_pieces_of_fruits",
+      "points": 1,
+      "note": "Eat 8 pieces of fruits"
+    }
+  ],
+  "settings": {
+    "active_user_id": "will",
+    "parent_pin_hash": "",
+    "sound_enabled": false,
+    "cleanup_non_willow_done": true,
+    "cleanup_willow_done": true,
+    "apply_willow_templates_done": true,
+    "bonus_grandma_niece_done": true
+  }
+}

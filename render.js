@@ -89,11 +89,15 @@ function renderUserWorkspaceTabs(userId, section, userName) {
 
 export function renderHome(state, embeddedHtml = "") {
   const cards = state.users.map((user) => userSummaryCard(state, user)).join("");
+  const soundEnabled = Boolean(state.settings?.sound_enabled);
   return `
     <section class="card">
       <div class="home-header">
         <h1 class="page-title"><a class="home-title-link" href="#/home">Dashboard - Home</a></h1>
-        <a class="btn-secondary home-settings-btn" href="#/settings">Settings</a>
+        <div class="inline-row">
+          <button class="btn-secondary home-settings-btn" data-action="toggle-sound" aria-pressed="${soundEnabled ? "true" : "false"}">${soundEnabled ? "Sound On" : "Sound Off"}</button>
+          <a class="btn-secondary home-settings-btn" href="#/settings">Settings</a>
+        </div>
       </div>
       <p class="muted">Choose a user card, then work in that user's Dashboard / History / Manage Events pages.</p>
       <div class="grid-2">${cards}</div>

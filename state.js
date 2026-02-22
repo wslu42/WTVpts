@@ -1,4 +1,6 @@
-const STORAGE_KEY = "family_points_v1";
+import { seedState } from "./seed-data.js";
+
+const STORAGE_KEY = "family_points_v2_seed_data_json";
 
 function makeBaseEvents() {
   return [
@@ -63,20 +65,20 @@ function makeDefaultRewardsByUser(users) {
   return out;
 }
 
-export function makeDefaultState() {
-  const users = makeDefaultUsers();
+function cloneSeedState() {
+  const cloned = typeof structuredClone === "function" ? structuredClone(seedState) : JSON.parse(JSON.stringify(seedState));
   return {
-    version: 2,
-    users,
-    events_by_user: makeDefaultEventsByUser(users),
-    rewards_by_user: makeDefaultRewardsByUser(users),
-    ledger: [],
+    ...cloned,
     settings: {
-      active_user_id: "will",
       parent_pin_hash: "",
-      sound_enabled: false
+      sound_enabled: false,
+      ...(cloned.settings || {})
     }
   };
+}
+
+export function makeDefaultState() {
+  return cloneSeedState();
 }
 
 function hashPin(pin) {
@@ -214,37 +216,6 @@ function migrate(input) {
       Number.isFinite(row.ts)
     );
   });
-
-  // One-time cleanup requested by user: clear point history for Mom/Dad/Guest.
-  if (!output.settings.cleanup_non_willow_done) {
-    output.ledger = output.ledger.filter((row) => row.user_id === "will");
-    output.settings.cleanup_non_willow_done = true;
-  }
-
-  // One-time cleanup requested by user: clear Willow history.
-  if (!output.settings.cleanup_willow_done) {
-    output.ledger = output.ledger.filter((row) => row.user_id !== "will");
-    output.settings.cleanup_willow_done = true;
-  }
-
-  // One-time bonus requested by user: +5 balance for Grandma and Niece.
-  if (!output.settings.bonus_grandma_niece_done) {
-    const now = Date.now();
-    for (const userId of ["grandma", "niece"]) {
-      if (!output.users.some((u) => u.id === userId)) continue;
-      output.ledger.push({
-        id: `bonus_${userId}_${now}`,
-        ts: now,
-        user_id: userId,
-        type: "earn",
-        ref_kind: "event",
-        ref_id: "custom_bonus",
-        points: 5,
-        note: "Initial bonus +5"
-      });
-    }
-    output.settings.bonus_grandma_niece_done = true;
-  }
 
   output.version = 2;
 

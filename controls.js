@@ -26,6 +26,61 @@ import {
 } from "./render.js";
 
 const app = document.getElementById("app");
+const ambientAudio = new Audio("./lake.mp3");
+ambientAudio.loop = true;
+ambientAudio.preload = "auto";
+ambientAudio.volume = 0;
+
+let fadeTimer = null;
+
+function fadeAudioTo(targetVolume, durationMs = 1600, onDone = null) {
+  if (fadeTimer) {
+    clearInterval(fadeTimer);
+    fadeTimer = null;
+  }
+  const startVolume = ambientAudio.volume;
+  const delta = targetVolume - startVolume;
+  if (Math.abs(delta) < 0.001 || durationMs <= 0) {
+    ambientAudio.volume = targetVolume;
+    if (onDone) onDone();
+    return;
+  }
+  const stepMs = 60;
+  const steps = Math.max(1, Math.round(durationMs / stepMs));
+  let tick = 0;
+  fadeTimer = setInterval(() => {
+    tick += 1;
+    const t = Math.min(1, tick / steps);
+    ambientAudio.volume = Math.max(0, Math.min(1, startVolume + delta * t));
+    if (t >= 1) {
+      clearInterval(fadeTimer);
+      fadeTimer = null;
+      if (onDone) onDone();
+    }
+  }, stepMs);
+}
+
+async function syncAmbientAudio(enabled, fromUserGesture = false) {
+  if (!enabled) {
+    fadeAudioTo(0, 1200, () => {
+      ambientAudio.pause();
+      ambientAudio.currentTime = 0;
+    });
+    return;
+  }
+
+  if (ambientAudio.paused) {
+    try {
+      await ambientAudio.play();
+    } catch {
+      if (fromUserGesture) {
+        showToast("Unable to start audio on this browser.", true);
+      }
+      return;
+    }
+  }
+  fadeAudioTo(0.14, 1600);
+}
 
 function parseRoute(hash) {
   const raw = hash.replace(/^#/, "") || "/home";
@@ -115,6 +170,20 @@ export function createController(getState, setState, rerender) {
       const next = setActiveUser(state, userId);
       setState(next);
       ensureUserHash(userId, "dashboard");
+      return;
+    }
+
+    if (action === "toggle-sound") {
+      const enabled = !Boolean(state.settings?.sound_enabled);
+      const next = {
+        ...state,
+        settings: {
+          ...state.settings,
+          sound_enabled: enabled
+        }
+      };
+      applyState(next);
+      syncAmbientAudio(enabled, true);
       return;
     }
 
@@ -415,11 +484,13 @@ export function createController(getState, setState, rerender) {
 
     if (route.kind === "home") {
       app.innerHTML = renderHome(state);
+      syncAmbientAudio(Boolean(state.settings?.sound_enabled), false);
       return;
     }
 
     if (route.kind === "settings") {
       app.innerHTML = renderHome(state, renderSettings(state));
+      syncAmbientAudio(Boolean(state.settings?.sound_enabled), false);
       return;
     }
 
@@ -427,6 +498,7 @@ export function createController(getState, setState, rerender) {
       const user = getUserById(state, route.userId);
       if (!user) {
         app.innerHTML = `<section class="empty">User not found.</section>`;
+        syncAmbientAudio(Boolean(state.settings?.sound_enabled), false);
         return;
       }
       if (state.settings.active_user_id !== route.userId) {
@@ -434,19 +506,23 @@ export function createController(getState, setState, rerender) {
       }
       if (route.section === "dashboard") {
         app.innerHTML = renderHome(getState(), renderUserDashboard(getState(), route.userId));
+        syncAmbientAudio(Boolean(getState().settings?.sound_enabled), false);
         return;
       }
       if (route.section === "history") {
         app.innerHTML = renderHome(getState(), renderUserHistory(getState(), route.userId, historyFilters));
+        syncAmbientAudio(Boolean(getState().settings?.sound_enabled), false);
         return;
       }
       if (route.section === "manage-events") {
         app.innerHTML = renderHome(getState(), renderManageEvents(getState(), route.userId));
+        syncAmbientAudio(Boolean(getState().settings?.sound_enabled), false);
         return;
       }
     }
 
     app.innerHTML = renderHome(state);
+    syncAmbientAudio(Boolean(state.settings?.sound_enabled), false);
   }
 
   return {
