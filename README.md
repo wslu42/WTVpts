@@ -5,14 +5,13 @@ A pure static, vanilla HTML/CSS/JS app for a family points and rewards system.
 ## Features
 - Multi-user profiles (default demo: Mom, Dad, Willow, Grandpa, Grandma, Niece)
 - Balance vs lifetime earned totals
-- User-specific event tables (each user has independent event list)
-- `Earning pts` page for recording earn events
-- `Spending pts` page with unlock thresholds by earned total
-- User quick spend suggests the top 3 most redeemed rewards per user
+- User-specific event tables (each user has independent earning/redeem lists)
+- Dashboard sections: `Redeem` and `Earn` (category-grouped, full-card click actions)
 - Per-user history with filters and newest-first sort
-- User workspace flow: Home -> User -> Earning pts / Spending pts / History / Manage Events
-- Settings page for JSON export/import, reset, and optional parent PIN guard
-- `Manage Events` includes both per-user earning events and spending events (rewards)
+- User workspace flow: Home -> User -> Dashboard / History / Manage Events
+- Settings panel for JSON export/import, reset, and optional parent PIN guard
+- `Manage Events` includes both per-user `Redeem` and `Earning` event management
+- `Settings` is rendered inside the same `Dashboard - Home` container layout
 - localStorage persistence (`family_points_v1`)
 - Hash routing for GitHub Pages compatibility
 
@@ -30,19 +29,17 @@ python -m http.server 8000
 3. Under `Build and deployment`, choose `Deploy from a branch`.
 4. Select branch (usually `main`) and folder (`/root` or `/docs`).
 5. Save and wait for deployment.
-6. Visit your Pages URL and use routes like `#/home`, `#/user/will/earning`, etc.
+6. Visit your Pages URL and use routes like `#/home`, `#/user/will`, `#/user/will/manage-events`, etc.
 
 ## Routes
 - `#/home`
 - `#/user/<id>` (user dashboard)
-- `#/user/<id>/earning`
-- `#/user/<id>/spending`
 - `#/user/<id>/history`
 - `#/user/<id>/manage-events`
 - `#/settings`
 
 ## File Structure
-- `index.html`: app shell + navbar + containers
+- `index.html`: app shell + main container
 - `style.css`: responsive UI styles
 - `state.js`: state model, persistence, selectors, safe mutations
 - `render.js`: pure-ish view render functions
