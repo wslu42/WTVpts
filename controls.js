@@ -302,8 +302,20 @@ export function createController(getState, setState, rerender) {
           payload = null;
         }
         if (!res.ok) {
-          const detail = payload?.error || payload?.detail || `Sync failed (${res.status})`;
-          return showToast(String(detail), true);
+          const baseError = String(payload?.error || `Sync failed (${res.status})`);
+          const rawDetail = typeof payload?.detail === "string" ? payload.detail : "";
+          let detailMsg = "";
+          if (rawDetail) {
+            try {
+              const parsedDetail = JSON.parse(rawDetail);
+              detailMsg = String(parsedDetail?.message || parsedDetail?.error || rawDetail);
+            } catch {
+              detailMsg = rawDetail;
+            }
+          }
+          const clippedDetail = detailMsg.length > 180 ? `${detailMsg.slice(0, 180)}...` : detailMsg;
+          const fullError = clippedDetail ? `${baseError}: ${clippedDetail}` : baseError;
+          return showToast(fullError, true);
         }
         const shortCommit = payload?.commit ? ` (${String(payload.commit).slice(0, 7)})` : "";
         showToast(`Synced to GitHub${shortCommit}`);
