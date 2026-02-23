@@ -144,10 +144,10 @@
       },
       {
         "id": "math_practice",
-        "title": "Guitar practice 30 minutes",
+        "title": "Guitar practice 15 minutes",
         "category": "Learning",
         "description": "Completed assigned practice.",
-        "points": 2,
+        "points": 1,
         "enabled": true
       },
       {
