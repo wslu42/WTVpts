@@ -32,7 +32,6 @@ ambientAudio.preload = "auto";
 ambientAudio.volume = 0;
 const AUTO_SYNC_PUSH_DEBOUNCE_MS = 1200;
 const AUTO_SYNC_PULL_INTERVAL_MS = 15000;
-const SYNC_KEY_HINT_DISMISSED_KEY = "family_points_sync_key_hint_dismissed_v1";
 let runtimeSyncKey = "";
 
 let fadeTimer = null;
@@ -136,30 +135,6 @@ function setStoredSyncKey(value) {
   runtimeSyncKey = String(value || "").trim();
 }
 
-function isSyncKeyHintDismissed() {
-  try {
-    return sessionStorage.getItem(SYNC_KEY_HINT_DISMISSED_KEY) === "1";
-  } catch {
-    return false;
-  }
-}
-
-function dismissSyncKeyHint() {
-  try {
-    sessionStorage.setItem(SYNC_KEY_HINT_DISMISSED_KEY, "1");
-  } catch {
-    // ignore storage write failures
-  }
-}
-
-function clearSyncKeyHintDismissed() {
-  try {
-    sessionStorage.removeItem(SYNC_KEY_HINT_DISMISSED_KEY);
-  } catch {
-    // ignore storage write failures
-  }
-}
-
 function downloadJsonFile(filename, content) {
   const blob = new Blob([content], { type: "application/json" });
   const url = URL.createObjectURL(blob);
@@ -207,6 +182,7 @@ export function createController(getState, setState, rerender) {
   let lastSyncedSha = "";
   let syncEndpointBound = "";
   let visibilityHooked = false;
+  let forcingSyncKeyPrompt = false;
 
   function getSyncEndpoint(state) {
     return String(state.settings?.github_sync_url || "").trim();
@@ -216,26 +192,44 @@ export function createController(getState, setState, rerender) {
     return getStoredSyncKey();
   }
 
-  function maybePromptFirstSyncKey() {
-    const state = getState();
-    const endpoint = getSyncEndpoint(state);
-    if (!endpoint || getSyncKey() || isSyncKeyHintDismissed()) return;
-    const entered = window.prompt("Enter SYNC_KEY for this device to enable auto sync:", "");
-    if (entered === null) {
-      dismissSyncKeyHint();
-      showToast("SYNC_KEY not set. Auto sync is paused on this device.", true);
-      return;
+  function enforceSyncKeyPromptIfNeeded() {
+    if (forcingSyncKeyPrompt) return;
+    const endpoint = getSyncEndpoint(getState());
+    if (!endpoint || getSyncKey()) return;
+    forcingSyncKeyPrompt = true;
+    try {
+      while (!getSyncKey()) {
+        const entered = window.prompt("SYNC_KEY is required on this device. Please enter SYNC_KEY to continue:", "");
+        const key = String(entered || "").trim();
+        if (key) {
+          setStoredSyncKey(key);
+          showToast("Sync key saved on this device.");
+          break;
+        }
+        window.alert("SYNC_KEY is required before continuing.");
+      }
+    } finally {
+      forcingSyncKeyPrompt = false;
     }
-    const key = String(entered || "").trim();
-    if (!key) {
-      dismissSyncKeyHint();
-      showToast("SYNC_KEY not set. Auto sync is paused on this device.", true);
-      return;
-    }
-    setStoredSyncKey(key);
-    clearSyncKeyHintDismissed();
-    showToast("Sync key saved on this device.");
     ensureAutoSyncLoop();
+  }
+
+  function focusSyncKeyInput() {
+    const input = document.getElementById("github-sync-key");
+    if (!(input instanceof HTMLInputElement)) return;
+    input.focus();
+    input.select();
+  }
+
+  function redirectToSettingsForSyncUnlock(message = "Sync is locked. Enter SYNC_KEY in Settings.") {
+    if (!window.location.hash.startsWith("#/settings")) {
+      window.location.hash = "#/settings";
+    }
+    setTimeout(() => {
+      rerender();
+      focusSyncKeyInput();
+    }, 0);
+    showToast(message, true);
   }
 
   function stateFingerprint(state) {
@@ -520,16 +514,19 @@ export function createController(getState, setState, rerender) {
       const input = document.getElementById("github-sync-key");
       const key = String(input?.value || "").trim();
       setStoredSyncKey(key);
-      if (key) clearSyncKeyHintDismissed();
       if (input) input.value = "";
-      showToast(key ? "Sync key saved on this device." : "Sync key cleared on this device.");
+      if (!key) {
+        showToast("SYNC_KEY is empty. Sync remains locked.", true);
+      } else {
+        showToast("Sync key saved on this device.");
+      }
       ensureAutoSyncLoop();
       return;
     }
 
     if (action === "prompt-sync-key") {
-      clearSyncKeyHintDismissed();
-      maybePromptFirstSyncKey();
+      enforceSyncKeyPromptIfNeeded();
+      focusSyncKeyInput();
       return;
     }
 
@@ -539,7 +536,11 @@ export function createController(getState, setState, rerender) {
         return showToast("Set and save GitHub Sync URL first.", true);
       }
       if (!getSyncKey()) {
-        return showToast("Set and save SYNC_KEY first.", true);
+        enforceSyncKeyPromptIfNeeded();
+        if (!getSyncKey()) {
+          redirectToSettingsForSyncUnlock("SYNC_KEY is still missing.");
+          return;
+        }
       }
       await pushStateToGithub({ silent: false });
       return;
@@ -744,8 +745,8 @@ export function createController(getState, setState, rerender) {
 
   function renderCurrent() {
     const state = getState();
+    enforceSyncKeyPromptIfNeeded();
     ensureAutoSyncLoop();
-    maybePromptFirstSyncKey();
     const route = parseRoute(window.location.hash || "#/home");
     const activeUserId = state.settings.active_user_id;
 
