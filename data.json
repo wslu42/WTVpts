@@ -990,6 +990,16 @@
       "ref_id": "minigame_1",
       "points": 1,
       "note": "Play a mini game"
+    },
+    {
+      "id": "3efa0c0e-f4b2-41b2-bc0c-171bbb3e60de",
+      "ts": 1771807790620,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
     }
   ],
   "settings": {
