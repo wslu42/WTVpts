@@ -601,6 +601,14 @@
         "cost": 1,
         "unlock_at_total": 100,
         "enabled": true
+      },
+      {
+        "id": "massage_5_min",
+        "title": "Massage 5 min",
+        "category": "Me-time",
+        "cost": 1,
+        "unlock_at_total": 50,
+        "enabled": true
       }
     ],
     "dad": [
