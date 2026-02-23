@@ -609,6 +609,14 @@
         "cost": 1,
         "unlock_at_total": 50,
         "enabled": true
+      },
+      {
+        "id": "go_restaurant",
+        "title": "Go restaurant",
+        "category": "Family",
+        "cost": 20,
+        "unlock_at_total": 150,
+        "enabled": true
       }
     ],
     "dad": [
