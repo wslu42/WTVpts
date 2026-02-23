@@ -53,14 +53,6 @@
         "enabled": true
       },
       {
-        "id": "math_practice",
-        "title": "Math practice 15 minutes",
-        "category": "Learning",
-        "description": "Completed assigned practice.",
-        "points": 2,
-        "enabled": true
-      },
-      {
         "id": "exercise",
         "title": "Remind exercise",
         "category": "Health",
