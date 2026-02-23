@@ -1022,13 +1022,23 @@
       "ref_id": "minigame_1",
       "points": 1,
       "note": "Play a mini game"
+    },
+    {
+      "id": "5de20d5b-d563-4d02-828b-9952eacfdcca",
+      "ts": 1771862383964,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "drink_water",
+      "points": 1,
+      "note": "Remind water"
     }
   ],
   "settings": {
     "parent_pin_hash": "",
     "sound_enabled": false,
     "github_sync_url": "https://wtvpts-sync.wslu42-wtvpts.workers.dev",
-    "active_user_id": "dad",
+    "active_user_id": "will",
     "cleanup_non_willow_done": true,
     "cleanup_willow_done": true,
     "apply_willow_templates_done": true,
