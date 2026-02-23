@@ -573,7 +573,7 @@
       {
         "id": "minigame_1",
         "title": "Play a mini game",
-        "category": "Game",
+        "category": "Me-time",
         "cost": 1,
         "unlock_at_total": 0,
         "enabled": true
