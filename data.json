@@ -980,6 +980,16 @@
       "ref_id": "set_table",
       "points": 2,
       "note": "Clean the table"
+    },
+    {
+      "id": "7624ac17-e028-4867-8c72-683d0dac6f98",
+      "ts": 1771807629804,
+      "user_id": "will",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "minigame_1",
+      "points": 1,
+      "note": "Play a mini game"
     }
   ],
   "settings": {
