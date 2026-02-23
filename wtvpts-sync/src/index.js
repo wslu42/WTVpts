@@ -9,7 +9,9 @@ export default {
     }
 
     const origin = req.headers.get("Origin") || "";
-    if (origin !== env.ALLOWED_ORIGIN) {
+    const isGet = req.method === "GET";
+    const originAllowed = origin === env.ALLOWED_ORIGIN || (isGet && !origin);
+    if (!originAllowed) {
       return json({ error: "Forbidden origin" }, 403, env);
     }
 

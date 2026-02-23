@@ -259,7 +259,13 @@ export function createController(getState, setState, rerender) {
         lastSyncedSha = remoteSha || lastSyncedSha;
         return true;
       }
-      const imported = replaceState(remoteState);
+      const imported = replaceState({
+        ...remoteState,
+        settings: {
+          ...(remoteState.settings || {}),
+          github_sync_url: getSyncEndpoint(current)
+        }
+      });
       applyState(imported, { skipAutoPush: true });
       lastSyncedSha = remoteSha || lastSyncedSha;
       dirtySinceLastPush = false;
