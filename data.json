@@ -930,12 +930,62 @@
       "ref_id": "eat_8_pieces_of_fruits",
       "points": 1,
       "note": "Eat 8 pieces of fruits"
+    },
+    {
+      "id": "0f43b344-5daf-4215-bf13-c600f75b05e7",
+      "ts": 1771807125443,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "set_table",
+      "points": 2,
+      "note": "Clean the table"
+    },
+    {
+      "id": "ad1327fe-9eac-4e8a-a234-a93ede8be4d7",
+      "ts": 1771807126156,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "tidy_room",
+      "points": 2,
+      "note": "Tidy room"
+    },
+    {
+      "id": "850df7cb-0f9e-4e84-9800-6a38ecd8888b",
+      "ts": 1771807126814,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
+    },
+    {
+      "id": "4a8435a5-dd38-46f0-ac2f-83af03b87eb4",
+      "ts": 1771807128890,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
+    },
+    {
+      "id": "2ba7cf50-a6dd-4737-8caf-7c14b058913f",
+      "ts": 1771807131180,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "set_table",
+      "points": 2,
+      "note": "Clean the table"
     }
   ],
   "settings": {
     "parent_pin_hash": "",
-    "sound_enabled": false,
-    "active_user_id": "mom",
+    "sound_enabled": true,
+    "active_user_id": "will",
     "cleanup_non_willow_done": true,
     "cleanup_willow_done": true,
     "apply_willow_templates_done": true,
