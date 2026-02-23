@@ -96,7 +96,7 @@
         "id": "make_a_video",
         "title": "Make a video",
         "category": "Learning",
-        "description": "Make a video and upload to youtube",
+        "description": "Make a video and upload to shareable site like youtube",
         "points": 1,
         "enabled": true
       }
