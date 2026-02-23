@@ -32,8 +32,8 @@ ambientAudio.preload = "auto";
 ambientAudio.volume = 0;
 const AUTO_SYNC_PUSH_DEBOUNCE_MS = 1200;
 const AUTO_SYNC_PULL_INTERVAL_MS = 15000;
-const SYNC_KEY_STORAGE_KEY = "family_points_sync_key_v1";
 const SYNC_KEY_HINT_DISMISSED_KEY = "family_points_sync_key_hint_dismissed_v1";
+let runtimeSyncKey = "";
 
 let fadeTimer = null;
 
@@ -129,24 +129,11 @@ function parseSyncError(payload, status) {
 }
 
 function getStoredSyncKey() {
-  try {
-    return String(localStorage.getItem(SYNC_KEY_STORAGE_KEY) || "").trim();
-  } catch {
-    return "";
-  }
+  return runtimeSyncKey;
 }
 
 function setStoredSyncKey(value) {
-  try {
-    const next = String(value || "").trim();
-    if (!next) {
-      localStorage.removeItem(SYNC_KEY_STORAGE_KEY);
-      return;
-    }
-    localStorage.setItem(SYNC_KEY_STORAGE_KEY, next);
-  } catch {
-    // ignore storage write failures
-  }
+  runtimeSyncKey = String(value || "").trim();
 }
 
 function isSyncKeyHintDismissed() {

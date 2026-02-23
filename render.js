@@ -437,6 +437,7 @@ export function renderSettings(state, syncMeta = {}) {
     <section class="card">
       <h2>GitHub Sync</h2>
       <p class="muted">Save current data to your GitHub repo through Cloudflare Worker. Auto sync: <strong>${autoSyncOn ? "On" : "Off"}</strong>. Sync key: <strong>${syncKeySet ? "Set" : "Not set"}</strong>.</p>
+      <p class="muted">SYNC_KEY is kept in memory only and is cleared on page reload.</p>
       ${!syncKeySet ? '<p class="muted"><strong>First-time setup:</strong> add SYNC_KEY on this device to enable auto sync.</p>' : ""}
       <div class="inline-row">
         <input id="github-sync-url" type="text" placeholder="https://your-worker.workers.dev" value="${escapeHtml(syncUrl)}" />
