@@ -984,7 +984,7 @@
   ],
   "settings": {
     "parent_pin_hash": "",
-    "sound_enabled": true,
+    "sound_enabled": false,
     "active_user_id": "will",
     "cleanup_non_willow_done": true,
     "cleanup_willow_done": true,
