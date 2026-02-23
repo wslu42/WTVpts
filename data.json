@@ -112,17 +112,17 @@
     "dad": [
       {
         "id": "eat_veg",
-        "title": "Finished a type of food",
+        "title": "Eat 8 pieces of fruits",
         "category": "Health",
-        "description": "Finished any type of food in the dish",
+        "description": "Eat 8 pieces of fruits",
         "points": 1,
         "enabled": true
       },
       {
         "id": "drink_water",
-        "title": "Remind water",
+        "title": "Drink water",
         "category": "Health",
-        "description": "Remind Mom or Dad to drink up a cup of water",
+        "description": "Drink up a cup of water",
         "points": 1,
         "enabled": true
       },
@@ -131,67 +131,11 @@
         "title": "Clean the table",
         "category": "Chores",
         "description": "Table clean check passed.",
-        "points": 2,
+        "points": 1,
         "enabled": true
       },
       {
         "id": "tidy_room",
-        "title": "Tidy room",
-        "category": "Chores",
-        "description": "Room tidy check passed.",
-        "points": 2,
-        "enabled": true
-      },
-      {
-        "id": "read_15",
-        "title": "Read 15 minutes",
-        "category": "Learning",
-        "description": "Book or educational reading.",
-        "points": 2,
-        "enabled": true
-      },
-      {
-        "id": "math_practice",
-        "title": "Math practice 15 minutes",
-        "category": "Learning",
-        "description": "Completed assigned practice.",
-        "points": 2,
-        "enabled": true
-      },
-      {
-        "id": "exercise",
-        "title": "Remind exercise",
-        "category": "Health",
-        "description": "Remind Mom or Dad to drink up to exercise",
-        "points": 2,
-        "enabled": true
-      },
-      {
-        "id": "eat_8_pieces_of_fruits",
-        "title": "Eat 8 pieces of fruits",
-        "category": "Health",
-        "description": "Eat 8 pieces of fruits",
-        "points": 1,
-        "enabled": true
-      },
-      {
-        "id": "help_categorize_cloth_for_washing",
-        "title": "Help categorize cloth for washing",
-        "category": "Chores",
-        "description": "Help categorize cloth for washing",
-        "points": 2,
-        "enabled": true
-      },
-      {
-        "id": "help_cooking_a_dish",
-        "title": "Help cooking a dish",
-        "category": "Chores",
-        "description": "Help cooking a dish",
-        "points": 1,
-        "enabled": true
-      },
-      {
-        "id": "play_with_willow_for_5_mins",
         "title": "Play with Willow for 5 mins",
         "category": "Chores",
         "description": "Play with Willow for 5 mins",
@@ -199,10 +143,58 @@
         "enabled": true
       },
       {
-        "id": "cook_a_type_of_fruit",
-        "title": "Prepare a type of fruit",
+        "id": "math_practice",
+        "title": "Guitar practice 30 minutes",
+        "category": "Learning",
+        "description": "Completed assigned practice.",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "exercise",
+        "title": "Exercise for 30 min",
+        "category": "Health",
+        "description": "Exercise for 30 min",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "eat_8_pieces_of_fruits",
+        "title": "Tidy room",
         "category": "Chores",
-        "description": "Prepare a type of fruit",
+        "description": "Room tidy check passed.",
+        "points": 2,
+        "enabled": true
+      },
+      {
+        "id": "help_categorize_cloth_for_washing",
+        "title": "Cook a type of dish",
+        "category": "Chores",
+        "description": "Cook a type of dish",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "help_cooking_a_dish",
+        "title": "Garbage drop off",
+        "category": "Chores",
+        "description": "Garbage drop off",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "play_with_willow_for_5_mins",
+        "title": "Help categorize cloth for washing",
+        "category": "Chores",
+        "description": "Help categorize cloth for washing",
+        "points": 1,
+        "enabled": true
+      },
+      {
+        "id": "cook_a_type_of_fruit",
+        "title": "Help cooking a dish",
+        "category": "Chores",
+        "description": "Help cooking a dish",
         "points": 1,
         "enabled": true
       }
@@ -1036,7 +1028,7 @@
     "parent_pin_hash": "",
     "sound_enabled": false,
     "github_sync_url": "https://wtvpts-sync.wslu42-wtvpts.workers.dev",
-    "active_user_id": "mom",
+    "active_user_id": "dad",
     "cleanup_non_willow_done": true,
     "cleanup_willow_done": true,
     "apply_willow_templates_done": true,
