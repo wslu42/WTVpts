@@ -29,14 +29,6 @@
   "events_by_user": {
     "mom": [
       {
-        "id": "drink_water",
-        "title": "Remind water",
-        "category": "Health",
-        "description": "Remind Mom or Dad to drink up a cup of water",
-        "points": 1,
-        "enabled": true
-      },
-      {
         "id": "set_table",
         "title": "Clean the table",
         "category": "Chores",
