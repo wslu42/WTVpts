@@ -1020,12 +1020,22 @@
       "ref_id": "help_categorize_cloth_for_washing",
       "points": 2,
       "note": "Help categorize cloth for washing"
+    },
+    {
+      "id": "279093aa-3cc0-4e62-8806-5188f5248e51",
+      "ts": 1771809415469,
+      "user_id": "will",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "minigame_1",
+      "points": 1,
+      "note": "Play a mini game"
     }
   ],
   "settings": {
     "parent_pin_hash": "",
     "sound_enabled": false,
-    "github_sync_url": "https://wtvpts-sync.wslu42-wtvpts.workers.dev",
+    "github_sync_url": "https://wtvpts-sync.wslu42-wtvpts.workers.dev/",
     "active_user_id": "will",
     "cleanup_non_willow_done": true,
     "cleanup_willow_done": true,
