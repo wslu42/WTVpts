@@ -45,14 +45,6 @@
         "enabled": true
       },
       {
-        "id": "read_15",
-        "title": "Read 15 minutes",
-        "category": "Learning",
-        "description": "Book or educational reading.",
-        "points": 2,
-        "enabled": true
-      },
-      {
         "id": "exercise",
         "title": "Remind exercise",
         "category": "Health",
