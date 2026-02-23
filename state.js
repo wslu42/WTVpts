@@ -1,6 +1,7 @@
 import { seedState } from "./seed-data.js";
 
 const STORAGE_KEY = "family_points_v2_seed_data_json";
+const DEFAULT_SYNC_URL = "https://wtvpts-sync.wslu42-wtvpts.workers.dev";
 
 function makeBaseEvents() {
   return [
@@ -72,6 +73,7 @@ function cloneSeedState() {
     settings: {
       parent_pin_hash: "",
       sound_enabled: false,
+      github_sync_url: DEFAULT_SYNC_URL,
       ...(cloned.settings || {})
     }
   };
