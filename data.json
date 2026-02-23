@@ -46,9 +46,9 @@
       },
       {
         "id": "exercise",
-        "title": "Remind exercise",
+        "title": "Exercise for 30 min",
         "category": "Health",
-        "description": "Remind Mom or Dad to drink up to exercise",
+        "description": "Exercise for 30 min",
         "points": 2,
         "enabled": true
       },
