@@ -32,6 +32,8 @@ ambientAudio.preload = "auto";
 ambientAudio.volume = 0;
 const AUTO_SYNC_PUSH_DEBOUNCE_MS = 1200;
 const AUTO_SYNC_PULL_INTERVAL_MS = 15000;
+const SYNC_KEY_STORAGE_KEY = "family_points_sync_key_v1";
+const SYNC_KEY_HINT_DISMISSED_KEY = "family_points_sync_key_hint_dismissed_v1";
 
 let fadeTimer = null;
 
@@ -126,6 +128,51 @@ function parseSyncError(payload, status) {
   return clippedDetail ? `${baseError}: ${clippedDetail}` : baseError;
 }
 
+function getStoredSyncKey() {
+  try {
+    return String(localStorage.getItem(SYNC_KEY_STORAGE_KEY) || "").trim();
+  } catch {
+    return "";
+  }
+}
+
+function setStoredSyncKey(value) {
+  try {
+    const next = String(value || "").trim();
+    if (!next) {
+      localStorage.removeItem(SYNC_KEY_STORAGE_KEY);
+      return;
+    }
+    localStorage.setItem(SYNC_KEY_STORAGE_KEY, next);
+  } catch {
+    // ignore storage write failures
+  }
+}
+
+function isSyncKeyHintDismissed() {
+  try {
+    return sessionStorage.getItem(SYNC_KEY_HINT_DISMISSED_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function dismissSyncKeyHint() {
+  try {
+    sessionStorage.setItem(SYNC_KEY_HINT_DISMISSED_KEY, "1");
+  } catch {
+    // ignore storage write failures
+  }
+}
+
+function clearSyncKeyHintDismissed() {
+  try {
+    sessionStorage.removeItem(SYNC_KEY_HINT_DISMISSED_KEY);
+  } catch {
+    // ignore storage write failures
+  }
+}
+
 function downloadJsonFile(filename, content) {
   const blob = new Blob([content], { type: "application/json" });
   const url = URL.createObjectURL(blob);
@@ -178,6 +225,32 @@ export function createController(getState, setState, rerender) {
     return String(state.settings?.github_sync_url || "").trim();
   }
 
+  function getSyncKey() {
+    return getStoredSyncKey();
+  }
+
+  function maybePromptFirstSyncKey() {
+    const state = getState();
+    const endpoint = getSyncEndpoint(state);
+    if (!endpoint || getSyncKey() || isSyncKeyHintDismissed()) return;
+    const entered = window.prompt("Enter SYNC_KEY for this device to enable auto sync:", "");
+    if (entered === null) {
+      dismissSyncKeyHint();
+      showToast("SYNC_KEY not set. Auto sync is paused on this device.", true);
+      return;
+    }
+    const key = String(entered || "").trim();
+    if (!key) {
+      dismissSyncKeyHint();
+      showToast("SYNC_KEY not set. Auto sync is paused on this device.", true);
+      return;
+    }
+    setStoredSyncKey(key);
+    clearSyncKeyHintDismissed();
+    showToast("Sync key saved on this device.");
+    ensureAutoSyncLoop();
+  }
+
   function stateFingerprint(state) {
     return JSON.stringify(state);
   }
@@ -195,13 +268,15 @@ export function createController(getState, setState, rerender) {
     if (syncBusy) return false;
     const current = getState();
     const endpoint = getSyncEndpoint(current);
-    if (!endpoint) return false;
+    const syncKey = getSyncKey();
+    if (!endpoint || !syncKey) return false;
     syncBusy = true;
     try {
       const res = await fetch(endpoint, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "X-Sync-Key": syncKey
         },
         body: JSON.stringify({ state: current })
       });
@@ -234,10 +309,16 @@ export function createController(getState, setState, rerender) {
     if (syncBusy || dirtySinceLastPush) return false;
     const current = getState();
     const endpoint = getSyncEndpoint(current);
-    if (!endpoint) return false;
+    const syncKey = getSyncKey();
+    if (!endpoint || !syncKey) return false;
     syncBusy = true;
     try {
-      const res = await fetch(endpoint, { method: "GET" });
+      const res = await fetch(endpoint, {
+        method: "GET",
+        headers: {
+          "X-Sync-Key": syncKey
+        }
+      });
       let payload = null;
       try {
         payload = await res.json();
@@ -288,7 +369,8 @@ export function createController(getState, setState, rerender) {
 
   function ensureAutoSyncLoop() {
     const endpoint = getSyncEndpoint(getState());
-    if (!endpoint) {
+    const syncKey = getSyncKey();
+    if (!endpoint || !syncKey) {
       if (autoPullTimer) {
         clearInterval(autoPullTimer);
         autoPullTimer = null;
@@ -447,10 +529,30 @@ export function createController(getState, setState, rerender) {
       return;
     }
 
+    if (action === "save-sync-key") {
+      const input = document.getElementById("github-sync-key");
+      const key = String(input?.value || "").trim();
+      setStoredSyncKey(key);
+      if (key) clearSyncKeyHintDismissed();
+      if (input) input.value = "";
+      showToast(key ? "Sync key saved on this device." : "Sync key cleared on this device.");
+      ensureAutoSyncLoop();
+      return;
+    }
+
+    if (action === "prompt-sync-key") {
+      clearSyncKeyHintDismissed();
+      maybePromptFirstSyncKey();
+      return;
+    }
+
     if (action === "sync-github") {
       const endpoint = getSyncEndpoint(state);
       if (!endpoint) {
         return showToast("Set and save GitHub Sync URL first.", true);
+      }
+      if (!getSyncKey()) {
+        return showToast("Set and save SYNC_KEY first.", true);
       }
       await pushStateToGithub({ silent: false });
       return;
@@ -656,6 +758,7 @@ export function createController(getState, setState, rerender) {
   function renderCurrent() {
     const state = getState();
     ensureAutoSyncLoop();
+    maybePromptFirstSyncKey();
     const route = parseRoute(window.location.hash || "#/home");
     const activeUserId = state.settings.active_user_id;
 
@@ -682,7 +785,7 @@ export function createController(getState, setState, rerender) {
     }
 
     if (route.kind === "settings") {
-      app.innerHTML = renderHome(state, renderSettings(state));
+      app.innerHTML = renderHome(state, renderSettings(state, { syncKeySet: Boolean(getSyncKey()) }));
       syncAmbientAudio(Boolean(state.settings?.sound_enabled), false);
       return;
     }

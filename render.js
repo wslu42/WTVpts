@@ -411,10 +411,11 @@ export function renderManageEvents(state, userId) {
   `;
 }
 
-export function renderSettings(state) {
+export function renderSettings(state, syncMeta = {}) {
   const hasPin = Boolean(state.settings.parent_pin_hash);
   const syncUrl = String(state.settings?.github_sync_url || "");
   const autoSyncOn = Boolean(syncUrl);
+  const syncKeySet = Boolean(syncMeta.syncKeySet);
 
   return `
     <section class="card">
@@ -435,10 +436,14 @@ export function renderSettings(state) {
 
     <section class="card">
       <h2>GitHub Sync</h2>
-      <p class="muted">Save current data to your GitHub repo through Cloudflare Worker. Auto sync: <strong>${autoSyncOn ? "On" : "Off"}</strong>.</p>
+      <p class="muted">Save current data to your GitHub repo through Cloudflare Worker. Auto sync: <strong>${autoSyncOn ? "On" : "Off"}</strong>. Sync key: <strong>${syncKeySet ? "Set" : "Not set"}</strong>.</p>
+      ${!syncKeySet ? '<p class="muted"><strong>First-time setup:</strong> add SYNC_KEY on this device to enable auto sync.</p>' : ""}
       <div class="inline-row">
         <input id="github-sync-url" type="text" placeholder="https://your-worker.workers.dev" value="${escapeHtml(syncUrl)}" />
+        <input id="github-sync-key" type="password" placeholder="SYNC_KEY" value="" />
         <button class="btn-secondary" data-action="save-sync-url">Save URL</button>
+        <button class="btn-secondary" data-action="save-sync-key">Save Key</button>
+        ${!syncKeySet ? '<button class="btn-secondary" data-action="prompt-sync-key">Set Key Now</button>' : ""}
         <button class="btn-primary" data-action="sync-github">Sync to GitHub</button>
       </div>
     </section>

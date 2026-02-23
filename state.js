@@ -152,6 +152,9 @@ function migrate(input) {
   if (output.settings.active_user_id === "guest") {
     output.settings.active_user_id = "grandpa";
   }
+  if (!String(output.settings.github_sync_url || "").trim()) {
+    output.settings.github_sync_url = DEFAULT_SYNC_URL;
+  }
 
   if (!output.version || output.version < 1) {
     output.version = 1;

@@ -15,6 +15,10 @@ export default {
       return json({ error: "Forbidden origin" }, 403, env);
     }
 
+    if (!hasValidSyncKey(req, env)) {
+      return json({ error: "Unauthorized sync key" }, 401, env);
+    }
+
     let state = null;
     if (req.method === "POST") {
       let body;
@@ -126,4 +130,16 @@ function base64ToUtf8(base64) {
   const binary = atob(normalized);
   const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
   return new TextDecoder().decode(bytes);
+}
+
+function hasValidSyncKey(req, env) {
+  const expected = String(env.SYNC_KEY || "");
+  if (!expected) return false;
+  const provided = String(req.headers.get("X-Sync-Key") || "");
+  if (provided.length !== expected.length) return false;
+  let mismatch = 0;
+  for (let i = 0; i < expected.length; i += 1) {
+    mismatch |= expected.charCodeAt(i) ^ provided.charCodeAt(i);
+  }
+  return mismatch === 0;
 }
