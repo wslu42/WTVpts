@@ -1015,11 +1015,11 @@
   "settings": {
     "parent_pin_hash": "",
     "sound_enabled": false,
+    "github_sync_url": "https://wtvpts-sync.wslu42-wtvpts.workers.dev",
     "active_user_id": "mom",
     "cleanup_non_willow_done": true,
     "cleanup_willow_done": true,
     "apply_willow_templates_done": true,
-    "bonus_grandma_niece_done": true,
-    "github_sync_url": "https://wtvpts-sync.wslu42-wtvpts.workers.dev/"
+    "bonus_grandma_niece_done": true
   }
 }
