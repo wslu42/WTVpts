@@ -930,6 +930,36 @@
       "ref_id": "eat_8_pieces_of_fruits",
       "points": 1,
       "note": "Eat 8 pieces of fruits"
+    },
+    {
+      "id": "0f43b344-5daf-4215-bf13-c600f75b05e7",
+      "ts": 1771807125443,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "set_table",
+      "points": 2,
+      "note": "Clean the table"
+    },
+    {
+      "id": "ad1327fe-9eac-4e8a-a234-a93ede8be4d7",
+      "ts": 1771807126156,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "tidy_room",
+      "points": 2,
+      "note": "Tidy room"
+    },
+    {
+      "id": "850df7cb-0f9e-4e84-9800-6a38ecd8888b",
+      "ts": 1771807126814,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
     }
   ],
   "settings": {
