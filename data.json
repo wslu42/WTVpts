@@ -99,6 +99,14 @@
         "description": "Make a video and upload to shareable site like youtube",
         "points": 1,
         "enabled": true
+      },
+      {
+        "id": "garbage_drop_off",
+        "title": "Garbage drop off",
+        "category": "Chores",
+        "description": "Garbage drop off",
+        "points": 1,
+        "enabled": true
       }
     ],
     "dad": [
