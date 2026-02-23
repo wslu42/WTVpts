@@ -30,6 +30,8 @@ const ambientAudio = new Audio("./lake.mp3");
 ambientAudio.loop = true;
 ambientAudio.preload = "auto";
 ambientAudio.volume = 0;
+const AUTO_SYNC_PUSH_DEBOUNCE_MS = 1200;
+const AUTO_SYNC_PULL_INTERVAL_MS = 15000;
 
 let fadeTimer = null;
 
@@ -108,6 +110,22 @@ function showToast(message, isError = false) {
   setTimeout(() => toast.remove(), 2200);
 }
 
+function parseSyncError(payload, status) {
+  const baseError = String(payload?.error || `Sync failed (${status})`);
+  const rawDetail = typeof payload?.detail === "string" ? payload.detail : "";
+  let detailMsg = "";
+  if (rawDetail) {
+    try {
+      const parsedDetail = JSON.parse(rawDetail);
+      detailMsg = String(parsedDetail?.message || parsedDetail?.error || rawDetail);
+    } catch {
+      detailMsg = rawDetail;
+    }
+  }
+  const clippedDetail = detailMsg.length > 180 ? `${detailMsg.slice(0, 180)}...` : detailMsg;
+  return clippedDetail ? `${baseError}: ${clippedDetail}` : baseError;
+}
+
 function downloadJsonFile(filename, content) {
   const blob = new Blob([content], { type: "application/json" });
   const url = URL.createObjectURL(blob);
@@ -148,14 +166,154 @@ export function createController(getState, setState, rerender) {
     range: "7",
     category: "all"
   };
+  let autoPushTimer = null;
+  let autoPullTimer = null;
+  let syncBusy = false;
+  let dirtySinceLastPush = false;
+  let lastSyncedSha = "";
+  let syncEndpointBound = "";
+  let visibilityHooked = false;
 
-  function applyState(next) {
+  function getSyncEndpoint(state) {
+    return String(state.settings?.github_sync_url || "").trim();
+  }
+
+  function stateFingerprint(state) {
+    return JSON.stringify(state);
+  }
+
+  function applyState(next, options = {}) {
     setState(next);
     rerender();
+    if (!options.skipAutoPush) {
+      dirtySinceLastPush = true;
+      scheduleAutoPush();
+    }
+  }
+
+  async function pushStateToGithub({ silent = true } = {}) {
+    if (syncBusy) return false;
+    const current = getState();
+    const endpoint = getSyncEndpoint(current);
+    if (!endpoint) return false;
+    syncBusy = true;
+    try {
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ state: current })
+      });
+      let payload = null;
+      try {
+        payload = await res.json();
+      } catch {
+        payload = null;
+      }
+      if (!res.ok) {
+        if (!silent) showToast(parseSyncError(payload, res.status), true);
+        return false;
+      }
+      lastSyncedSha = String(payload?.sha || lastSyncedSha || "");
+      dirtySinceLastPush = false;
+      if (!silent) {
+        const shortCommit = payload?.commit ? ` (${String(payload.commit).slice(0, 7)})` : "";
+        showToast(`Synced to GitHub${shortCommit}`);
+      }
+      return true;
+    } catch {
+      if (!silent) showToast("Sync request failed. Check Worker URL/CORS/network.", true);
+      return false;
+    } finally {
+      syncBusy = false;
+    }
+  }
+
+  async function pullStateFromGithub({ silent = true } = {}) {
+    if (syncBusy || dirtySinceLastPush) return false;
+    const current = getState();
+    const endpoint = getSyncEndpoint(current);
+    if (!endpoint) return false;
+    syncBusy = true;
+    try {
+      const res = await fetch(endpoint, { method: "GET" });
+      let payload = null;
+      try {
+        payload = await res.json();
+      } catch {
+        payload = null;
+      }
+      if (!res.ok) {
+        if (!silent) showToast(parseSyncError(payload, res.status), true);
+        return false;
+      }
+      const remoteState = payload?.state;
+      const remoteSha = String(payload?.sha || "");
+      if (!remoteState || typeof remoteState !== "object") {
+        if (!silent) showToast("Remote state is invalid.", true);
+        return false;
+      }
+      if (remoteSha && remoteSha === lastSyncedSha) return true;
+      if (stateFingerprint(remoteState) === stateFingerprint(current)) {
+        lastSyncedSha = remoteSha || lastSyncedSha;
+        return true;
+      }
+      const imported = replaceState(remoteState);
+      applyState(imported, { skipAutoPush: true });
+      lastSyncedSha = remoteSha || lastSyncedSha;
+      dirtySinceLastPush = false;
+      if (!silent) showToast("Loaded latest data from GitHub.");
+      return true;
+    } catch {
+      if (!silent) showToast("Pull request failed. Check Worker URL/CORS/network.", true);
+      return false;
+    } finally {
+      syncBusy = false;
+    }
+  }
+
+  function scheduleAutoPush() {
+    if (autoPushTimer) clearTimeout(autoPushTimer);
+    autoPushTimer = setTimeout(() => {
+      pushStateToGithub({ silent: true });
+    }, AUTO_SYNC_PUSH_DEBOUNCE_MS);
+  }
+
+  function ensureAutoSyncLoop() {
+    const endpoint = getSyncEndpoint(getState());
+    if (!endpoint) {
+      if (autoPullTimer) {
+        clearInterval(autoPullTimer);
+        autoPullTimer = null;
+      }
+      syncEndpointBound = "";
+      lastSyncedSha = "";
+      return;
+    }
+    if (endpoint !== syncEndpointBound) {
+      syncEndpointBound = endpoint;
+      lastSyncedSha = "";
+      pullStateFromGithub({ silent: true });
+    }
+    if (!autoPullTimer) {
+      autoPullTimer = setInterval(() => {
+        pullStateFromGithub({ silent: true });
+      }, AUTO_SYNC_PULL_INTERVAL_MS);
+    }
+    if (!visibilityHooked) {
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") {
+          pullStateFromGithub({ silent: true });
+        }
+      });
+      visibilityHooked = true;
+    }
   }
 
   function onRouteChange() {
     rerender();
+    ensureAutoSyncLoop();
   }
 
   async function onGlobalClick(event) {
@@ -279,49 +437,16 @@ export function createController(getState, setState, rerender) {
       };
       applyState(next);
       showToast(url ? "Sync URL saved." : "Sync URL cleared.");
+      ensureAutoSyncLoop();
       return;
     }
 
     if (action === "sync-github") {
-      const endpoint = String(state.settings?.github_sync_url || "").trim();
+      const endpoint = getSyncEndpoint(state);
       if (!endpoint) {
         return showToast("Set and save GitHub Sync URL first.", true);
       }
-      try {
-        const res = await fetch(endpoint, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ state })
-        });
-        let payload = null;
-        try {
-          payload = await res.json();
-        } catch {
-          payload = null;
-        }
-        if (!res.ok) {
-          const baseError = String(payload?.error || `Sync failed (${res.status})`);
-          const rawDetail = typeof payload?.detail === "string" ? payload.detail : "";
-          let detailMsg = "";
-          if (rawDetail) {
-            try {
-              const parsedDetail = JSON.parse(rawDetail);
-              detailMsg = String(parsedDetail?.message || parsedDetail?.error || rawDetail);
-            } catch {
-              detailMsg = rawDetail;
-            }
-          }
-          const clippedDetail = detailMsg.length > 180 ? `${detailMsg.slice(0, 180)}...` : detailMsg;
-          const fullError = clippedDetail ? `${baseError}: ${clippedDetail}` : baseError;
-          return showToast(fullError, true);
-        }
-        const shortCommit = payload?.commit ? ` (${String(payload.commit).slice(0, 7)})` : "";
-        showToast(`Synced to GitHub${shortCommit}`);
-      } catch {
-        showToast("Sync request failed. Check Worker URL/CORS/network.", true);
-      }
+      await pushStateToGithub({ silent: false });
       return;
     }
 
@@ -524,6 +649,7 @@ export function createController(getState, setState, rerender) {
 
   function renderCurrent() {
     const state = getState();
+    ensureAutoSyncLoop();
     const route = parseRoute(window.location.hash || "#/home");
     const activeUserId = state.settings.active_user_id;
 

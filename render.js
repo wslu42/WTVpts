@@ -414,6 +414,7 @@ export function renderManageEvents(state, userId) {
 export function renderSettings(state) {
   const hasPin = Boolean(state.settings.parent_pin_hash);
   const syncUrl = String(state.settings?.github_sync_url || "");
+  const autoSyncOn = Boolean(syncUrl);
 
   return `
     <section class="card">
@@ -434,7 +435,7 @@ export function renderSettings(state) {
 
     <section class="card">
       <h2>GitHub Sync</h2>
-      <p class="muted">Save current data to your GitHub repo through Cloudflare Worker.</p>
+      <p class="muted">Save current data to your GitHub repo through Cloudflare Worker. Auto sync: <strong>${autoSyncOn ? "On" : "Off"}</strong>.</p>
       <div class="inline-row">
         <input id="github-sync-url" type="text" placeholder="https://your-worker.workers.dev" value="${escapeHtml(syncUrl)}" />
         <button class="btn-secondary" data-action="save-sync-url">Save URL</button>

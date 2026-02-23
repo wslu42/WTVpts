@@ -4,7 +4,7 @@ export default {
       return new Response(null, { headers: corsHeaders(env) });
     }
 
-    if (req.method !== "POST") {
+    if (req.method !== "GET" && req.method !== "POST") {
       return json({ error: "Method not allowed" }, 405, env);
     }
 
@@ -37,7 +37,6 @@ export default {
 
     const apiBase = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
 
-    // 1) Fetch current file to get its sha.
     const getRes = await fetch(`${apiBase}?ref=${encodeURIComponent(branch)}`, {
       headers: ghHeaders(token)
     });
@@ -47,6 +46,16 @@ export default {
     }
     const current = await getRes.json();
     const sha = current.sha;
+
+    if (req.method === "GET") {
+      try {
+        const raw = base64ToUtf8(String(current.content || ""));
+        const state = JSON.parse(raw);
+        return json({ ok: true, state, sha }, 200, env);
+      } catch (error) {
+        return json({ error: "Parse current file failed", detail: String(error?.message || error) }, 502, env);
+      }
+    }
 
     // 2) Update file with latest app state.
     const raw = JSON.stringify(state, null, 2) + "\n";
@@ -69,7 +78,7 @@ export default {
     }
 
     const result = await putRes.json();
-    return json({ ok: true, commit: result?.commit?.sha || null }, 200, env);
+    return json({ ok: true, commit: result?.commit?.sha || null, sha: result?.content?.sha || null }, 200, env);
   }
 };
 
@@ -96,7 +105,7 @@ function json(data, status, env) {
 function corsHeaders(env) {
   return {
     "Access-Control-Allow-Origin": env.ALLOWED_ORIGIN || "",
-    "Access-Control-Allow-Methods": "POST,OPTIONS",
+    "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type"
   };
 }
@@ -106,4 +115,11 @@ function base64Utf8(text) {
   let binary = "";
   for (const b of bytes) binary += String.fromCharCode(b);
   return btoa(binary);
+}
+
+function base64ToUtf8(base64) {
+  const normalized = base64.replace(/\s+/g, "");
+  const binary = atob(normalized);
+  const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
 }
