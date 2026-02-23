@@ -15,16 +15,18 @@ export default {
       return json({ error: "Forbidden origin" }, 403, env);
     }
 
-    let body;
-    try {
-      body = await req.json();
-    } catch {
-      return json({ error: "Invalid JSON" }, 400, env);
-    }
-
-    const state = body?.state;
-    if (!state || typeof state !== "object") {
-      return json({ error: "Missing state" }, 400, env);
+    let state = null;
+    if (req.method === "POST") {
+      let body;
+      try {
+        body = await req.json();
+      } catch {
+        return json({ error: "Invalid JSON" }, 400, env);
+      }
+      state = body?.state;
+      if (!state || typeof state !== "object") {
+        return json({ error: "Missing state" }, 400, env);
+      }
     }
 
     const owner = env.GH_OWNER;
