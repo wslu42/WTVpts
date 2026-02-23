@@ -659,7 +659,7 @@
         "title": "Me time 5 min",
         "category": "Me-time",
         "cost": 1,
-        "unlock_at_total": 200,
+        "unlock_at_total": 300,
         "enabled": true
       },
       {
@@ -667,7 +667,7 @@
         "title": "Pick weekend activity",
         "category": "Family",
         "cost": 1,
-        "unlock_at_total": 300,
+        "unlock_at_total": 200,
         "enabled": true
       },
       {
