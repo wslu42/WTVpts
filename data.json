@@ -1132,6 +1132,16 @@
       "ref_id": "set_table",
       "points": 2,
       "note": "Clean the table"
+    },
+    {
+      "id": "15476551-fd66-4196-b2ed-d595eed4e9fb",
+      "ts": 1771896593565,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_8_pieces_of_fruits",
+      "points": 1,
+      "note": "Eat 8 pieces of fruits"
     }
   ],
   "settings": {
