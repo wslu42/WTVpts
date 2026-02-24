@@ -1280,6 +1280,16 @@
       "ref_id": "read_15",
       "points": 2,
       "note": "Read 15 minutes"
+    },
+    {
+      "id": "f0496a51-a283-4dc1-a348-b17ce1cbad6c",
+      "ts": 1771963674516,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "drink_water",
+      "points": 1,
+      "note": "Remind water"
     }
   ],
   "settings": {
