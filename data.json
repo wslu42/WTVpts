@@ -1270,6 +1270,16 @@
       "ref_id": "eat_veg",
       "points": 1,
       "note": "Finished a type of food"
+    },
+    {
+      "id": "d086cac6-8ad0-4c94-9720-81bb4d542989",
+      "ts": 1771960504480,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "read_15",
+      "points": 2,
+      "note": "Read 15 minutes"
     }
   ],
   "settings": {
