@@ -1072,6 +1072,16 @@
       "ref_id": "read_15",
       "points": 2,
       "note": "Read 15 minutes"
+    },
+    {
+      "id": "1a106be4-af21-45fa-9acd-315cd02e4ffb",
+      "ts": 1771892122442,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
     }
   ],
   "settings": {
