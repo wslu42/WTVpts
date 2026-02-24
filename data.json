@@ -1122,6 +1122,16 @@
       "ref_id": "minigame_1",
       "points": 1,
       "note": "Play a mini game"
+    },
+    {
+      "id": "c48e436a-424d-4bd4-9d6c-15e5bff3b9fb",
+      "ts": 1771892335659,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "set_table",
+      "points": 2,
+      "note": "Clean the table"
     }
   ],
   "settings": {
