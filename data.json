@@ -1112,6 +1112,16 @@
       "ref_id": "minigame_1",
       "points": 1,
       "note": "Play a mini game"
+    },
+    {
+      "id": "ea601d6c-0014-4a55-99e4-550b37bab500",
+      "ts": 1771892331345,
+      "user_id": "will",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "minigame_1",
+      "points": 1,
+      "note": "Play a mini game"
     }
   ],
   "settings": {
