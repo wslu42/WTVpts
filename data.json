@@ -1330,6 +1330,16 @@
       "ref_id": "minigame_1",
       "points": 1,
       "note": "Play a mini game"
+    },
+    {
+      "id": "371ec596-5816-4e9c-8f29-c8bac0638bcc",
+      "ts": 1771965817868,
+      "user_id": "mom",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_8_pieces_of_fruits",
+      "points": 1,
+      "note": "Prepare 8 pieces of fruits"
     }
   ],
   "settings": {
