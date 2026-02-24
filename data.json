@@ -1230,6 +1230,16 @@
       "ref_id": "drink_water",
       "points": 1,
       "note": "Remind water"
+    },
+    {
+      "id": "f7d69ddb-baa9-48f2-803a-9bb8bedcb75b",
+      "ts": 1771948328990,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
     }
   ],
   "settings": {
