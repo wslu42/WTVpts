@@ -1180,6 +1180,26 @@
       "ref_id": "eat_8_pieces_of_fruits",
       "points": 1,
       "note": "Prepare 8 pieces of fruits"
+    },
+    {
+      "id": "387ce2f3-67ac-4e60-b39d-50a480119281",
+      "ts": 1771896918960,
+      "user_id": "dad",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "labor_works_30min",
+      "points": 1,
+      "note": "Labor works 30min"
+    },
+    {
+      "id": "dd3dd589-2964-4cd2-893f-1d5eeb2c2ae2",
+      "ts": 1771896919850,
+      "user_id": "dad",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "labor_works_30min",
+      "points": 1,
+      "note": "Labor works 30min"
     }
   ],
   "settings": {
