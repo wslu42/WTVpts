@@ -1310,6 +1310,26 @@
       "ref_id": "cook_a_type_of_dish",
       "points": 1,
       "note": "Cook a type of dish"
+    },
+    {
+      "id": "07f869ce-cedd-4dde-a0a7-9b0b9195e199",
+      "ts": 1771965810746,
+      "user_id": "mom",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "minigame_1",
+      "points": 1,
+      "note": "Play a mini game"
+    },
+    {
+      "id": "ccdcacaa-5cdd-4503-a3ab-d18411fe50b4",
+      "ts": 1771965811176,
+      "user_id": "mom",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "minigame_1",
+      "points": 1,
+      "note": "Play a mini game"
     }
   ],
   "settings": {
