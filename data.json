@@ -1162,6 +1162,16 @@
       "ref_id": "cook_a_type_of_dish",
       "points": 1,
       "note": "Cook a type of dish"
+    },
+    {
+      "id": "088725c6-1296-434c-883f-91afb608544b",
+      "ts": 1771896872321,
+      "user_id": "mom",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_8_pieces_of_fruits",
+      "points": 1,
+      "note": "Prepare 8 pieces of fruits"
     }
   ],
   "settings": {
