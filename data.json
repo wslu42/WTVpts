@@ -1200,13 +1200,23 @@
       "ref_id": "labor_works_30min",
       "points": 1,
       "note": "Labor works 30min"
+    },
+    {
+      "id": "7f3aa684-05ed-4402-905e-349caa1dd38b",
+      "ts": 1771942723268,
+      "user_id": "dad",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "labor_works_30min",
+      "points": 1,
+      "note": "Labor works 30min"
     }
   ],
   "settings": {
     "parent_pin_hash": "",
     "sound_enabled": true,
     "github_sync_url": "https://wtvpts-sync.wslu42-wtvpts.workers.dev",
-    "active_user_id": "will",
+    "active_user_id": "dad",
     "cleanup_non_willow_done": true,
     "cleanup_willow_done": true,
     "apply_willow_templates_done": true,
