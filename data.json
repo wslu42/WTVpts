@@ -1290,13 +1290,33 @@
       "ref_id": "drink_water",
       "points": 1,
       "note": "Remind water"
+    },
+    {
+      "id": "d782921c-ba4f-48c4-bc27-85f1dcbe1048",
+      "ts": 1771965804632,
+      "user_id": "mom",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "cook_a_type_of_dish",
+      "points": 1,
+      "note": "Cook a type of dish"
+    },
+    {
+      "id": "899f45d1-4900-480a-af2e-77cfed60af35",
+      "ts": 1771965804733,
+      "user_id": "mom",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "cook_a_type_of_dish",
+      "points": 1,
+      "note": "Cook a type of dish"
     }
   ],
   "settings": {
     "parent_pin_hash": "",
     "sound_enabled": false,
     "github_sync_url": "https://wtvpts-sync.wslu42-wtvpts.workers.dev",
-    "active_user_id": "will",
+    "active_user_id": "mom",
     "cleanup_non_willow_done": true,
     "cleanup_willow_done": true,
     "apply_willow_templates_done": true,
