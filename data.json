@@ -1460,6 +1460,16 @@
       "ref_id": "eat_8_pieces_of_fruits",
       "points": 1,
       "note": "Eat 8 pieces of fruits"
+    },
+    {
+      "id": "37665870-2da0-4563-a439-629412c60d10",
+      "ts": 1772036396586,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "exercise",
+      "points": 1,
+      "note": "Remind exercise"
     }
   ],
   "settings": {
