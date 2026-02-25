@@ -1410,13 +1410,33 @@
       "ref_id": "help_cooking_a_dish",
       "points": 1,
       "note": "Garbage drop off"
+    },
+    {
+      "id": "de43bf82-b1f1-4a10-b81f-56583dd2312b",
+      "ts": 1771986995965,
+      "user_id": "mom",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "help_cooking_a_dish",
+      "points": 1,
+      "note": "Help cooking a dish"
+    },
+    {
+      "id": "45fef971-2a3d-45eb-9c4f-25ed444e1ec9",
+      "ts": 1771986996899,
+      "user_id": "mom",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "help_cooking_a_dish",
+      "points": 1,
+      "note": "Help cooking a dish"
     }
   ],
   "settings": {
     "parent_pin_hash": "",
     "sound_enabled": false,
     "github_sync_url": "https://wtvpts-sync.wslu42-wtvpts.workers.dev",
-    "active_user_id": "dad",
+    "active_user_id": "mom",
     "cleanup_non_willow_done": true,
     "cleanup_willow_done": true,
     "apply_willow_templates_done": true,
