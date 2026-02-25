@@ -229,7 +229,7 @@
         "title": "Clean the table",
         "category": "Chores",
         "description": "Table clean check passed.",
-        "points": 2,
+        "points": 1,
         "enabled": true
       },
       {
@@ -253,7 +253,7 @@
         "title": "Math practice 15 minutes",
         "category": "Learning",
         "description": "Completed assigned practice.",
-        "points": 2,
+        "points": 1,
         "enabled": true
       },
       {
@@ -261,7 +261,7 @@
         "title": "Remind exercise",
         "category": "Health",
         "description": "Remind Mom or Dad to drink up to exercise",
-        "points": 2,
+        "points": 1,
         "enabled": true
       },
       {
