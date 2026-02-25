@@ -1510,13 +1510,33 @@
       "ref_id": "help_cooking_a_dish",
       "points": 1,
       "note": "Help cooking a dish"
+    },
+    {
+      "id": "baf02cd6-bc3e-4076-8467-476173aa5e06",
+      "ts": 1772057648346,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
+    },
+    {
+      "id": "6adf6e6f-17b5-4470-95c1-a744746445a1",
+      "ts": 1772057649029,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
     }
   ],
   "settings": {
     "parent_pin_hash": "",
     "sound_enabled": false,
     "github_sync_url": "https://wtvpts-sync.wslu42-wtvpts.workers.dev",
-    "active_user_id": "mom",
+    "active_user_id": "will",
     "cleanup_non_willow_done": true,
     "cleanup_willow_done": true,
     "apply_willow_templates_done": true,
