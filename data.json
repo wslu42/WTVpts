@@ -1380,6 +1380,16 @@
       "ref_id": "eat_veg",
       "points": 1,
       "note": "Finished a type of food"
+    },
+    {
+      "id": "5faad548-5870-40f1-8192-fcbec52acb97",
+      "ts": 1771979527322,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "set_table",
+      "points": 2,
+      "note": "Clean the table"
     }
   ],
   "settings": {
