@@ -1400,13 +1400,23 @@
       "ref_id": "cook_a_type_of_dish",
       "points": 1,
       "note": "Cook a type of dish"
+    },
+    {
+      "id": "886d368b-0f67-4bab-b9a1-5a88197625ed",
+      "ts": 1771986954785,
+      "user_id": "dad",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "help_cooking_a_dish",
+      "points": 1,
+      "note": "Garbage drop off"
     }
   ],
   "settings": {
     "parent_pin_hash": "",
     "sound_enabled": false,
     "github_sync_url": "https://wtvpts-sync.wslu42-wtvpts.workers.dev",
-    "active_user_id": "mom",
+    "active_user_id": "dad",
     "cleanup_non_willow_done": true,
     "cleanup_willow_done": true,
     "apply_willow_templates_done": true,
