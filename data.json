@@ -1480,13 +1480,23 @@
       "ref_id": "exercise",
       "points": 2,
       "note": "Exercise for 30 min"
+    },
+    {
+      "id": "fe580433-0f2c-4714-932e-b1a24365af53",
+      "ts": 1772054416133,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "drink_water",
+      "points": 1,
+      "note": "Remind water"
     }
   ],
   "settings": {
     "parent_pin_hash": "",
     "sound_enabled": false,
     "github_sync_url": "https://wtvpts-sync.wslu42-wtvpts.workers.dev",
-    "active_user_id": "dad",
+    "active_user_id": "will",
     "cleanup_non_willow_done": true,
     "cleanup_willow_done": true,
     "apply_willow_templates_done": true,
