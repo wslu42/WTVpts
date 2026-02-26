@@ -1560,6 +1560,16 @@
       "ref_id": "set_table",
       "points": 1,
       "note": "Clean the table"
+    },
+    {
+      "id": "8582ce5c-4bf4-402a-8247-a4067138508c",
+      "ts": 1772064506857,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "set_table",
+      "points": 1,
+      "note": "Clean the table"
     }
   ],
   "settings": {
