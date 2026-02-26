@@ -1760,6 +1760,36 @@
       "ref_id": "garbage_drop_off",
       "points": 1,
       "note": "Garbage drop off"
+    },
+    {
+      "id": "706e8ab6-8f11-49e7-99c2-c51756105341",
+      "ts": 1772149648097,
+      "user_id": "mom",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "cook_a_type_of_dish",
+      "points": 1,
+      "note": "Cook a type of dish"
+    },
+    {
+      "id": "3fa1917f-a554-459a-b6ea-543a8a21b275",
+      "ts": 1772149649162,
+      "user_id": "mom",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "cook_a_type_of_dish",
+      "points": 1,
+      "note": "Cook a type of dish"
+    },
+    {
+      "id": "6ad6574e-4d70-42f9-9b71-66801748f464",
+      "ts": 1772149649779,
+      "user_id": "mom",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "cook_a_type_of_dish",
+      "points": 1,
+      "note": "Cook a type of dish"
     }
   ],
   "settings": {
