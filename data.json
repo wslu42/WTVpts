@@ -1650,6 +1650,16 @@
       "ref_id": "cook_a_type_of_dish",
       "points": 1,
       "note": "Cook a type of dish"
+    },
+    {
+      "id": "5d263c18-c9c2-4ddd-b6e2-59cf41d8e73a",
+      "ts": 1772069482494,
+      "user_id": "mom",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "cook_a_type_of_dish",
+      "points": 1,
+      "note": "Cook a type of dish"
     }
   ],
   "settings": {
