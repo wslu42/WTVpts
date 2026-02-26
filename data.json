@@ -1680,6 +1680,26 @@
       "ref_id": "help_categorize_cloth_for_washing",
       "points": 2,
       "note": "Help categorize cloth for washing"
+    },
+    {
+      "id": "fa98274f-9296-4abe-b5ab-63cac6db0ece",
+      "ts": 1772069562575,
+      "user_id": "mom",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "minigame_1",
+      "points": 1,
+      "note": "Play a mini game"
+    },
+    {
+      "id": "0c0349fb-fa9c-4d37-8838-e28684dcaaf3",
+      "ts": 1772069562980,
+      "user_id": "mom",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "minigame_1",
+      "points": 1,
+      "note": "Play a mini game"
     }
   ],
   "settings": {
