@@ -1750,13 +1750,23 @@
       "ref_id": "eat_veg",
       "points": 1,
       "note": "Finished a type of food"
+    },
+    {
+      "id": "51d65c88-bccf-4ac1-806b-7593fb610be3",
+      "ts": 1772149646875,
+      "user_id": "mom",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "garbage_drop_off",
+      "points": 1,
+      "note": "Garbage drop off"
     }
   ],
   "settings": {
     "parent_pin_hash": "",
     "sound_enabled": false,
     "github_sync_url": "https://wtvpts-sync.wslu42-wtvpts.workers.dev",
-    "active_user_id": "will",
+    "active_user_id": "mom",
     "cleanup_non_willow_done": true,
     "cleanup_willow_done": true,
     "apply_willow_templates_done": true,
