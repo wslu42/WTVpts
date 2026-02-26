@@ -1600,6 +1600,16 @@
       "ref_id": "eat_veg",
       "points": 1,
       "note": "Finished a type of food"
+    },
+    {
+      "id": "5279f213-5f9f-49ee-b113-6afd8d0e8d2e",
+      "ts": 1772065180679,
+      "user_id": "will",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "minigame_1",
+      "points": 1,
+      "note": "Play a mini game"
     }
   ],
   "settings": {
