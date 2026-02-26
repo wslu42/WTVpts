@@ -1790,6 +1790,16 @@
       "ref_id": "cook_a_type_of_dish",
       "points": 1,
       "note": "Cook a type of dish"
+    },
+    {
+      "id": "fec35540-7034-4ed8-8279-06420e1bad6a",
+      "ts": 1772149679918,
+      "user_id": "mom",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "help_categorize_cloth_for_washing",
+      "points": 2,
+      "note": "Help categorize cloth for washing"
     }
   ],
   "settings": {
