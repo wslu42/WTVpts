@@ -1800,13 +1800,23 @@
       "ref_id": "help_categorize_cloth_for_washing",
       "points": 2,
       "note": "Help categorize cloth for washing"
+    },
+    {
+      "id": "25b70bec-cacd-421e-a8f9-be4b08c68a51",
+      "ts": 1772149699388,
+      "user_id": "dad",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "play_with_willow_for_5_mins",
+      "points": 1,
+      "note": "Help categorize cloth for washing"
     }
   ],
   "settings": {
     "parent_pin_hash": "",
     "sound_enabled": false,
     "github_sync_url": "https://wtvpts-sync.wslu42-wtvpts.workers.dev",
-    "active_user_id": "mom",
+    "active_user_id": "dad",
     "cleanup_non_willow_done": true,
     "cleanup_willow_done": true,
     "apply_willow_templates_done": true,
