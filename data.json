@@ -1610,6 +1610,16 @@
       "ref_id": "minigame_1",
       "points": 1,
       "note": "Play a mini game"
+    },
+    {
+      "id": "e9712e90-78fe-4d4e-ac96-35255ff185c0",
+      "ts": 1772069438800,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "tidy_room",
+      "points": 2,
+      "note": "Tidy room"
     }
   ],
   "settings": {
