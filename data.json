@@ -213,6 +213,14 @@
         "description": "",
         "points": 1,
         "enabled": true
+      },
+      {
+        "id": "buy_food",
+        "title": "Buy food",
+        "category": "Other",
+        "description": "",
+        "points": 1,
+        "enabled": true
       }
     ],
     "will": [
