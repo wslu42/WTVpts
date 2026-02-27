@@ -1866,6 +1866,26 @@
       "ref_id": "cook_a_type_of_dish",
       "points": 1,
       "note": "Cook a type of dish"
+    },
+    {
+      "id": "819df656-c7f8-4b30-bc70-ce285fe6e49b",
+      "ts": 1772159248595,
+      "user_id": "dad",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "taking_willow_to_tkd",
+      "points": 1,
+      "note": "Taking Willow to tkd"
+    },
+    {
+      "id": "069d0db0-2263-46c4-a84a-d4b62bcdd6ec",
+      "ts": 1772159249539,
+      "user_id": "dad",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "buy_food",
+      "points": 1,
+      "note": "Buy food"
     }
   ],
   "settings": {
