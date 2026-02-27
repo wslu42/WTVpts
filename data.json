@@ -1830,13 +1830,23 @@
       "ref_id": "eat_8_pieces_of_fruits",
       "points": 1,
       "note": "Prepare 8 pieces of fruits"
+    },
+    {
+      "id": "3db39046-0d2f-4a91-a0f3-a6f64848eaf3",
+      "ts": 1772158748227,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "set_table",
+      "points": 1,
+      "note": "Clean the table"
     }
   ],
   "settings": {
     "parent_pin_hash": "",
     "sound_enabled": false,
     "github_sync_url": "https://wtvpts-sync.wslu42-wtvpts.workers.dev",
-    "active_user_id": "mom",
+    "active_user_id": "will",
     "cleanup_non_willow_done": true,
     "cleanup_willow_done": true,
     "apply_willow_templates_done": true,
