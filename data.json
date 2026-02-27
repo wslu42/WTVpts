@@ -1810,13 +1810,23 @@
       "ref_id": "play_with_willow_for_5_mins",
       "points": 1,
       "note": "Help categorize cloth for washing"
+    },
+    {
+      "id": "67f86b60-56d7-4d06-bcc6-ff4d07ba8636",
+      "ts": 1772158614106,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_8_pieces_of_fruits",
+      "points": 1,
+      "note": "Eat 8 pieces of fruits"
     }
   ],
   "settings": {
     "parent_pin_hash": "",
     "sound_enabled": false,
     "github_sync_url": "https://wtvpts-sync.wslu42-wtvpts.workers.dev",
-    "active_user_id": "dad",
+    "active_user_id": "will",
     "cleanup_non_willow_done": true,
     "cleanup_willow_done": true,
     "apply_willow_templates_done": true,
