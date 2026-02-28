@@ -2094,6 +2094,16 @@
       "ref_id": "drink_water",
       "points": 1,
       "note": "Drink water"
+    },
+    {
+      "id": "c0bc83cd-38e5-4dcf-9877-8649d91d0726",
+      "ts": 1772248828501,
+      "user_id": "dad",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "help_cooking_a_dish",
+      "points": 1,
+      "note": "Garbage drop off"
     }
   ],
   "settings": {
