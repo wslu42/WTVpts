@@ -303,6 +303,14 @@
         "description": "Help cooking a dish",
         "points": 1,
         "enabled": true
+      },
+      {
+        "id": "wash_dishes",
+        "title": "Wash dishes",
+        "category": "Chores",
+        "description": "",
+        "points": 1,
+        "enabled": true
       }
     ],
     "grandpa": [
