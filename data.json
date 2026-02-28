@@ -1924,6 +1924,46 @@
       "ref_id": "wash_dishes",
       "points": 1,
       "note": "Wash dishes"
+    },
+    {
+      "id": "cb9b0dee-026c-446f-bde5-0714be0f6343",
+      "ts": 1772241835087,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
+    },
+    {
+      "id": "091addcf-796d-4a06-8943-2265cb5ae9ac",
+      "ts": 1772241835443,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
+    },
+    {
+      "id": "e43944a5-6500-41df-9098-c7635aed006c",
+      "ts": 1772241836256,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
+    },
+    {
+      "id": "6f846ef8-62f3-4991-9919-3cfb665ba926",
+      "ts": 1772241836522,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
     }
   ],
   "settings": {
