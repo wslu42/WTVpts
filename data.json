@@ -2014,6 +2014,16 @@
       "ref_id": "help_cooking_a_dish",
       "points": 1,
       "note": "Garbage drop off"
+    },
+    {
+      "id": "3f70dd9a-99c7-42f2-8200-02c0db467f5a",
+      "ts": 1772248629378,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "tidy_room",
+      "points": 2,
+      "note": "Tidy room"
     }
   ],
   "settings": {
