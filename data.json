@@ -2004,6 +2004,16 @@
       "ref_id": "taking_willow_to_tkd",
       "points": 1,
       "note": "Taking Willow to tkd"
+    },
+    {
+      "id": "32872015-d0ff-4040-8230-eaee0b211bdc",
+      "ts": 1772241883935,
+      "user_id": "dad",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "help_cooking_a_dish",
+      "points": 1,
+      "note": "Garbage drop off"
     }
   ],
   "settings": {
