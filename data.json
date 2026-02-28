@@ -1894,6 +1894,16 @@
       "ref_id": "buy_food",
       "points": 1,
       "note": "Buy food"
+    },
+    {
+      "id": "0b3db1f7-cd0a-4104-aaf7-2fa52e5c784f",
+      "ts": 1772239622512,
+      "user_id": "will",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "wash_dishes",
+      "points": 1,
+      "note": "Wash dishes"
     }
   ],
   "settings": {
