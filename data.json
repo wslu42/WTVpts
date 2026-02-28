@@ -1914,6 +1914,16 @@
       "ref_id": "wash_dishes",
       "points": 1,
       "note": "Wash dishes"
+    },
+    {
+      "id": "a3d224f5-428a-4dd2-89dd-9bfc06f7fba2",
+      "ts": 1772239719301,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "wash_dishes",
+      "points": 1,
+      "note": "Wash dishes"
     }
   ],
   "settings": {
