@@ -701,6 +701,14 @@
         "cost": 1,
         "unlock_at_total": 100,
         "enabled": true
+      },
+      {
+        "id": "wash_dishes",
+        "title": "Wash dishes",
+        "category": "Other",
+        "cost": 1,
+        "unlock_at_total": 0,
+        "enabled": true
       }
     ],
     "grandpa": [
@@ -1892,7 +1900,7 @@
     "parent_pin_hash": "",
     "sound_enabled": true,
     "github_sync_url": "https://wtvpts-sync.wslu42-wtvpts.workers.dev",
-    "active_user_id": "dad",
+    "active_user_id": "will",
     "cleanup_non_willow_done": true,
     "cleanup_willow_done": true,
     "apply_willow_templates_done": true,
