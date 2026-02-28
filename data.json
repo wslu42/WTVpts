@@ -2034,13 +2034,53 @@
       "ref_id": "eat_8_pieces_of_fruits",
       "points": 1,
       "note": "Eat 8 pieces of fruits"
+    },
+    {
+      "id": "1d6a2c27-c578-44f8-a2d5-5b32eeb8583c",
+      "ts": 1772248725060,
+      "user_id": "mom",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "cook_a_type_of_dish",
+      "points": 1,
+      "note": "Cook a type of dish"
+    },
+    {
+      "id": "0d67e202-e1f7-46d5-9398-63a8b4c8ad80",
+      "ts": 1772248725533,
+      "user_id": "mom",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "cook_a_type_of_dish",
+      "points": 1,
+      "note": "Cook a type of dish"
+    },
+    {
+      "id": "f338d9c5-d8c1-4234-80a8-6820557c517f",
+      "ts": 1772248726274,
+      "user_id": "mom",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "cook_a_type_of_dish",
+      "points": 1,
+      "note": "Cook a type of dish"
+    },
+    {
+      "id": "3d7af6be-6e66-4302-b401-b5f4426a51e1",
+      "ts": 1772248726778,
+      "user_id": "mom",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "cook_a_type_of_dish",
+      "points": 1,
+      "note": "Cook a type of dish"
     }
   ],
   "settings": {
     "parent_pin_hash": "",
     "sound_enabled": false,
     "github_sync_url": "https://wtvpts-sync.wslu42-wtvpts.workers.dev",
-    "active_user_id": "will",
+    "active_user_id": "mom",
     "cleanup_non_willow_done": true,
     "cleanup_willow_done": true,
     "apply_willow_templates_done": true,
