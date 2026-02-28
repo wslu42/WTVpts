@@ -1994,13 +1994,23 @@
       "ref_id": "cook_a_type_of_dish",
       "points": 1,
       "note": "Cook a type of dish"
+    },
+    {
+      "id": "2e3bd7b2-6463-47f0-b252-80b184095ea2",
+      "ts": 1772241874907,
+      "user_id": "dad",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "taking_willow_to_tkd",
+      "points": 1,
+      "note": "Taking Willow to tkd"
     }
   ],
   "settings": {
     "parent_pin_hash": "",
     "sound_enabled": true,
     "github_sync_url": "https://wtvpts-sync.wslu42-wtvpts.workers.dev",
-    "active_user_id": "mom",
+    "active_user_id": "dad",
     "cleanup_non_willow_done": true,
     "cleanup_willow_done": true,
     "apply_willow_templates_done": true,
