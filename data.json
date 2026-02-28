@@ -235,7 +235,7 @@
       {
         "id": "drink_water",
         "title": "Remind water",
-        "category": "Health",
+        "category": "Remind",
         "description": "Remind Mom or Dad to drink up a cup of water",
         "points": 1,
         "enabled": true
@@ -275,8 +275,8 @@
       {
         "id": "exercise",
         "title": "Remind exercise",
-        "category": "Health",
-        "description": "Remind Mom or Dad to drink up to exercise",
+        "category": "Remind",
+        "description": "Remind Mom or Dad to drink up",
         "points": 1,
         "enabled": true
       },
