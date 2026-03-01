@@ -2182,6 +2182,16 @@
       "ref_id": "drink_water",
       "points": 1,
       "note": "Remind water"
+    },
+    {
+      "id": "24491085-f2a9-49ca-9daf-7edd1d77120a",
+      "ts": 1772380076808,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "help_categorize_cloth_for_washing",
+      "points": 2,
+      "note": "Help categorize cloth for washing"
     }
   ],
   "settings": {
