@@ -2172,6 +2172,16 @@
       "ref_id": "set_table",
       "points": 1,
       "note": "Clean the table"
+    },
+    {
+      "id": "af9b653b-aa8e-4dad-8320-bdd27d34cc06",
+      "ts": 1772380067017,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "drink_water",
+      "points": 1,
+      "note": "Remind water"
     }
   ],
   "settings": {
