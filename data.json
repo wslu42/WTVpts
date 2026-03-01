@@ -2112,6 +2112,26 @@
       "ref_id": "help_cooking_a_dish",
       "points": 1,
       "note": "Garbage drop off"
+    },
+    {
+      "id": "30776a16-2539-4b23-b478-ff472e15f200",
+      "ts": 1772331551671,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
+    },
+    {
+      "id": "bbdb5b6e-992f-4754-b0f9-346df29d7abf",
+      "ts": 1772331552501,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
     }
   ],
   "settings": {
