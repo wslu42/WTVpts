@@ -2142,6 +2142,16 @@
       "ref_id": "eat_8_pieces_of_fruits",
       "points": 1,
       "note": "Eat 8 pieces of fruits"
+    },
+    {
+      "id": "92b21f13-f9cf-4a29-87cf-bb505720795f",
+      "ts": 1772331560296,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "remind_brush_teeth",
+      "points": 1,
+      "note": "Remind brush teeth"
     }
   ],
   "settings": {
