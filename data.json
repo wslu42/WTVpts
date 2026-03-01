@@ -691,7 +691,7 @@
         "title": "Play a mini game",
         "category": "Game",
         "cost": 1,
-        "unlock_at_total": 0,
+        "unlock_at_total": 50,
         "enabled": true
       },
       {
