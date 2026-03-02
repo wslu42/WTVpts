@@ -2312,6 +2312,26 @@
       "ref_id": "eat_8_pieces_of_fruits",
       "points": 1,
       "note": "Eat 8 pieces of fruits"
+    },
+    {
+      "id": "239f8c96-56e1-4b03-9734-35d8e94c3dea",
+      "ts": 1772418626070,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "help_cooking_a_dish",
+      "points": 1,
+      "note": "Help cooking a dish"
+    },
+    {
+      "id": "a5334f13-9bde-4275-b10f-d7395c8c35f3",
+      "ts": 1772418627204,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "help_cooking_a_dish",
+      "points": 1,
+      "note": "Help cooking a dish"
     }
   ],
   "settings": {
