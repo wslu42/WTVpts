@@ -2392,13 +2392,23 @@
       "ref_id": "cook_a_type_of_fruit",
       "points": 1,
       "note": "Help cooking a dish"
+    },
+    {
+      "id": "b61524ac-32fb-47b7-a0a1-0539e4aefb34",
+      "ts": 1772495355372,
+      "user_id": "mom",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "help_cooking_a_dish",
+      "points": 1,
+      "note": "Help cooking a dish"
     }
   ],
   "settings": {
     "parent_pin_hash": "",
     "sound_enabled": false,
     "github_sync_url": "https://wtvpts-sync.wslu42-wtvpts.workers.dev",
-    "active_user_id": "dad",
+    "active_user_id": "mom",
     "cleanup_non_willow_done": true,
     "cleanup_willow_done": true,
     "apply_willow_templates_done": true,
