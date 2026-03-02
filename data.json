@@ -2292,6 +2292,16 @@
       "ref_id": "help_categorize_cloth_for_washing",
       "points": 2,
       "note": "Help categorize cloth for washing"
+    },
+    {
+      "id": "7bfca0b0-1957-4f6b-9bd7-3285ffae963a",
+      "ts": 1772418444433,
+      "user_id": "mom",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_8_pieces_of_fruits",
+      "points": 1,
+      "note": "Prepare 8 pieces of fruits"
     }
   ],
   "settings": {
