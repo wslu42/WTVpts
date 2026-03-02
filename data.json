@@ -2192,6 +2192,56 @@
       "ref_id": "help_categorize_cloth_for_washing",
       "points": 2,
       "note": "Help categorize cloth for washing"
+    },
+    {
+      "id": "13fdd236-c6ee-4259-bf08-85b04c1eae51",
+      "ts": 1772414340732,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_8_pieces_of_fruits",
+      "points": 1,
+      "note": "Eat 8 pieces of fruits"
+    },
+    {
+      "id": "123b93b7-8dfe-4239-8de1-2a007f946a4e",
+      "ts": 1772414341592,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
+    },
+    {
+      "id": "678e2735-a12a-49ac-b718-cb242e5cc790",
+      "ts": 1772414341982,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
+    },
+    {
+      "id": "a9ae62cc-9ea5-4560-8611-3bb69f448537",
+      "ts": 1772414342448,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
+    },
+    {
+      "id": "c0b42e41-9146-49e9-bc44-e4f8596e4a2b",
+      "ts": 1772414342888,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
     }
   ],
   "settings": {
