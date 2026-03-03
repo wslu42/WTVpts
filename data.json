@@ -2492,6 +2492,16 @@
       "ref_id": "help_cooking_a_dish",
       "points": 1,
       "note": "Help cooking a dish"
+    },
+    {
+      "id": "3d87e34c-3258-4f00-87c9-a05e238dda2e",
+      "ts": 1772562425771,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "help_cooking_a_dish",
+      "points": 1,
+      "note": "Help cooking a dish"
     }
   ],
   "settings": {
