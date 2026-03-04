@@ -722,7 +722,7 @@
         "id": "trade_1_usd",
         "title": "Trade $1 USD",
         "category": "Trade",
-        "cost": 3,
+        "cost": 5,
         "unlock_at_total": 300,
         "enabled": true
       },
@@ -730,7 +730,7 @@
         "id": "trade_5_usd",
         "title": "Trade $5 USD",
         "category": "Trade",
-        "cost": 15,
+        "cost": 25,
         "unlock_at_total": 300,
         "enabled": true
       },
@@ -738,7 +738,7 @@
         "id": "trade_10_usd",
         "title": "Trade $10 USD",
         "category": "Trade",
-        "cost": 30,
+        "cost": 50,
         "unlock_at_total": 300,
         "enabled": true
       }
