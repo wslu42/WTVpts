@@ -725,6 +725,14 @@
         "cost": 3,
         "unlock_at_total": 0,
         "enabled": true
+      },
+      {
+        "id": "trade_5_usd",
+        "title": "Trade $5 USD",
+        "category": "Trade",
+        "cost": 15,
+        "unlock_at_total": 0,
+        "enabled": true
       }
     ],
     "grandpa": [
