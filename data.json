@@ -2606,6 +2606,26 @@
       "ref_id": "help_cooking_a_dish",
       "points": 1,
       "note": "Help cooking a dish"
+    },
+    {
+      "id": "8a315622-4d6b-4bdb-948f-e076e9cfc54d",
+      "ts": 1772673743172,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "tidy_room",
+      "points": 2,
+      "note": "Tidy room"
+    },
+    {
+      "id": "80d74025-87ef-4c0c-adf3-66f630a5c64c",
+      "ts": 1772673743586,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "tidy_room",
+      "points": 2,
+      "note": "Tidy room"
     }
   ],
   "settings": {
