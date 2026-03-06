@@ -2764,6 +2764,16 @@
       "ref_id": "prepare_fruit",
       "points": 1,
       "note": "Prepare fruit"
+    },
+    {
+      "id": "0ac162d5-2a60-4a76-ad19-704d1485ce44",
+      "ts": 1772765199077,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "remind_brush_teeth",
+      "points": 1,
+      "note": "Remind brush teeth"
     }
   ],
   "settings": {
