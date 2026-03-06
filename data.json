@@ -2774,6 +2774,16 @@
       "ref_id": "remind_brush_teeth",
       "points": 1,
       "note": "Remind brush teeth"
+    },
+    {
+      "id": "64724ee8-c7bc-4272-b1ac-a6fa542d9676",
+      "ts": 1772839230476,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "tidy_room",
+      "points": 2,
+      "note": "Tidy room"
     }
   ],
   "settings": {
