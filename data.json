@@ -319,6 +319,14 @@
         "description": "",
         "points": 1,
         "enabled": true
+      },
+      {
+        "id": "prepare_fruit",
+        "title": "Prepare fruit",
+        "category": "Herbs",
+        "description": "",
+        "points": 1,
+        "enabled": true
       }
     ],
     "grandpa": [
