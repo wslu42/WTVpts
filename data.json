@@ -2736,6 +2736,16 @@
       "ref_id": "tidy_room",
       "points": 2,
       "note": "Tidy room"
+    },
+    {
+      "id": "f0779d4b-a06a-4517-8751-6ac4aeb3c7a7",
+      "ts": 1772763228256,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_8_pieces_of_fruits",
+      "points": 1,
+      "note": "Eat 8 pieces of fruits"
     }
   ],
   "settings": {
