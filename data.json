@@ -2824,6 +2824,16 @@
       "ref_id": "set_table",
       "points": 1,
       "note": "Clean the table"
+    },
+    {
+      "id": "82dd3eba-5356-49b9-80d0-1f5d6d681df6",
+      "ts": 1772847429824,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "tidy_room",
+      "points": 2,
+      "note": "Tidy room"
     }
   ],
   "settings": {
