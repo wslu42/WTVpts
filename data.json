@@ -2842,6 +2842,16 @@
       "ref_id": "tidy_room",
       "points": 2,
       "note": "Tidy room"
+    },
+    {
+      "id": "44504e26-f9f5-4d40-bd18-8773b6f237f3",
+      "ts": 1773002951309,
+      "user_id": "will",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "abcya",
+      "points": 1,
+      "note": "Abcya"
     }
   ],
   "settings": {
