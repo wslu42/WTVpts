@@ -749,6 +749,14 @@
         "cost": 50,
         "unlock_at_total": 300,
         "enabled": true
+      },
+      {
+        "id": "abcya",
+        "title": "Abcya",
+        "category": "W",
+        "cost": 1,
+        "unlock_at_total": 0,
+        "enabled": true
       }
     ],
     "grandpa": [
