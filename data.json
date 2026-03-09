@@ -2852,6 +2852,16 @@
       "ref_id": "abcya",
       "points": 1,
       "note": "Abcya"
+    },
+    {
+      "id": "0786add9-8b48-4950-b362-dbdd3788de14",
+      "ts": 1773017078792,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "set_table",
+      "points": 1,
+      "note": "Clean the table"
     }
   ],
   "settings": {
