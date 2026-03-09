@@ -2862,6 +2862,16 @@
       "ref_id": "set_table",
       "points": 1,
       "note": "Clean the table"
+    },
+    {
+      "id": "72046640-0367-4f47-a787-edad89e9edf5",
+      "ts": 1773017083229,
+      "user_id": "will",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "abcya",
+      "points": 1,
+      "note": "Abcya"
     }
   ],
   "settings": {
