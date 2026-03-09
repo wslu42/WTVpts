@@ -2872,6 +2872,16 @@
       "ref_id": "abcya",
       "points": 1,
       "note": "Abcya"
+    },
+    {
+      "id": "402391f8-29f9-417d-b4a5-8af75495bb17",
+      "ts": 1773017089680,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_8_pieces_of_fruits",
+      "points": 1,
+      "note": "Eat 8 pieces of fruits"
     }
   ],
   "settings": {
