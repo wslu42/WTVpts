@@ -757,6 +757,14 @@
         "cost": 1,
         "unlock_at_total": 0,
         "enabled": true
+      },
+      {
+        "id": "w",
+        "title": "W",
+        "category": "W",
+        "cost": 1,
+        "unlock_at_total": 0,
+        "enabled": true
       }
     ],
     "grandpa": [
