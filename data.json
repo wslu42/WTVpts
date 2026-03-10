@@ -2940,6 +2940,16 @@
       "ref_id": "eat_veg",
       "points": 1,
       "note": "Finished a type of food"
+    },
+    {
+      "id": "5a22c5bf-40b1-451a-a854-115d4e3b0962",
+      "ts": 1773182982384,
+      "user_id": "will",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "w",
+      "points": 1,
+      "note": "W"
     }
   ],
   "settings": {
