@@ -2892,6 +2892,16 @@
       "ref_id": "tidy_room",
       "points": 2,
       "note": "Tidy room"
+    },
+    {
+      "id": "cb7c4bf3-9637-4a6e-95a4-38e471031b55",
+      "ts": 1773108029665,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "tidy_room",
+      "points": 2,
+      "note": "Tidy room"
     }
   ],
   "settings": {
