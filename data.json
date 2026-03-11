@@ -3010,6 +3010,16 @@
       "ref_id": "help_cooking_a_dish",
       "points": 1,
       "note": "Help cooking a dish"
+    },
+    {
+      "id": "aa3d4c01-2f42-4cee-a874-ed31fa48c28b",
+      "ts": 1773260661803,
+      "user_id": "will",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "w",
+      "points": 1,
+      "note": "W"
     }
   ],
   "settings": {
