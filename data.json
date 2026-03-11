@@ -3000,6 +3000,16 @@
       "ref_id": "eat_veg",
       "points": 1,
       "note": "Finished a type of food"
+    },
+    {
+      "id": "3d8141d4-7907-4d9a-84ba-9f96ea9ca622",
+      "ts": 1773191378784,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "help_cooking_a_dish",
+      "points": 1,
+      "note": "Help cooking a dish"
     }
   ],
   "settings": {
