@@ -2950,6 +2950,46 @@
       "ref_id": "w",
       "points": 1,
       "note": "W"
+    },
+    {
+      "id": "b9c29aa7-7858-4fd3-be92-b98fc106a2b9",
+      "ts": 1773191336286,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
+    },
+    {
+      "id": "2d1eb280-5a1c-4aee-81fb-4528f6212e7c",
+      "ts": 1773191336654,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
+    },
+    {
+      "id": "aeab5c48-c28a-4734-ae74-30f42fc5aee1",
+      "ts": 1773191337038,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
+    },
+    {
+      "id": "cd0242e1-d5d4-4c32-9c87-714ec6d2d0e5",
+      "ts": 1773191337488,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
     }
   ],
   "settings": {
