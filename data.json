@@ -3050,6 +3050,16 @@
       "ref_id": "trade_5_usd",
       "points": 25,
       "note": "Trade $5 USD"
+    },
+    {
+      "id": "6d8fd1f1-92d9-4053-b994-58cfd8735ae5",
+      "ts": 1773349988387,
+      "user_id": "will",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "abcya",
+      "points": 1,
+      "note": "Abcya"
     }
   ],
   "settings": {
