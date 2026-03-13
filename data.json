@@ -3110,13 +3110,23 @@
       "ref_id": "cook_a_type_of_dish",
       "points": 1,
       "note": "Cook a type of dish"
+    },
+    {
+      "id": "fd17f67c-3f12-4107-9e13-b54ac2453a36",
+      "ts": 1773433106679,
+      "user_id": "will",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "w",
+      "points": 1,
+      "note": "W"
     }
   ],
   "settings": {
     "parent_pin_hash": "",
     "sound_enabled": false,
     "github_sync_url": "https://wtvpts-sync.wslu42-wtvpts.workers.dev",
-    "active_user_id": "mom",
+    "active_user_id": "will",
     "cleanup_non_willow_done": true,
     "cleanup_willow_done": true,
     "apply_willow_templates_done": true,
