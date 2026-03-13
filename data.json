@@ -3060,6 +3060,46 @@
       "ref_id": "abcya",
       "points": 1,
       "note": "Abcya"
+    },
+    {
+      "id": "a95e5539-7a9d-4694-8bfd-fca8c0623704",
+      "ts": 1773363388318,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "help_cooking_a_dish",
+      "points": 1,
+      "note": "Help cooking a dish"
+    },
+    {
+      "id": "7807519f-efb8-49ed-b6cb-e9c28d940897",
+      "ts": 1773363388985,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "help_cooking_a_dish",
+      "points": 1,
+      "note": "Help cooking a dish"
+    },
+    {
+      "id": "7ea42fd8-c4ef-4f92-a3ad-bef87dd01ec7",
+      "ts": 1773363389541,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "help_cooking_a_dish",
+      "points": 1,
+      "note": "Help cooking a dish"
+    },
+    {
+      "id": "c21c8026-d2d5-4618-88d0-860e5fb27786",
+      "ts": 1773363390051,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "help_cooking_a_dish",
+      "points": 1,
+      "note": "Help cooking a dish"
     }
   ],
   "settings": {
