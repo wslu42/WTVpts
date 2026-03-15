@@ -3120,6 +3120,46 @@
       "ref_id": "w",
       "points": 1,
       "note": "W"
+    },
+    {
+      "id": "d641df21-4a48-4fb1-a35e-2dba25e26bef",
+      "ts": 1773583565755,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "help_cooking_a_dish",
+      "points": 1,
+      "note": "Help cooking a dish"
+    },
+    {
+      "id": "2c0beff1-725d-4a0c-8c3a-275e560ba6a5",
+      "ts": 1773583566864,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "wash_dishes",
+      "points": 1,
+      "note": "Wash dishes"
+    },
+    {
+      "id": "25d0a020-e104-4a82-90b8-94a95d372027",
+      "ts": 1773583567598,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "wash_dishes",
+      "points": 1,
+      "note": "Wash dishes"
+    },
+    {
+      "id": "b47c80cf-42dc-4853-9f38-aa7355f18e37",
+      "ts": 1773583568180,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "wash_dishes",
+      "points": 1,
+      "note": "Wash dishes"
     }
   ],
   "settings": {
