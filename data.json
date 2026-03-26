@@ -3240,6 +3240,16 @@
       "ref_id": "abcya",
       "points": 1,
       "note": "Abcya"
+    },
+    {
+      "id": "acc64947-43ee-45ad-8e6e-65ea0fd533e3",
+      "ts": 1774564861192,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "help_cooking_a_dish",
+      "points": 1,
+      "note": "Help cooking a dish"
     }
   ],
   "settings": {
