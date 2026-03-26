@@ -3170,6 +3170,36 @@
       "ref_id": "tidy_room",
       "points": 2,
       "note": "Tidy room"
+    },
+    {
+      "id": "a438a91d-5a70-410a-af9e-cb5dbf3d485d",
+      "ts": 1774488190578,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
+    },
+    {
+      "id": "21f2ed29-48dd-4a11-b998-3cec42200fb6",
+      "ts": 1774488190893,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
+    },
+    {
+      "id": "c32f35dc-2f4d-4194-9eac-a02f7615c167",
+      "ts": 1774488191650,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
     }
   ],
   "settings": {
