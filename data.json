@@ -765,6 +765,14 @@
         "cost": 1,
         "unlock_at_total": 0,
         "enabled": true
+      },
+      {
+        "id": "videos",
+        "title": "Videos",
+        "category": "F",
+        "cost": 1,
+        "unlock_at_total": 0,
+        "enabled": true
       }
     ],
     "grandpa": [
