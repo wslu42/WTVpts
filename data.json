@@ -3160,6 +3160,16 @@
       "ref_id": "wash_dishes",
       "points": 1,
       "note": "Wash dishes"
+    },
+    {
+      "id": "18742652-d631-4b8b-a152-78f01ddd7397",
+      "ts": 1774488188418,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "tidy_room",
+      "points": 2,
+      "note": "Tidy room"
     }
   ],
   "settings": {
