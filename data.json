@@ -3308,6 +3308,16 @@
       "ref_id": "videos",
       "points": 1,
       "note": "Videos"
+    },
+    {
+      "id": "62e29f76-1f61-4e21-a9d8-22fccd7553a9",
+      "ts": 1774564990422,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_8_pieces_of_fruits",
+      "points": 1,
+      "note": "Eat 8 pieces of fruits"
     }
   ],
   "settings": {
