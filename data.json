@@ -3288,6 +3288,26 @@
       "ref_id": "prepare_fruit",
       "points": 1,
       "note": "Prepare fruit"
+    },
+    {
+      "id": "503e69f0-fc58-4dc5-b981-4ea607e16fdd",
+      "ts": 1774564965138,
+      "user_id": "will",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "videos",
+      "points": 1,
+      "note": "Videos"
+    },
+    {
+      "id": "260b385a-b08b-413c-bd40-d7f1b4ea3cc6",
+      "ts": 1774564965285,
+      "user_id": "will",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "videos",
+      "points": 1,
+      "note": "Videos"
     }
   ],
   "settings": {
