@@ -3270,6 +3270,16 @@
       "ref_id": "eat_veg",
       "points": 1,
       "note": "Finished a type of food"
+    },
+    {
+      "id": "72ee04dd-6888-462c-abb2-b5862855d22a",
+      "ts": 1774564871723,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "prepare_fruit",
+      "points": 1,
+      "note": "Prepare fruit"
     }
   ],
   "settings": {
