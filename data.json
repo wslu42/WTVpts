@@ -3328,6 +3328,16 @@
       "ref_id": "trade_5_usd",
       "points": 25,
       "note": "Trade $5 USD"
+    },
+    {
+      "id": "4ee3428d-b538-4802-b917-4a3beebe1aff",
+      "ts": 1774806000899,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
     }
   ],
   "settings": {
