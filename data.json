@@ -3318,6 +3318,16 @@
       "ref_id": "eat_8_pieces_of_fruits",
       "points": 1,
       "note": "Eat 8 pieces of fruits"
+    },
+    {
+      "id": "88b8d26c-2709-468e-805f-0780863e5da0",
+      "ts": 1774805984859,
+      "user_id": "will",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "trade_5_usd",
+      "points": 25,
+      "note": "Trade $5 USD"
     }
   ],
   "settings": {
