@@ -697,7 +697,7 @@
       {
         "id": "minigame_1",
         "title": "Play a mini game",
-        "category": "Game",
+        "category": "Games",
         "cost": 1,
         "unlock_at_total": 50,
         "enabled": true
@@ -753,23 +753,23 @@
       {
         "id": "abcya",
         "title": "Abcya",
-        "category": "W",
+        "category": "Games",
         "cost": 1,
         "unlock_at_total": 0,
         "enabled": true
       },
       {
         "id": "w",
-        "title": "W",
-        "category": "W",
+        "title": "Prology",
+        "category": "Games",
         "cost": 1,
         "unlock_at_total": 0,
         "enabled": true
       },
       {
         "id": "videos",
-        "title": "Videos",
-        "category": "F",
+        "title": "Watch video for 12 miutes",
+        "category": "Videos",
         "cost": 1,
         "unlock_at_total": 0,
         "enabled": true
