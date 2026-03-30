@@ -3388,6 +3388,16 @@
       "ref_id": "videos",
       "points": 1,
       "note": "Watch video for 12 miutes"
+    },
+    {
+      "id": "c0e75e48-775e-477b-8585-b00b83415005",
+      "ts": 1774909122673,
+      "user_id": "will",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "videos",
+      "points": 1,
+      "note": "Watch video for 12 miutes"
     }
   ],
   "settings": {
