@@ -3348,6 +3348,26 @@
       "ref_id": "videos",
       "points": 1,
       "note": "Watch video for 12 miutes"
+    },
+    {
+      "id": "9d958ec2-27cc-4650-8723-d16b58b46ac2",
+      "ts": 1774891376206,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
+    },
+    {
+      "id": "dd5159f0-74b7-48dd-bb66-ab52ac212103",
+      "ts": 1774891376805,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
     }
   ],
   "settings": {
