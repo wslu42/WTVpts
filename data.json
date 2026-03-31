@@ -3408,6 +3408,16 @@
       "ref_id": "videos",
       "points": 1,
       "note": "Watch video for 12 miutes"
+    },
+    {
+      "id": "f0b5abc9-9007-491b-a5f2-71a202086d2c",
+      "ts": 1774976845887,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "set_table",
+      "points": 1,
+      "note": "Clean the table"
     }
   ],
   "settings": {
