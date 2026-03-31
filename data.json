@@ -3418,6 +3418,26 @@
       "ref_id": "set_table",
       "points": 1,
       "note": "Clean the table"
+    },
+    {
+      "id": "dee2e986-4426-4c3c-9b5a-92977af3db60",
+      "ts": 1774977191179,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
+    },
+    {
+      "id": "1df311ff-84f0-490c-b706-40f7e61279e4",
+      "ts": 1774977192019,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
     }
   ],
   "settings": {
