@@ -3518,6 +3518,16 @@
       "ref_id": "read_15",
       "points": 2,
       "note": "Read 15 minutes"
+    },
+    {
+      "id": "381d718f-57d0-42e2-b047-c02859c26a80",
+      "ts": 1775074245320,
+      "user_id": "will",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "videos",
+      "points": 1,
+      "note": "Watch video for 12 miutes"
     }
   ],
   "settings": {
