@@ -3448,6 +3448,36 @@
       "ref_id": "set_table",
       "points": 1,
       "note": "Clean the table"
+    },
+    {
+      "id": "850d01a2-7c58-4575-8313-1eb9f2f539c5",
+      "ts": 1775005540206,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
+    },
+    {
+      "id": "13ab3388-b27b-4a72-b372-ab0d379f4b1c",
+      "ts": 1775005540361,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
+    },
+    {
+      "id": "79ae89d1-20c0-4ac8-a0dd-e15691a5aca5",
+      "ts": 1775005540533,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
     }
   ],
   "settings": {
