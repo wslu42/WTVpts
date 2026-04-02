@@ -3558,6 +3558,16 @@
       "ref_id": "help_cooking_a_dish",
       "points": 1,
       "note": "Help cooking a dish"
+    },
+    {
+      "id": "4b4521b3-b722-43f9-aeb3-a7f2e6bf4506",
+      "ts": 1775164027573,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "help_categorize_cloth_for_washing",
+      "points": 2,
+      "note": "Help categorize cloth for washing"
     }
   ],
   "settings": {
