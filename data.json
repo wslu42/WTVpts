@@ -3628,6 +3628,16 @@
       "ref_id": "eat_8_pieces_of_fruits",
       "points": 1,
       "note": "Eat 8 pieces of fruits"
+    },
+    {
+      "id": "1c270504-b44d-4dd1-aa01-9e76ab5b5063",
+      "ts": 1775259435434,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
     }
   ],
   "settings": {
