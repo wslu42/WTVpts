@@ -3568,6 +3568,26 @@
       "ref_id": "help_categorize_cloth_for_washing",
       "points": 2,
       "note": "Help categorize cloth for washing"
+    },
+    {
+      "id": "a5806fba-db85-4176-b415-a9d0035bec26",
+      "ts": 1775254227985,
+      "user_id": "will",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "videos",
+      "points": 1,
+      "note": "Watch video for 12 miutes"
+    },
+    {
+      "id": "2ea27e5a-146d-4936-a8cc-5bc63e4e9006",
+      "ts": 1775254228349,
+      "user_id": "will",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "videos",
+      "points": 1,
+      "note": "Watch video for 12 miutes"
     }
   ],
   "settings": {
