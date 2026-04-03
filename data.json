@@ -3638,6 +3638,36 @@
       "ref_id": "eat_veg",
       "points": 1,
       "note": "Finished a type of food"
+    },
+    {
+      "id": "e9c38f74-9964-4745-b49f-33c6ce44a014",
+      "ts": 1775259549617,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "help_cooking_a_dish",
+      "points": 1,
+      "note": "Help cooking a dish"
+    },
+    {
+      "id": "009f01fb-2840-4cd5-8dd8-594593da92cc",
+      "ts": 1775259550768,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "help_cooking_a_dish",
+      "points": 1,
+      "note": "Help cooking a dish"
+    },
+    {
+      "id": "410b9811-d58a-4f39-98a8-8a1e9981fd92",
+      "ts": 1775259551683,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "help_cooking_a_dish",
+      "points": 1,
+      "note": "Help cooking a dish"
     }
   ],
   "settings": {
