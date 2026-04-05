@@ -3778,6 +3778,26 @@
       "ref_id": "eat_veg",
       "points": 1,
       "note": "Finished a type of food"
+    },
+    {
+      "id": "9c7f4173-ce6f-4778-897e-447c002a96d7",
+      "ts": 1775356238815,
+      "user_id": "will",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "videos",
+      "points": 1,
+      "note": "Watch video for 12 miutes"
+    },
+    {
+      "id": "2348e5e5-b214-4809-a1c9-307d98824ddb",
+      "ts": 1775356239828,
+      "user_id": "will",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "videos",
+      "points": 1,
+      "note": "Watch video for 12 miutes"
     }
   ],
   "settings": {
