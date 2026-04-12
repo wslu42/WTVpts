@@ -3798,6 +3798,16 @@
       "ref_id": "videos",
       "points": 1,
       "note": "Watch video for 12 miutes"
+    },
+    {
+      "id": "56c4c5e5-f685-41d0-8540-a2be6d2f3c17",
+      "ts": 1775954610588,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_veg",
+      "points": 1,
+      "note": "Finished a type of food"
     }
   ],
   "settings": {
