@@ -68,8 +68,11 @@ function makeDefaultRewardsByUser(users) {
 
 function cloneSeedState() {
   const cloned = typeof structuredClone === "function" ? structuredClone(seedState) : JSON.parse(JSON.stringify(seedState));
+  const users = Array.isArray(cloned.users) && cloned.users.length ? cloned.users : makeDefaultUsers();
   return {
     ...cloned,
+    users,
+    health_by_user: makeDefaultHealthByUser(users),
     settings: {
       parent_pin_hash: "",
       sound_enabled: false,
@@ -77,6 +80,121 @@ function cloneSeedState() {
       ...(cloned.settings || {})
     }
   };
+}
+
+function makeDefaultHealthByUser(users) {
+  const out = {};
+  for (const user of users) {
+    out[user.id] = {
+      weight_records: [],
+      blood_pressure_records: user.id === "grandpa" ? [] : undefined
+    };
+    if (user.id !== "grandpa") {
+      delete out[user.id].blood_pressure_records;
+    }
+  }
+  return out;
+}
+
+function normalizeHealthTimestamp(value) {
+  if (Number.isFinite(Number(value))) {
+    return Number(value);
+  }
+  const parsed = new Date(value).getTime();
+  return Number.isFinite(parsed) ? parsed : Date.now();
+}
+
+function normalizeWeightRecord(record) {
+  return {
+    id: String(record?.id || createId()),
+    ts: normalizeHealthTimestamp(record?.ts || record?.timestamp),
+    kg: roundToTenth(Number(record?.kg ?? record?.weight_kg ?? record?.weight)),
+    note: String(record?.note || "").trim()
+  };
+}
+
+function isValidWeightRecord(record) {
+  const kg = Number(record?.kg ?? record?.weight_kg ?? record?.weight);
+  return Number.isFinite(kg) && kg >= 1 && kg <= 500;
+}
+
+function normalizeBloodPressureRecord(record) {
+  return {
+    id: String(record?.id || createId()),
+    ts: normalizeHealthTimestamp(record?.ts || record?.timestamp),
+    systolic: Math.round(Number(record?.systolic)),
+    diastolic: Math.round(Number(record?.diastolic)),
+    pulse: Math.round(Number(record?.pulse)),
+    mealStatus: ["before_meal", "after_meal", "unknown"].includes(record?.mealStatus) ? record.mealStatus : "unknown",
+    medicationTaken: toBoolean(record?.medicationTaken),
+    medicationDose: String(record?.medicationDose || "").trim(),
+    hadDizziness: toBoolean(record?.hadDizziness),
+    hadBreathlessness: toBoolean(record?.hadBreathlessness),
+    hadChestTightness: toBoolean(record?.hadChestTightness),
+    hadVisionChange: toBoolean(record?.hadVisionChange),
+    energyChange: ["better", "worse", "unchanged"].includes(record?.energyChange) ? record.energyChange : "unchanged",
+    measurementContext: ["resting", "post_exercise", "unknown"].includes(record?.measurementContext)
+      ? record.measurementContext
+      : "unknown",
+    note: String(record?.note || "").trim()
+  };
+}
+
+function isValidBloodPressureRecord(record) {
+  const systolic = Number(record?.systolic);
+  const diastolic = Number(record?.diastolic);
+  const pulse = Number(record?.pulse);
+  return (
+    Number.isFinite(systolic) &&
+    Number.isFinite(diastolic) &&
+    Number.isFinite(pulse) &&
+    systolic >= 60 &&
+    systolic <= 250 &&
+    diastolic >= 30 &&
+    diastolic <= 150 &&
+    pulse >= 30 &&
+    pulse <= 220
+  );
+}
+
+function normalizeHealthForUsers(inputHealthByUser, users) {
+  const defaults = makeDefaultHealthByUser(users);
+  const input = inputHealthByUser && typeof inputHealthByUser === "object" ? inputHealthByUser : {};
+  const out = {};
+  for (const user of users) {
+    const raw = input[user.id] && typeof input[user.id] === "object" ? input[user.id] : {};
+    const weightRecords = Array.isArray(raw.weight_records) ? raw.weight_records : [];
+    out[user.id] = {
+      ...defaults[user.id],
+      weight_records: weightRecords
+        .filter(isValidWeightRecord)
+        .map(normalizeWeightRecord)
+        .sort(sortNewestByTs)
+    };
+    if (user.id === "grandpa") {
+      const bpRecords = Array.isArray(raw.blood_pressure_records) ? raw.blood_pressure_records : [];
+      out[user.id].blood_pressure_records = bpRecords
+        .filter(isValidBloodPressureRecord)
+        .map(normalizeBloodPressureRecord)
+        .sort(sortNewestByTs);
+    }
+  }
+  return out;
+}
+
+function roundToTenth(value) {
+  return Math.round(value * 10) / 10;
+}
+
+function toBoolean(value) {
+  if (typeof value === "string") {
+    return value.toLowerCase() === "true" || value.toLowerCase() === "on";
+  }
+  return Boolean(value);
+}
+
+function sortNewestByTs(a, b) {
+  return b.ts - a.ts;
 }
 
 export function makeDefaultState() {
@@ -148,6 +266,7 @@ function migrate(input) {
       ...(input.settings || {})
     }
   };
+  output.health_by_user = normalizeHealthForUsers(input.health_by_user, users);
 
   if (output.settings.active_user_id === "guest") {
     output.settings.active_user_id = "grandpa";
@@ -278,6 +397,21 @@ export function getUserEvents(state, userId) {
 export function getUserRewards(state, userId) {
   const rows = state.rewards_by_user?.[userId];
   return Array.isArray(rows) ? rows : [];
+}
+
+export function getUserHealth(state, userId) {
+  return state.health_by_user?.[userId] || { weight_records: [], blood_pressure_records: [] };
+}
+
+export function getUserWeightRecords(state, userId) {
+  const rows = getUserHealth(state, userId).weight_records;
+  return Array.isArray(rows) ? [...rows].sort(sortNewestByTs) : [];
+}
+
+export function getUserBloodPressureRecords(state, userId) {
+  if (userId !== "grandpa") return [];
+  const rows = getUserHealth(state, userId).blood_pressure_records;
+  return Array.isArray(rows) ? [...rows].sort(sortNewestByTs) : [];
 }
 
 export function getAllEventCategories(state) {
@@ -430,6 +564,102 @@ export function addQuickPoints(state, { userId, points, note = "" }) {
     ok: true,
     state: withAppendedLedger(state, entry),
     entry
+  };
+}
+
+export function addWeightRecord(state, userId, payload) {
+  if (!getUserById(state, userId)) return { ok: false, error: "User not found." };
+  if (!isValidWeightRecord(payload)) {
+    return { ok: false, error: "Weight must be between 1 and 500 kg." };
+  }
+  const record = normalizeWeightRecord({
+    ...payload,
+    id: payload?.id || createId(),
+    ts: payload?.ts || Date.now()
+  });
+  const currentHealth = normalizeHealthForUsers(state.health_by_user, state.users);
+  const userHealth = currentHealth[userId] || { weight_records: [] };
+  return {
+    ok: true,
+    state: {
+      ...state,
+      health_by_user: {
+        ...currentHealth,
+        [userId]: {
+          ...userHealth,
+          weight_records: [record, ...(userHealth.weight_records || [])].sort(sortNewestByTs)
+        }
+      }
+    },
+    record
+  };
+}
+
+export function deleteWeightRecord(state, userId, recordId) {
+  if (!getUserById(state, userId)) return { ok: false, error: "User not found." };
+  const currentHealth = normalizeHealthForUsers(state.health_by_user, state.users);
+  const userHealth = currentHealth[userId] || { weight_records: [] };
+  return {
+    ok: true,
+    state: {
+      ...state,
+      health_by_user: {
+        ...currentHealth,
+        [userId]: {
+          ...userHealth,
+          weight_records: (userHealth.weight_records || []).filter((record) => record.id !== recordId)
+        }
+      }
+    }
+  };
+}
+
+export function addBloodPressureRecord(state, userId, payload) {
+  if (userId !== "grandpa") return { ok: false, error: "Blood pressure tracking is only enabled for Grandpa." };
+  if (!getUserById(state, userId)) return { ok: false, error: "User not found." };
+  if (!isValidBloodPressureRecord(payload)) {
+    return { ok: false, error: "Blood pressure or pulse values are outside the supported range." };
+  }
+  const record = normalizeBloodPressureRecord({
+    ...payload,
+    id: payload?.id || createId(),
+    ts: payload?.ts || Date.now()
+  });
+  const currentHealth = normalizeHealthForUsers(state.health_by_user, state.users);
+  const userHealth = currentHealth[userId] || { weight_records: [], blood_pressure_records: [] };
+  return {
+    ok: true,
+    state: {
+      ...state,
+      health_by_user: {
+        ...currentHealth,
+        [userId]: {
+          ...userHealth,
+          blood_pressure_records: [record, ...(userHealth.blood_pressure_records || [])].sort(sortNewestByTs)
+        }
+      }
+    },
+    record
+  };
+}
+
+export function deleteBloodPressureRecord(state, userId, recordId) {
+  if (userId !== "grandpa") return { ok: false, error: "Blood pressure tracking is only enabled for Grandpa." };
+  if (!getUserById(state, userId)) return { ok: false, error: "User not found." };
+  const currentHealth = normalizeHealthForUsers(state.health_by_user, state.users);
+  const userHealth = currentHealth[userId] || { weight_records: [], blood_pressure_records: [] };
+  return {
+    ok: true,
+    state: {
+      ...state,
+      health_by_user: {
+        ...currentHealth,
+        [userId]: {
+          ...userHealth,
+          blood_pressure_records: (userHealth.blood_pressure_records || []).filter((record) => record.id !== recordId)
+        }
+      }
+    }
   };
 }
 

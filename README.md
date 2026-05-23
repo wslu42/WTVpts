@@ -9,6 +9,7 @@ A pure static, vanilla HTML/CSS/JS app for a family points and rewards system.
 - Dashboard sections: `Redeem` and `Earn` (category-grouped, full-card click actions)
 - Per-user history with filters and newest-first sort
 - User workspace flow: Home -> User -> Dashboard / History / Manage Events
+- User health tracking: kg weight records for every user, plus Grandpa-only blood pressure records
 - Settings panel for JSON export/import, reset, and optional parent PIN guard
 - `Manage Events` includes both per-user `Redeem` and `Earning` event management
 - `Settings` is rendered inside the same `Dashboard - Home` container layout
@@ -34,6 +35,7 @@ python -m http.server 8000
 ## Routes
 - `#/home`
 - `#/user/<id>` (user dashboard)
+- `#/user/<id>/health`
 - `#/user/<id>/history`
 - `#/user/<id>/manage-events`
 - `#/settings`
@@ -50,5 +52,6 @@ python -m http.server 8000
 - Storage key: `family_points_v1`
 - Events are stored per-user in `events_by_user`
 - Rewards are stored per-user in `rewards_by_user`
+- Health records are stored per-user in `health_by_user`
 - Export creates `data.json` with the exact current state
 - Import validates shape and replaces current state

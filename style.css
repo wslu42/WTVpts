@@ -688,6 +688,97 @@ th {
   gap: 8px;
 }
 
+.health-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.health-header h2 {
+  margin-bottom: 4px;
+}
+
+.health-form {
+  display: grid;
+  grid-template-columns: minmax(120px, 180px) minmax(180px, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  margin: 12px 0;
+}
+
+.health-form-grid {
+  grid-template-columns: repeat(4, minmax(140px, 1fr));
+  align-items: stretch;
+}
+
+.health-form label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.health-form-wide {
+  grid-column: 1 / -1;
+}
+
+.health-trend {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fbfdff;
+  padding: 10px;
+  margin: 12px 0;
+}
+
+.health-trend svg {
+  display: block;
+  width: 100%;
+  height: 150px;
+}
+
+.health-trend polyline {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.health-trend circle {
+  fill: var(--surface);
+  stroke: var(--primary-strong);
+  stroke-width: 2;
+}
+
+.health-trend-labels {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--muted);
+}
+
+.health-list {
+  display: grid;
+  gap: 8px;
+}
+
+.health-record-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  padding: 10px;
+}
+
 .empty {
   border: 1px dashed var(--border);
   background: #fbfdff;
@@ -752,5 +843,14 @@ th {
   .point-cell {
     width: 14px;
     height: 14px;
+  }
+
+  .health-form,
+  .health-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .health-record-row {
+    display: grid;
   }
 }

@@ -5,6 +5,8 @@ import {
   getRewardUnlockProgress,
   getUserEvents,
   getUserRewards,
+  getUserWeightRecords,
+  getUserBloodPressureRecords,
   getAllEventCategories,
   getAllRewardCategories,
   listCategories,
@@ -24,6 +26,10 @@ function escapeHtml(value) {
 
 function formatDate(ts) {
   return new Date(ts).toLocaleString();
+}
+
+function formatShortDate(ts) {
+  return new Date(ts).toLocaleDateString(undefined, { month: "short", day: "numeric" });
 }
 
 function renderPointsGrid(balance) {
@@ -74,6 +80,7 @@ export function renderNavActive(route, activeUserId) {
 function renderUserWorkspaceTabs(userId, section, userName) {
   const tabs = [
     { key: "dashboard", label: "Dashboard", href: `#/user/${userId}` },
+    { key: "health", label: "Health", href: `#/user/${userId}/health` },
     { key: "history", label: "History", href: `#/user/${userId}/history` },
     { key: "manage-events", label: "Manage Events", href: `#/user/${userId}/manage-events` }
   ];
@@ -310,6 +317,178 @@ export function renderUserHistory(state, userId, filters) {
     <section class="card table-wrap">
       ${rows.length ? `<table><thead><tr><th>Time</th><th>Type</th><th>Item</th><th>Points</th><th>Note</th></tr></thead><tbody>${tr}</tbody></table>` : '<div class="empty">No ledger entries match current filters.</div>'}
     </section>
+  `;
+}
+
+function renderWeightTrend(records) {
+  const oldest = [...records].sort((a, b) => a.ts - b.ts).slice(-12);
+  if (!oldest.length) {
+    return '<div class="empty health-empty">No weight records yet.</div>';
+  }
+  const min = Math.min(...oldest.map((record) => record.kg));
+  const max = Math.max(...oldest.map((record) => record.kg));
+  const span = Math.max(max - min, 1);
+  const points = oldest
+    .map((record, index) => {
+      const x = oldest.length === 1 ? 50 : 8 + (index / (oldest.length - 1)) * 84;
+      const y = 84 - ((record.kg - min) / span) * 68;
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    })
+    .join(" ");
+  return `
+    <div class="health-trend" aria-label="Weight trend">
+      <svg viewBox="0 0 100 100" role="img" aria-hidden="true">
+        <polyline points="${points}" />
+        ${oldest
+          .map((record, index) => {
+            const x = oldest.length === 1 ? 50 : 8 + (index / (oldest.length - 1)) * 84;
+            const y = 84 - ((record.kg - min) / span) * 68;
+            return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.4"><title>${escapeHtml(formatShortDate(record.ts))}: ${record.kg} kg</title></circle>`;
+          })
+          .join("")}
+      </svg>
+      <div class="health-trend-labels">
+        <span>${escapeHtml(formatShortDate(oldest[0].ts))}</span>
+        <strong>${oldest[oldest.length - 1].kg} kg</strong>
+        <span>${escapeHtml(formatShortDate(oldest[oldest.length - 1].ts))}</span>
+      </div>
+    </div>
+  `;
+}
+
+function renderWeightRows(records, userId) {
+  if (!records.length) {
+    return '<div class="empty">No weight records yet.</div>';
+  }
+  return `
+    <div class="health-list">
+      ${records
+        .map(
+          (record) => `
+        <article class="health-record-row">
+          <div>
+            <strong>${record.kg} kg</strong>
+            <div class="muted">${escapeHtml(formatDate(record.ts))}</div>
+            ${record.note ? `<div class="muted">${escapeHtml(record.note)}</div>` : ""}
+          </div>
+          <button class="btn-delete-subtle" data-action="delete-weight-record" data-user-id="${escapeHtml(userId)}" data-record-id="${escapeHtml(record.id)}">delete</button>
+        </article>
+      `
+        )
+        .join("")}
+    </div>
+  `;
+}
+
+function renderBloodPressureRows(records, userId) {
+  if (!records.length) {
+    return '<div class="empty">No blood pressure records yet.</div>';
+  }
+  return `
+    <div class="health-list">
+      ${records
+        .map(
+          (record) => `
+        <article class="health-record-row">
+          <div>
+            <strong>${record.systolic}/${record.diastolic} mmHg</strong>
+            <div class="muted">Pulse ${record.pulse} | ${escapeHtml(formatDate(record.ts))}</div>
+            <div class="muted">${formatBloodPressureDetails(record)}</div>
+          </div>
+          <button class="btn-delete-subtle" data-action="delete-bp-record" data-user-id="${escapeHtml(userId)}" data-record-id="${escapeHtml(record.id)}">delete</button>
+        </article>
+      `
+        )
+        .join("")}
+    </div>
+  `;
+}
+
+function formatBloodPressureDetails(record) {
+  const meal = { before_meal: "before meal", after_meal: "after meal", unknown: "meal unknown" }[record.mealStatus] || "meal unknown";
+  const context = { resting: "resting", post_exercise: "post exercise", unknown: "context unknown" }[record.measurementContext] || "context unknown";
+  const symptoms = [];
+  if (record.hadDizziness) symptoms.push("dizzy");
+  if (record.hadBreathlessness) symptoms.push("breathless");
+  if (record.hadChestTightness) symptoms.push("chest tightness");
+  if (record.hadVisionChange) symptoms.push("vision change");
+  const medicine = record.medicationTaken ? `medicine taken${record.medicationDose ? `: ${escapeHtml(record.medicationDose)}` : ""}` : "no medicine";
+  const note = record.note ? ` | ${escapeHtml(record.note)}` : "";
+  return `${meal} | ${context} | ${medicine} | symptoms: ${symptoms.length ? symptoms.join(", ") : "none"}${note}`;
+}
+
+export function renderUserHealth(state, userId) {
+  const user = getUserById(state, userId);
+  if (!user) return `<section class="empty">User not found.</section>`;
+  const weightRecords = getUserWeightRecords(state, userId);
+  const bpRecords = getUserBloodPressureRecords(state, userId);
+  const latestWeight = weightRecords[0];
+  const isGrandpa = userId === "grandpa";
+
+  return `
+    ${renderUserWorkspaceTabs(user.id, "health", user.name)}
+    <section class="card">
+      <div class="health-header">
+        <div>
+          <h2>Weight</h2>
+          <p class="muted">Track ${escapeHtml(user.name)}'s weight in kg.</p>
+        </div>
+        <span class="badge">${latestWeight ? `${latestWeight.kg} kg latest` : "No records"}</span>
+      </div>
+      <form class="health-form" data-action="add-weight-record" data-user-id="${escapeHtml(user.id)}">
+        <input name="kg" type="number" min="1" max="500" step="0.1" placeholder="kg" required />
+        <input name="note" type="text" maxlength="120" placeholder="note optional" />
+        <button class="btn-primary" type="submit">Add Weight</button>
+      </form>
+      ${renderWeightTrend(weightRecords)}
+      ${renderWeightRows(weightRecords, user.id)}
+    </section>
+    ${
+      isGrandpa
+        ? `
+      <section class="card">
+        <div class="health-header">
+          <div>
+            <h2>Blood Pressure</h2>
+            <p class="muted">Grandpa-only blood pressure, pulse, medicine, and symptom tracking.</p>
+          </div>
+          <span class="badge">${bpRecords[0] ? `${bpRecords[0].systolic}/${bpRecords[0].diastolic} latest` : "No records"}</span>
+        </div>
+        <form class="health-form health-form-grid" data-action="add-bp-record" data-user-id="${escapeHtml(user.id)}">
+          <input name="systolic" type="number" min="60" max="250" step="1" placeholder="systolic" required />
+          <input name="diastolic" type="number" min="30" max="150" step="1" placeholder="diastolic" required />
+          <input name="pulse" type="number" min="30" max="220" step="1" placeholder="pulse" required />
+          <select name="mealStatus">
+            <option value="unknown">meal unknown</option>
+            <option value="before_meal">before meal</option>
+            <option value="after_meal">after meal</option>
+          </select>
+          <select name="medicationTaken">
+            <option value="false">no medicine</option>
+            <option value="true">medicine taken</option>
+          </select>
+          <input name="medicationDose" type="text" maxlength="120" placeholder="medicine note" />
+          <select name="energyChange">
+            <option value="unchanged">energy unchanged</option>
+            <option value="better">energy better</option>
+            <option value="worse">energy worse</option>
+          </select>
+          <select name="measurementContext">
+            <option value="resting">resting</option>
+            <option value="post_exercise">post exercise</option>
+            <option value="unknown">context unknown</option>
+          </select>
+          <label><input name="hadDizziness" type="checkbox" /> dizzy</label>
+          <label><input name="hadBreathlessness" type="checkbox" /> breathless</label>
+          <label><input name="hadChestTightness" type="checkbox" /> chest tightness</label>
+          <label><input name="hadVisionChange" type="checkbox" /> vision change</label>
+          <input class="health-form-wide" name="note" type="text" maxlength="240" placeholder="note optional" />
+          <button class="btn-primary health-form-wide" type="submit">Add Blood Pressure</button>
+        </form>
+        ${renderBloodPressureRows(bpRecords, user.id)}
+      </section>`
+        : ""
+    }
   `;
 }
 
