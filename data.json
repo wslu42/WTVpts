@@ -4184,6 +4184,7 @@
     "parent_pin_hash": "",
     "sound_enabled": false,
     "github_sync_url": "https://wtvpts-sync.wslu42-wtvpts.workers.dev",
+    "language": "zh-Hant-TW",
     "active_user_id": "grandpa",
     "cleanup_non_willow_done": true,
     "cleanup_willow_done": true,
