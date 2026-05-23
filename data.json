@@ -3838,16 +3838,207 @@
       "ref_id": "tidy_room",
       "points": 2,
       "note": "Tidy room"
+    },
+    {
+      "id": "cbbaed2e-d5f4-4b93-80ba-15ddfbf2ceab",
+      "ts": 1779496844315,
+      "user_id": "grandpa",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "pick_up_or_drop_off_willow",
+      "points": 1,
+      "note": "Pick up or Drop off Willow"
+    },
+    {
+      "id": "ea216caa-b1e0-4ecb-ad6b-d1acec999cfb",
+      "ts": 1779496844990,
+      "user_id": "grandpa",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "pick_up_or_drop_off_willow",
+      "points": 1,
+      "note": "Pick up or Drop off Willow"
+    },
+    {
+      "id": "c5713ee9-401b-44de-84fb-dab3bac4170f",
+      "ts": 1779496845641,
+      "user_id": "grandpa",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "pick_up_or_drop_off_willow",
+      "points": 1,
+      "note": "Pick up or Drop off Willow"
+    },
+    {
+      "id": "837fecbf-5684-4cc2-aa3e-cdc3bcbbe52b",
+      "ts": 1779496846208,
+      "user_id": "grandpa",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "pick_up_or_drop_off_willow",
+      "points": 1,
+      "note": "Pick up or Drop off Willow"
+    },
+    {
+      "id": "5982db77-7fb1-4fa9-8309-af71144707e6",
+      "ts": 1779496846539,
+      "user_id": "grandpa",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "pick_up_or_drop_off_willow",
+      "points": 1,
+      "note": "Pick up or Drop off Willow"
+    },
+    {
+      "id": "e4a4a50f-e202-4c28-9cfd-c9c4a47ebbe3",
+      "ts": 1779496846773,
+      "user_id": "grandpa",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "pick_up_or_drop_off_willow",
+      "points": 1,
+      "note": "Pick up or Drop off Willow"
+    },
+    {
+      "id": "aab36a7b-50b7-4290-8dda-4f16bba0d1ca",
+      "ts": 1779496846970,
+      "user_id": "grandpa",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "pick_up_or_drop_off_willow",
+      "points": 1,
+      "note": "Pick up or Drop off Willow"
+    },
+    {
+      "id": "4557d91e-2e5e-41aa-95a5-9c778b20eaa5",
+      "ts": 1779496847187,
+      "user_id": "grandpa",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "pick_up_or_drop_off_willow",
+      "points": 1,
+      "note": "Pick up or Drop off Willow"
+    },
+    {
+      "id": "648defb3-e6c2-443a-b781-7d008e82e964",
+      "ts": 1779496847370,
+      "user_id": "grandpa",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "pick_up_or_drop_off_willow",
+      "points": 1,
+      "note": "Pick up or Drop off Willow"
+    },
+    {
+      "id": "0664f2a3-2708-4cde-80fd-1d610121ed1e",
+      "ts": 1779496847640,
+      "user_id": "grandpa",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "pick_up_or_drop_off_willow",
+      "points": 1,
+      "note": "Pick up or Drop off Willow"
+    },
+    {
+      "id": "cfcd1f1e-eb6a-46a4-ab4e-04c41f402457",
+      "ts": 1779496847822,
+      "user_id": "grandpa",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "pick_up_or_drop_off_willow",
+      "points": 1,
+      "note": "Pick up or Drop off Willow"
+    },
+    {
+      "id": "ee1a2f4e-9766-40f1-a4e9-14db61a559fd",
+      "ts": 1779496848327,
+      "user_id": "grandpa",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "pick_up_or_drop_off_willow",
+      "points": 1,
+      "note": "Pick up or Drop off Willow"
+    },
+    {
+      "id": "a52ffd0f-7b93-44b6-8791-55e2a639e5c6",
+      "ts": 1779496848810,
+      "user_id": "grandpa",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "pick_up_or_drop_off_willow",
+      "points": 1,
+      "note": "Pick up or Drop off Willow"
+    },
+    {
+      "id": "3268d523-9634-4315-b34d-d74b57987cac",
+      "ts": 1779496849263,
+      "user_id": "grandpa",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "pick_up_or_drop_off_willow",
+      "points": 1,
+      "note": "Pick up or Drop off Willow"
+    },
+    {
+      "id": "30ba5197-9b55-47a0-8bde-6a2911ef9316",
+      "ts": 1779496849456,
+      "user_id": "grandpa",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "pick_up_or_drop_off_willow",
+      "points": 1,
+      "note": "Pick up or Drop off Willow"
+    },
+    {
+      "id": "4917cbdc-928a-4948-afe7-fcdfabea2b98",
+      "ts": 1779496849682,
+      "user_id": "grandpa",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "pick_up_or_drop_off_willow",
+      "points": 1,
+      "note": "Pick up or Drop off Willow"
+    },
+    {
+      "id": "9de8f23e-513a-4f96-990c-ac0f9c94d52b",
+      "ts": 1779496849890,
+      "user_id": "grandpa",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "pick_up_or_drop_off_willow",
+      "points": 1,
+      "note": "Pick up or Drop off Willow"
     }
   ],
   "settings": {
     "parent_pin_hash": "",
     "sound_enabled": false,
     "github_sync_url": "https://wtvpts-sync.wslu42-wtvpts.workers.dev",
-    "active_user_id": "will",
+    "active_user_id": "grandpa",
     "cleanup_non_willow_done": true,
     "cleanup_willow_done": true,
     "apply_willow_templates_done": true,
     "bonus_grandma_niece_done": true
+  },
+  "health_by_user": {
+    "mom": {
+      "weight_records": []
+    },
+    "dad": {
+      "weight_records": []
+    },
+    "will": {
+      "weight_records": []
+    },
+    "grandpa": {
+      "weight_records": [],
+      "blood_pressure_records": []
+    },
+    "grandma": {
+      "weight_records": []
+    },
+    "niece": {
+      "weight_records": []
+    }
   }
 }
