@@ -14,12 +14,17 @@ import {
   upsertReward,
   deleteReward,
   getUserById,
-  getUserRewards
+  getUserRewards,
+  addWeightRecord,
+  deleteWeightRecord,
+  addBloodPressureRecord,
+  deleteBloodPressureRecord
 } from "./state.js";
 import {
   renderNavActive,
   renderHome,
   renderUserDashboard,
+  renderUserHealth,
   renderUserHistory,
   renderManageEvents,
   renderSettings
@@ -92,9 +97,15 @@ function parseRoute(hash) {
 
   if (parts[0] === "user" && parts[1]) {
     const section = parts[2] || "dashboard";
-    const allowed = new Set(["dashboard", "history", "manage-events"]);
+    const allowed = new Set(["dashboard", "health", "history", "manage-events"]);
     const normalized = allowed.has(section) ? section : "dashboard";
-    return { kind: "user", userId: parts[1], section: normalized, raw: path, top: normalized === "dashboard" ? "home" : normalized === "manage-events" ? "manage" : normalized };
+    return {
+      kind: "user",
+      userId: parts[1],
+      section: normalized,
+      raw: path,
+      top: normalized === "dashboard" ? "home" : normalized === "manage-events" ? "manage" : normalized
+    };
   }
 
   if (parts[0] === "settings") return { kind: "settings", raw: path, top: "settings" };
@@ -385,6 +396,64 @@ export function createController(getState, setState, rerender) {
     ensureAutoSyncLoop();
   }
 
+  function formDataObject(form) {
+    return Object.fromEntries(new FormData(form).entries());
+  }
+
+  function resetSubmittedForm(form) {
+    form.reset();
+    const defaultContext = form.querySelector("[name='measurementContext']");
+    if (defaultContext instanceof HTMLSelectElement) {
+      defaultContext.value = "resting";
+    }
+  }
+
+  function onSubmit(event) {
+    const form = event.target;
+    if (!(form instanceof HTMLFormElement)) return;
+    const action = form.getAttribute("data-action");
+    if (action !== "add-weight-record" && action !== "add-bp-record") return;
+    event.preventDefault();
+
+    const state = getState();
+    const userId = form.getAttribute("data-user-id") || state.settings.active_user_id;
+    const data = formDataObject(form);
+
+    if (action === "add-weight-record") {
+      const result = addWeightRecord(state, userId, {
+        kg: Number(data.kg),
+        note: data.note
+      });
+      if (!result.ok) return showToast(result.error, true);
+      applyState(result.state);
+      resetSubmittedForm(form);
+      showToast(`Added ${result.record.kg} kg`);
+      return;
+    }
+
+    if (action === "add-bp-record") {
+      const result = addBloodPressureRecord(state, userId, {
+        systolic: Number(data.systolic),
+        diastolic: Number(data.diastolic),
+        pulse: Number(data.pulse),
+        mealStatus: String(data.mealStatus || "unknown"),
+        medicationTaken: data.medicationTaken === "true",
+        medicationDose: data.medicationDose,
+        hadDizziness: Boolean(data.hadDizziness),
+        hadBreathlessness: Boolean(data.hadBreathlessness),
+        hadChestTightness: Boolean(data.hadChestTightness),
+        hadVisionChange: Boolean(data.hadVisionChange),
+        energyChange: String(data.energyChange || "unchanged"),
+        measurementContext: String(data.measurementContext || "resting"),
+        note: data.note
+      });
+      if (!result.ok) return showToast(result.error, true);
+      applyState(result.state);
+      resetSubmittedForm(form);
+      showToast(`Added BP ${result.record.systolic}/${result.record.diastolic}`);
+    }
+  }
+
   async function onGlobalClick(event) {
     const target = event.target.closest("[data-action]");
     if (!target) return;
@@ -459,6 +528,30 @@ export function createController(getState, setState, rerender) {
       if (!result.ok) return showToast(result.error, true);
       applyState(result.state);
       showToast(`Redeemed -${reward.cost}: ${reward.title}`);
+      return;
+    }
+
+    if (action === "delete-weight-record") {
+      const userId = target.getAttribute("data-user-id") || state.settings.active_user_id;
+      const recordId = target.getAttribute("data-record-id");
+      if (!userId || !recordId) return;
+      if (!window.confirm("Delete this weight record?")) return;
+      const result = deleteWeightRecord(state, userId, recordId);
+      if (!result.ok) return showToast(result.error, true);
+      applyState(result.state);
+      showToast("Weight record deleted.");
+      return;
+    }
+
+    if (action === "delete-bp-record") {
+      const userId = target.getAttribute("data-user-id") || state.settings.active_user_id;
+      const recordId = target.getAttribute("data-record-id");
+      if (!userId || !recordId) return;
+      if (!window.confirm("Delete this blood pressure record?")) return;
+      const result = deleteBloodPressureRecord(state, userId, recordId);
+      if (!result.ok) return showToast(result.error, true);
+      applyState(result.state);
+      showToast("Blood pressure record deleted.");
       return;
     }
 
@@ -756,6 +849,7 @@ export function createController(getState, setState, rerender) {
         earning: "manage-events",
         rewards: "manage-events",
         spending: "manage-events",
+        health: "health",
         history: "history",
         "manage-events": "manage-events"
       };
@@ -793,6 +887,11 @@ export function createController(getState, setState, rerender) {
         syncAmbientAudio(Boolean(getState().settings?.sound_enabled), false);
         return;
       }
+      if (route.section === "health") {
+        app.innerHTML = renderHome(getState(), renderUserHealth(getState(), route.userId));
+        syncAmbientAudio(Boolean(getState().settings?.sound_enabled), false);
+        return;
+      }
       if (route.section === "history") {
         app.innerHTML = renderHome(getState(), renderUserHistory(getState(), route.userId, historyFilters));
         syncAmbientAudio(Boolean(getState().settings?.sound_enabled), false);
@@ -813,6 +912,7 @@ export function createController(getState, setState, rerender) {
     onRouteChange,
     onGlobalClick,
     onChange,
+    onSubmit,
     renderCurrent
   };
 }

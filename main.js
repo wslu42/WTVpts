@@ -28,6 +28,7 @@ function boot() {
   window.addEventListener("hashchange", controller.onRouteChange);
   document.addEventListener("click", controller.onGlobalClick);
   document.addEventListener("change", controller.onChange);
+  document.addEventListener("submit", controller.onSubmit);
 
   controller.renderCurrent();
 }
