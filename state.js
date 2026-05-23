@@ -1,4 +1,5 @@
 import { seedState } from "./seed-data.js";
+import { DEFAULT_LANGUAGE, normalizeLanguage } from "./i18n.js";
 
 const STORAGE_KEY = "family_points_v2_seed_data_json";
 const DEFAULT_SYNC_URL = "https://wtvpts-sync.wslu42-wtvpts.workers.dev";
@@ -77,6 +78,7 @@ function cloneSeedState() {
       parent_pin_hash: "",
       sound_enabled: false,
       github_sync_url: DEFAULT_SYNC_URL,
+      language: DEFAULT_LANGUAGE,
       ...(cloned.settings || {})
     }
   };
@@ -274,6 +276,7 @@ function migrate(input) {
   if (!String(output.settings.github_sync_url || "").trim()) {
     output.settings.github_sync_url = DEFAULT_SYNC_URL;
   }
+  output.settings.language = normalizeLanguage(output.settings.language);
 
   if (!output.version || output.version < 1) {
     output.version = 1;
@@ -564,6 +567,16 @@ export function addQuickPoints(state, { userId, points, note = "" }) {
     ok: true,
     state: withAppendedLedger(state, entry),
     entry
+  };
+}
+
+export function setLanguage(state, language) {
+  return {
+    ...state,
+    settings: {
+      ...state.settings,
+      language: normalizeLanguage(language)
+    }
   };
 }
 
