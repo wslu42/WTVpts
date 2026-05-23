@@ -1,5 +1,6 @@
 import {
   setActiveUser,
+  setLanguage,
   addEarn,
   addQuickPoints,
   redeemReward,
@@ -29,6 +30,7 @@ import {
   renderManageEvents,
   renderSettings
 } from "./render.js";
+import { getLanguage, t, translateMessage } from "./i18n.js";
 
 const app = document.getElementById("app");
 const ambientAudio = new Audio("./lake.mp3");
@@ -68,7 +70,7 @@ function fadeAudioTo(targetVolume, durationMs = 1600, onDone = null) {
   }, stepMs);
 }
 
-async function syncAmbientAudio(enabled, fromUserGesture = false) {
+async function syncAmbientAudio(enabled, fromUserGesture = false, state = null) {
   if (!enabled) {
     fadeAudioTo(0, 1200, () => {
       ambientAudio.pause();
@@ -82,7 +84,7 @@ async function syncAmbientAudio(enabled, fromUserGesture = false) {
       await ambientAudio.play();
     } catch {
       if (fromUserGesture) {
-        showToast("Unable to start audio on this browser.", true);
+        showToast(t(getLanguage(state), "unableStartAudio"), true);
       }
       return;
     }
@@ -122,8 +124,12 @@ function showToast(message, isError = false) {
   setTimeout(() => toast.remove(), 2200);
 }
 
-function parseSyncError(payload, status) {
-  const baseError = String(payload?.error || `Sync failed (${status})`);
+function localizedError(state, message) {
+  return translateMessage(getLanguage(state), message);
+}
+
+function parseSyncError(payload, status, lang) {
+  const baseError = String(payload?.error || `${t(lang, "syncFailed")} (${status})`);
   const rawDetail = typeof payload?.detail === "string" ? payload.detail : "";
   let detailMsg = "";
   if (rawDetail) {
@@ -160,7 +166,7 @@ function downloadJsonFile(filename, content) {
 
 function askPinIfNeeded(storeState, actionName) {
   if (!storeState.settings.parent_pin_hash) return true;
-  const entered = window.prompt(`Enter Parent PIN to continue (${actionName}):`, "");
+  const entered = window.prompt(t(getLanguage(storeState), "enterParentPin", { action: actionName }), "");
   if (entered === null) return false;
   return verifyPin(storeState, entered);
 }
@@ -205,19 +211,21 @@ export function createController(getState, setState, rerender) {
 
   function enforceSyncKeyPromptIfNeeded() {
     if (forcingSyncKeyPrompt) return;
-    const endpoint = getSyncEndpoint(getState());
+    const currentState = getState();
+    const lang = getLanguage(currentState);
+    const endpoint = getSyncEndpoint(currentState);
     if (!endpoint || getSyncKey()) return;
     forcingSyncKeyPrompt = true;
     try {
       while (!getSyncKey()) {
-        const entered = window.prompt("SYNC_KEY is required on this device. Please enter SYNC_KEY to continue:", "");
+        const entered = window.prompt(t(lang, "syncKeyRequiredPrompt"), "");
         const key = String(entered || "").trim();
         if (key) {
           setStoredSyncKey(key);
-          showToast("Sync key saved on this device.");
+          showToast(t(lang, "syncKeySaved"));
           break;
         }
-        window.alert("SYNC_KEY is required before continuing.");
+        window.alert(t(lang, "syncKeyRequiredAlert"));
       }
     } finally {
       forcingSyncKeyPrompt = false;
@@ -232,7 +240,7 @@ export function createController(getState, setState, rerender) {
     input.select();
   }
 
-  function redirectToSettingsForSyncUnlock(message = "Sync is locked. Enter SYNC_KEY in Settings.") {
+  function redirectToSettingsForSyncUnlock(message = t(getLanguage(getState()), "syncLockedSettings")) {
     if (!window.location.hash.startsWith("#/settings")) {
       window.location.hash = "#/settings";
     }
@@ -259,6 +267,7 @@ export function createController(getState, setState, rerender) {
   async function pushStateToGithub({ silent = true } = {}) {
     if (syncBusy) return false;
     const current = getState();
+    const lang = getLanguage(current);
     const endpoint = getSyncEndpoint(current);
     const syncKey = getSyncKey();
     if (!endpoint || !syncKey) return false;
@@ -279,18 +288,18 @@ export function createController(getState, setState, rerender) {
         payload = null;
       }
       if (!res.ok) {
-        if (!silent) showToast(parseSyncError(payload, res.status), true);
+        if (!silent) showToast(parseSyncError(payload, res.status, lang), true);
         return false;
       }
       lastSyncedSha = String(payload?.sha || lastSyncedSha || "");
       dirtySinceLastPush = false;
       if (!silent) {
         const shortCommit = payload?.commit ? ` (${String(payload.commit).slice(0, 7)})` : "";
-        showToast(`Synced to GitHub${shortCommit}`);
+        showToast(t(lang, "syncedToGithub", { commit: shortCommit }));
       }
       return true;
     } catch {
-      if (!silent) showToast("Sync request failed. Check Worker URL/CORS/network.", true);
+      if (!silent) showToast(t(lang, "syncRequestFailed"), true);
       return false;
     } finally {
       syncBusy = false;
@@ -300,6 +309,7 @@ export function createController(getState, setState, rerender) {
   async function pullStateFromGithub({ silent = true } = {}) {
     if (syncBusy || dirtySinceLastPush) return false;
     const current = getState();
+    const lang = getLanguage(current);
     const endpoint = getSyncEndpoint(current);
     const syncKey = getSyncKey();
     if (!endpoint || !syncKey) return false;
@@ -318,13 +328,13 @@ export function createController(getState, setState, rerender) {
         payload = null;
       }
       if (!res.ok) {
-        if (!silent) showToast(parseSyncError(payload, res.status), true);
+        if (!silent) showToast(parseSyncError(payload, res.status, lang), true);
         return false;
       }
       const remoteState = payload?.state;
       const remoteSha = String(payload?.sha || "");
       if (!remoteState || typeof remoteState !== "object") {
-        if (!silent) showToast("Remote state is invalid.", true);
+        if (!silent) showToast(t(lang, "invalidFileFormat"), true);
         return false;
       }
       if (remoteSha && remoteSha === lastSyncedSha) return true;
@@ -342,10 +352,10 @@ export function createController(getState, setState, rerender) {
       applyState(imported, { skipAutoPush: true });
       lastSyncedSha = remoteSha || lastSyncedSha;
       dirtySinceLastPush = false;
-      if (!silent) showToast("Loaded latest data from GitHub.");
+      if (!silent) showToast(t(lang, "loadedLatestGithub"));
       return true;
     } catch {
-      if (!silent) showToast("Pull request failed. Check Worker URL/CORS/network.", true);
+      if (!silent) showToast(t(lang, "pullFailed"), true);
       return false;
     } finally {
       syncBusy = false;
@@ -416,6 +426,10 @@ export function createController(getState, setState, rerender) {
     event.preventDefault();
 
     const state = getState();
+    const currentLanguage = getLanguage(state);
+    document.documentElement.lang = currentLanguage;
+    document.title = t(currentLanguage, "appTitle");
+    const lang = getLanguage(state);
     const userId = form.getAttribute("data-user-id") || state.settings.active_user_id;
     const data = formDataObject(form);
 
@@ -424,10 +438,10 @@ export function createController(getState, setState, rerender) {
         kg: Number(data.kg),
         note: data.note
       });
-      if (!result.ok) return showToast(result.error, true);
+      if (!result.ok) return showToast(localizedError(state, result.error), true);
       applyState(result.state);
       resetSubmittedForm(form);
-      showToast(`Added ${result.record.kg} kg`);
+      showToast(t(lang, "kgLatest", { kg: result.record.kg }));
       return;
     }
 
@@ -447,10 +461,10 @@ export function createController(getState, setState, rerender) {
         measurementContext: String(data.measurementContext || "resting"),
         note: data.note
       });
-      if (!result.ok) return showToast(result.error, true);
+      if (!result.ok) return showToast(localizedError(state, result.error), true);
       applyState(result.state);
       resetSubmittedForm(form);
-      showToast(`Added BP ${result.record.systolic}/${result.record.diastolic}`);
+      showToast(t(lang, "latestBp", { systolic: result.record.systolic, diastolic: result.record.diastolic }));
     }
   }
 
@@ -459,6 +473,7 @@ export function createController(getState, setState, rerender) {
     if (!target) return;
     const action = target.getAttribute("data-action");
     const state = getState();
+    const lang = getLanguage(state);
 
     if (action === "open-user") {
       const userId = target.getAttribute("data-user-id");
@@ -479,7 +494,13 @@ export function createController(getState, setState, rerender) {
         }
       };
       applyState(next);
-      syncAmbientAudio(enabled, true);
+      syncAmbientAudio(enabled, true, state);
+      return;
+    }
+
+    if (action === "switch-language") {
+      const next = setLanguage(state, target.getAttribute("data-language"));
+      applyState(next);
       return;
     }
 
@@ -487,9 +508,9 @@ export function createController(getState, setState, rerender) {
       const userId = target.getAttribute("data-user-id") || state.settings.active_user_id;
       const points = Number(target.getAttribute("data-points"));
       const result = addEarn(state, { userId, eventId: "custom_quick", points, note: `Quick add +${points}` });
-      if (!result.ok) return showToast(result.error, true);
+      if (!result.ok) return showToast(localizedError(state, result.error), true);
       applyState(result.state);
-      showToast(`+${points} points added`);
+      showToast(t(lang, "pointsAdded", { points }));
       return;
     }
 
@@ -497,12 +518,12 @@ export function createController(getState, setState, rerender) {
       const userId = target.getAttribute("data-user-id") || state.settings.active_user_id;
       const input = document.getElementById("custom-add-points");
       const points = Math.trunc(Number(input?.value || 0));
-      if (!Number.isFinite(points) || points === 0) return showToast("Enter a non-zero number.", true);
+      if (!Number.isFinite(points) || points === 0) return showToast(t(lang, "enterNonZeroNumber"), true);
       const result = addQuickPoints(state, { userId, points, note: `Quick adjust ${points > 0 ? "+" : ""}${points}` });
-      if (!result.ok) return showToast(result.error, true);
+      if (!result.ok) return showToast(localizedError(state, result.error), true);
       applyState(result.state);
       if (input) input.value = "1";
-      showToast(`${points > 0 ? "+" : ""}${points} points applied`);
+      showToast(t(lang, "pointsApplied", { points: `${points > 0 ? "+" : ""}${points}` }));
       return;
     }
 
@@ -511,11 +532,11 @@ export function createController(getState, setState, rerender) {
       const eventId = target.getAttribute("data-event-id");
       const userEvents = state.events_by_user?.[userId] || [];
       const eventObj = userEvents.find((e) => e.id === eventId);
-      if (!eventObj) return showToast("Event not found.", true);
+      if (!eventObj) return showToast(t(lang, "eventNotFound"), true);
       const result = addEarn(state, { userId, eventId: eventObj.id, points: eventObj.points, note: eventObj.title });
-      if (!result.ok) return showToast(result.error, true);
+      if (!result.ok) return showToast(localizedError(state, result.error), true);
       applyState(result.state);
-      showToast(`Earned +${eventObj.points}: ${eventObj.title}`);
+      showToast(t(lang, "earnedPoint", { points: eventObj.points, title: eventObj.title }));
       return;
     }
 
@@ -523,11 +544,11 @@ export function createController(getState, setState, rerender) {
       const userId = target.getAttribute("data-user-id") || state.settings.active_user_id;
       const rewardId = target.getAttribute("data-reward-id");
       const reward = getUserRewards(state, userId).find((r) => r.id === rewardId);
-      if (!reward) return showToast("Reward not found.", true);
+      if (!reward) return showToast(t(lang, "rewardNotFound"), true);
       const result = redeemReward(state, { userId, rewardId, note: reward.title });
-      if (!result.ok) return showToast(result.error, true);
+      if (!result.ok) return showToast(localizedError(state, result.error), true);
       applyState(result.state);
-      showToast(`Redeemed -${reward.cost}: ${reward.title}`);
+      showToast(t(lang, "redeemedPoint", { cost: reward.cost, title: reward.title }));
       return;
     }
 
@@ -535,11 +556,11 @@ export function createController(getState, setState, rerender) {
       const userId = target.getAttribute("data-user-id") || state.settings.active_user_id;
       const recordId = target.getAttribute("data-record-id");
       if (!userId || !recordId) return;
-      if (!window.confirm("Delete this weight record?")) return;
+      if (!window.confirm(t(lang, "deleteWeightConfirm"))) return;
       const result = deleteWeightRecord(state, userId, recordId);
-      if (!result.ok) return showToast(result.error, true);
+      if (!result.ok) return showToast(localizedError(state, result.error), true);
       applyState(result.state);
-      showToast("Weight record deleted.");
+      showToast(t(lang, "weightDeleted"));
       return;
     }
 
@@ -547,26 +568,26 @@ export function createController(getState, setState, rerender) {
       const userId = target.getAttribute("data-user-id") || state.settings.active_user_id;
       const recordId = target.getAttribute("data-record-id");
       if (!userId || !recordId) return;
-      if (!window.confirm("Delete this blood pressure record?")) return;
+      if (!window.confirm(t(lang, "deleteBloodPressureConfirm"))) return;
       const result = deleteBloodPressureRecord(state, userId, recordId);
-      if (!result.ok) return showToast(result.error, true);
+      if (!result.ok) return showToast(localizedError(state, result.error), true);
       applyState(result.state);
-      showToast("Blood pressure record deleted.");
+      showToast(t(lang, "bloodPressureDeleted"));
       return;
     }
 
     if (action === "export-json") {
       downloadJsonFile("data.json", exportState(state));
-      showToast("Exported data.json");
+      showToast(t(lang, "exportedData"));
       return;
     }
 
     if (action === "import-json") {
       const input = document.getElementById("import-file");
       const file = input?.files?.[0];
-      if (!file) return showToast("Select a JSON file first.", true);
-      if (!askPinIfNeeded(state, "Import")) return showToast("PIN check failed.", true);
-      if (!window.confirm("Import will replace all current data. Continue?")) return;
+      if (!file) return showToast(t(lang, "selectJsonFirst"), true);
+      if (!askPinIfNeeded(state, t(lang, "importSelectedJson"))) return showToast(t(lang, "invalidPin"), true);
+      if (!window.confirm(t(lang, "importReplaceConfirm"))) return;
 
       const reader = new FileReader();
       reader.onload = () => {
@@ -574,12 +595,12 @@ export function createController(getState, setState, rerender) {
           const parsed = parseImportJson(String(reader.result || ""));
           applyState(replaceState(parsed));
           if (input) input.value = "";
-          showToast("Import completed.");
+          showToast(t(lang, "importCompleted"));
         } catch (error) {
-          showToast(error.message || "Import failed.", true);
+          showToast(translateMessage(lang, error.message || t(lang, "importFailed")), true);
         }
       };
-      reader.onerror = () => showToast("Could not read file.", true);
+      reader.onerror = () => showToast(t(lang, "importFailed"), true);
       reader.readAsText(file);
       return;
     }
@@ -588,7 +609,7 @@ export function createController(getState, setState, rerender) {
       const input = document.getElementById("github-sync-url");
       const url = String(input?.value || "").trim();
       if (url && !/^https?:\/\//i.test(url)) {
-        return showToast("Sync URL must start with http:// or https://", true);
+        return showToast(t(lang, "urlMustStartHttp"), true);
       }
       const next = {
         ...state,
@@ -598,7 +619,7 @@ export function createController(getState, setState, rerender) {
         }
       };
       applyState(next);
-      showToast(url ? "Sync URL saved." : "Sync URL cleared.");
+      showToast(url ? t(lang, "urlSaved") : t(lang, "urlCleared"));
       ensureAutoSyncLoop();
       return;
     }
@@ -609,9 +630,9 @@ export function createController(getState, setState, rerender) {
       setStoredSyncKey(key);
       if (input) input.value = "";
       if (!key) {
-        showToast("SYNC_KEY is empty. Sync remains locked.", true);
+        showToast(t(lang, "syncKeyEmpty"), true);
       } else {
-        showToast("Sync key saved on this device.");
+        showToast(t(lang, "syncKeySaved"));
       }
       ensureAutoSyncLoop();
       return;
@@ -626,12 +647,12 @@ export function createController(getState, setState, rerender) {
     if (action === "sync-github") {
       const endpoint = getSyncEndpoint(state);
       if (!endpoint) {
-        return showToast("Set and save GitHub Sync URL first.", true);
+        return showToast(t(lang, "urlMustStartHttp"), true);
       }
       if (!getSyncKey()) {
         enforceSyncKeyPromptIfNeeded();
         if (!getSyncKey()) {
-          redirectToSettingsForSyncUnlock("SYNC_KEY is still missing.");
+          redirectToSettingsForSyncUnlock(t(lang, "syncKeyMissing"));
           return;
         }
       }
@@ -640,10 +661,10 @@ export function createController(getState, setState, rerender) {
     }
 
     if (action === "reset-state") {
-      if (!askPinIfNeeded(state, "Reset")) return showToast("PIN check failed.", true);
-      if (!window.confirm("Reset all data to factory defaults?")) return;
+      if (!askPinIfNeeded(state, t(lang, "resetFactory"))) return showToast(t(lang, "invalidPin"), true);
+      if (!window.confirm(t(lang, "resetConfirm"))) return;
       applyState(resetState());
-      showToast("State reset complete.");
+      showToast(t(lang, "resetComplete"));
       return;
     }
 
@@ -654,9 +675,9 @@ export function createController(getState, setState, rerender) {
         const next = setParentPin(state, val);
         applyState(next);
         if (input) input.value = "";
-        showToast("PIN saved.");
+        showToast(t(lang, "pinSaved"));
       } catch (error) {
-        showToast(error.message || "Invalid PIN.", true);
+        showToast(translateMessage(lang, error.message || t(lang, "invalidPin")), true);
       }
       return;
     }
@@ -666,7 +687,7 @@ export function createController(getState, setState, rerender) {
       applyState(next);
       const input = document.getElementById("parent-pin-input");
       if (input) input.value = "";
-      showToast("PIN cleared.");
+      showToast(t(lang, "pinCleared"));
       return;
     }
 
@@ -683,9 +704,9 @@ export function createController(getState, setState, rerender) {
         enabled: readInputValue(card, "[data-field='enabled']")
       };
       const result = upsertEvent(state, userId, payload);
-      if (!result.ok) return showToast(result.error, true);
+      if (!result.ok) return showToast(localizedError(state, result.error), true);
       applyState(result.state);
-      showToast("Event saved.");
+      showToast(t(lang, "earningEventSaved"));
       return;
     }
 
@@ -705,12 +726,12 @@ export function createController(getState, setState, rerender) {
           enabled: readInputValue(card, "[data-field='enabled']")
         };
         const result = upsertEvent(nextState, userId, payload);
-        if (!result.ok) return showToast(result.error, true);
+        if (!result.ok) return showToast(localizedError(state, result.error), true);
         nextState = result.state;
         updated += 1;
       }
       applyState(nextState);
-      showToast(`Saved ${updated} earning event${updated === 1 ? "" : "s"}.`);
+      showToast(t(lang, "earningPointsSaved", { count: updated, plural: updated === 1 ? "" : "s" }));
       return;
     }
 
@@ -718,11 +739,11 @@ export function createController(getState, setState, rerender) {
       const userId = target.getAttribute("data-user-id");
       const id = target.getAttribute("data-item-id");
       if (!userId || !id) return;
-      if (!window.confirm("Delete this event?")) return;
+      if (!window.confirm(t(lang, "deleteEventConfirm"))) return;
       const result = deleteEvent(state, userId, id);
-      if (!result.ok) return showToast(result.error, true);
+      if (!result.ok) return showToast(localizedError(state, result.error), true);
       applyState(result.state);
-      showToast("Event deleted.");
+      showToast(t(lang, "eventDeleted"));
       return;
     }
 
@@ -737,9 +758,9 @@ export function createController(getState, setState, rerender) {
         enabled: readInputValue(document, "#new-event-enabled")
       };
       const result = upsertEvent(state, userId, payload);
-      if (!result.ok) return showToast(result.error, true);
+      if (!result.ok) return showToast(localizedError(state, result.error), true);
       applyState(result.state);
-      showToast("Event added.");
+      showToast(t(lang, "eventAdded"));
       return;
     }
 
@@ -756,9 +777,9 @@ export function createController(getState, setState, rerender) {
         enabled: readInputValue(card, "[data-field='enabled']")
       };
       const result = upsertReward(state, userId, payload);
-      if (!result.ok) return showToast(result.error, true);
+      if (!result.ok) return showToast(localizedError(state, result.error), true);
       applyState(result.state);
-      showToast("Reward saved.");
+      showToast(t(lang, "rewardSaved"));
       return;
     }
 
@@ -778,12 +799,12 @@ export function createController(getState, setState, rerender) {
           enabled: readInputValue(card, "[data-field='enabled']")
         };
         const result = upsertReward(nextState, userId, payload);
-        if (!result.ok) return showToast(result.error, true);
+        if (!result.ok) return showToast(localizedError(state, result.error), true);
         nextState = result.state;
         updated += 1;
       }
       applyState(nextState);
-      showToast(`Saved ${updated} redeem event${updated === 1 ? "" : "s"}.`);
+      showToast(t(lang, "redeemEventsSaved", { count: updated, plural: updated === 1 ? "" : "s" }));
       return;
     }
 
@@ -791,11 +812,11 @@ export function createController(getState, setState, rerender) {
       const userId = target.getAttribute("data-user-id") || state.settings.active_user_id;
       const id = target.getAttribute("data-item-id");
       if (!userId || !id) return;
-      if (!window.confirm("Delete this reward?")) return;
+      if (!window.confirm(t(lang, "deleteRewardConfirm"))) return;
       const result = deleteReward(state, userId, id);
-      if (!result.ok) return showToast(result.error, true);
+      if (!result.ok) return showToast(localizedError(state, result.error), true);
       applyState(result.state);
-      showToast("Reward deleted.");
+      showToast(t(lang, "rewardDeleted"));
       return;
     }
 
@@ -810,9 +831,9 @@ export function createController(getState, setState, rerender) {
         enabled: readInputValue(document, "#new-reward-enabled")
       };
       const result = upsertReward(state, userId, payload);
-      if (!result.ok) return showToast(result.error, true);
+      if (!result.ok) return showToast(localizedError(state, result.error), true);
       applyState(result.state);
-      showToast("Reward added.");
+      showToast(t(lang, "rewardAdded"));
     }
   }
 
@@ -862,21 +883,21 @@ export function createController(getState, setState, rerender) {
 
     if (route.kind === "home") {
       app.innerHTML = renderHome(state);
-      syncAmbientAudio(Boolean(state.settings?.sound_enabled), false);
+      syncAmbientAudio(Boolean(state.settings?.sound_enabled), false, state);
       return;
     }
 
     if (route.kind === "settings") {
       app.innerHTML = renderHome(state, renderSettings(state, { syncKeySet: Boolean(getSyncKey()) }));
-      syncAmbientAudio(Boolean(state.settings?.sound_enabled), false);
+      syncAmbientAudio(Boolean(state.settings?.sound_enabled), false, state);
       return;
     }
 
     if (route.kind === "user") {
       const user = getUserById(state, route.userId);
       if (!user) {
-        app.innerHTML = `<section class="empty">User not found.</section>`;
-        syncAmbientAudio(Boolean(state.settings?.sound_enabled), false);
+        app.innerHTML = `<section class="empty">${t(getLanguage(state), "userNotFound")}</section>`;
+        syncAmbientAudio(Boolean(state.settings?.sound_enabled), false, state);
         return;
       }
       if (state.settings.active_user_id !== route.userId) {
@@ -884,28 +905,28 @@ export function createController(getState, setState, rerender) {
       }
       if (route.section === "dashboard") {
         app.innerHTML = renderHome(getState(), renderUserDashboard(getState(), route.userId));
-        syncAmbientAudio(Boolean(getState().settings?.sound_enabled), false);
+        syncAmbientAudio(Boolean(getState().settings?.sound_enabled), false, getState());
         return;
       }
       if (route.section === "health") {
         app.innerHTML = renderHome(getState(), renderUserHealth(getState(), route.userId));
-        syncAmbientAudio(Boolean(getState().settings?.sound_enabled), false);
+        syncAmbientAudio(Boolean(getState().settings?.sound_enabled), false, getState());
         return;
       }
       if (route.section === "history") {
         app.innerHTML = renderHome(getState(), renderUserHistory(getState(), route.userId, historyFilters));
-        syncAmbientAudio(Boolean(getState().settings?.sound_enabled), false);
+        syncAmbientAudio(Boolean(getState().settings?.sound_enabled), false, getState());
         return;
       }
       if (route.section === "manage-events") {
         app.innerHTML = renderHome(getState(), renderManageEvents(getState(), route.userId));
-        syncAmbientAudio(Boolean(getState().settings?.sound_enabled), false);
+        syncAmbientAudio(Boolean(getState().settings?.sound_enabled), false, getState());
         return;
       }
     }
 
     app.innerHTML = renderHome(state);
-    syncAmbientAudio(Boolean(state.settings?.sound_enabled), false);
+    syncAmbientAudio(Boolean(state.settings?.sound_enabled), false, state);
   }
 
   return {

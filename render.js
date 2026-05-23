@@ -14,6 +14,15 @@ import {
   resolveRefTitle,
   sortLedgerNewestFirst
 } from "./state.js";
+import {
+  ZH_TW_LANGUAGE,
+  displayCategory,
+  displayUserName,
+  formatDateForLanguage,
+  formatShortDateForLanguage,
+  getLanguage,
+  t
+} from "./i18n.js";
 
 function escapeHtml(value) {
   return String(value)
@@ -24,43 +33,36 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
-function formatDate(ts) {
-  return new Date(ts).toLocaleString();
-}
-
-function formatShortDate(ts) {
-  return new Date(ts).toLocaleDateString(undefined, { month: "short", day: "numeric" });
-}
-
-function renderPointsGrid(balance) {
+function renderPointsGrid(balance, lang) {
   const safe = Math.max(0, Math.floor(balance));
   const capped = Math.min(safe, 200);
   const cells = [];
   for (let i = 0; i < capped; i += 1) {
-    cells.push(`<div class="point-cell filled" title="Point ${i + 1}"></div>`);
+    cells.push(`<div class="point-cell filled" title="${t(lang, "point")} ${i + 1}"></div>`);
   }
   const remainder = Math.max(0, 20 - (capped % 20));
   const blanks = capped === 0 ? 20 : Math.min(remainder, 20);
   for (let i = 0; i < blanks; i += 1) {
     cells.push('<div class="point-cell"></div>');
   }
-  return `<div class="points-grid">${cells.join("")}</div>${safe > 200 ? `<p class="muted">Showing first 200 of ${safe} points.</p>` : ""}`;
+  return `<div class="points-grid">${cells.join("")}</div>${safe > 200 ? `<p class="muted">${t(lang, "showingFirstPoints", { count: safe })}</p>` : ""}`;
 }
 
 function userSummaryCard(state, user) {
+  const lang = getLanguage(state);
   const totals = getUserTotals(state, user.id);
   const today = getTodaySummary(state, user.id);
   return `
     <button class="card card-clickable user-card tone-${escapeHtml(user.id)}" data-action="open-user" data-user-id="${escapeHtml(user.id)}">
       <div class="summary-head">
-        <h3 class="user-name">${escapeHtml(user.name)}</h3>
+        <h3 class="user-name">${escapeHtml(displayUserName(lang, user))}</h3>
         <div class="summary-keystats">
-          <div class="stat-line"><span>Balance</span><strong>${totals.balance}</strong></div>
-          <div class="stat-line"><span>Earned total</span><strong>${totals.earned_total}</strong></div>
+          <div class="stat-line"><span>${t(lang, "balance")}</span><strong>${totals.balance}</strong></div>
+          <div class="stat-line"><span>${t(lang, "earnedTotal")}</span><strong>${totals.earned_total}</strong></div>
         </div>
       </div>
-      <div class="stat-line stat-line-plain muted"><span>Today earned</span><span>+${today.today_earned}</span></div>
-      <div class="stat-line stat-line-plain muted"><span>Today redeemed</span><span>-${today.today_spent}</span></div>
+      <div class="stat-line stat-line-plain muted"><span>${t(lang, "todayEarned")}</span><span>+${today.today_earned}</span></div>
+      <div class="stat-line stat-line-plain muted"><span>${t(lang, "todayRedeemed")}</span><span>-${today.today_spent}</span></div>
     </button>
   `;
 }
@@ -77,17 +79,17 @@ export function renderNavActive(route, activeUserId) {
   }
 }
 
-function renderUserWorkspaceTabs(userId, section, userName) {
+function renderUserWorkspaceTabs(userId, section, userName, lang) {
   const tabs = [
-    { key: "dashboard", label: "Dashboard", href: `#/user/${userId}` },
-    { key: "health", label: "Health", href: `#/user/${userId}/health` },
-    { key: "history", label: "History", href: `#/user/${userId}/history` },
-    { key: "manage-events", label: "Manage Events", href: `#/user/${userId}/manage-events` }
+    { key: "dashboard", label: t(lang, "dashboard"), href: `#/user/${userId}` },
+    { key: "health", label: t(lang, "health"), href: `#/user/${userId}/health` },
+    { key: "history", label: t(lang, "history"), href: `#/user/${userId}/history` },
+    { key: "manage-events", label: t(lang, "manageEvents"), href: `#/user/${userId}/manage-events` }
   ];
   return `
     <section class="card">
       <h1 class="page-title">${escapeHtml(userName)}</h1>
-      <nav class="nav-links" aria-label="User workspace navigation">
+      <nav class="nav-links" aria-label="${t(lang, "manageEvents")}">
         ${tabs.map((t) => `<a href="${t.href}" class="${section === t.key ? "active" : ""}">${t.label}</a>`).join("")}
       </nav>
     </section>
@@ -95,18 +97,22 @@ function renderUserWorkspaceTabs(userId, section, userName) {
 }
 
 export function renderHome(state, embeddedHtml = "") {
+  const lang = getLanguage(state);
   const cards = state.users.map((user) => userSummaryCard(state, user)).join("");
   const soundEnabled = Boolean(state.settings?.sound_enabled);
+  const nextLang = lang === ZH_TW_LANGUAGE ? "en" : ZH_TW_LANGUAGE;
+  const nextLangLabel = lang === ZH_TW_LANGUAGE ? t(lang, "languageEnglish") : t(lang, "languageTaiwan");
   return `
     <section class="card">
       <div class="home-header">
-        <h1 class="page-title"><a class="home-title-link" href="#/home">Dashboard - Home</a></h1>
+        <h1 class="page-title"><a class="home-title-link" href="#/home">${t(lang, "dashboardHome")}</a></h1>
         <div class="inline-row">
-          <button class="btn-secondary home-settings-btn" data-action="toggle-sound" aria-pressed="${soundEnabled ? "true" : "false"}">${soundEnabled ? "Sound On" : "Sound Off"}</button>
-          <a class="btn-secondary home-settings-btn" href="#/settings">Settings</a>
+          <button class="btn-secondary home-settings-btn" data-action="switch-language" data-language="${nextLang}">${nextLangLabel}</button>
+          <button class="btn-secondary home-settings-btn" data-action="toggle-sound" aria-pressed="${soundEnabled ? "true" : "false"}">${soundEnabled ? t(lang, "soundOn") : t(lang, "soundOff")}</button>
+          <a class="btn-secondary home-settings-btn" href="#/settings">${t(lang, "settings")}</a>
         </div>
       </div>
-      <p class="muted">Choose a user card, then work in that user's Dashboard / History / Manage Events pages.</p>
+      <p class="muted">${t(lang, "chooseUserCard")}</p>
       <div class="grid-2">${cards}</div>
       ${embeddedHtml ? `<div class="section-divider" aria-hidden="true"></div><div class="home-embedded">${embeddedHtml}</div>` : ""}
     </section>
@@ -114,8 +120,9 @@ export function renderHome(state, embeddedHtml = "") {
 }
 
 export function renderUserDashboard(state, userId) {
+  const lang = getLanguage(state);
   const user = getUserById(state, userId);
-  if (!user) return `<section class="empty">User not found.</section>`;
+  if (!user) return `<section class="empty">${t(lang, "userNotFound")}</section>`;
   const totals = getUserTotals(state, user.id);
   const unlock = getRewardUnlockProgress(state, user.id);
   const quickEvents = getUserEvents(state, user.id).filter((event) => event.enabled);
@@ -128,16 +135,16 @@ export function renderUserDashboard(state, userId) {
         .map(
           (event) => `
           <button class="item-card quick-item-card quick-card-button quick-earn-card is-enabled" data-action="achieve-event" data-event-id="${escapeHtml(event.id)}" data-user-id="${escapeHtml(user.id)}">
-            <div class="quick-card-status quick-card-status-plain">Earn</div>
+            <div class="quick-card-status quick-card-status-plain">${t(lang, "earn")}</div>
             <strong>${escapeHtml(event.title)}</strong>
-            <div class="muted">+${event.points} point${event.points === 1 ? "" : "s"}</div>
+            <div class="muted">+${event.points} ${t(lang, event.points === 1 ? "point" : "points")}</div>
           </button>`
         )
         .join("");
       const spanClass = rows.length >= 4 ? "quick-category-span-2" : "";
       return `
       <section class="category-block quick-category ${spanClass}">
-        <h3 class="category-title">${escapeHtml(category)}</h3>
+        <h3 class="category-title">${escapeHtml(displayCategory(lang, category))}</h3>
         <div class="quick-items">${cards}</div>
       </section>`;
     })
@@ -158,48 +165,48 @@ export function renderUserDashboard(state, userId) {
           const disabled = isLocked || !canAfford;
           return `
           <button class="item-card quick-item-card quick-card-button quick-redeem-card ${disabled ? "is-disabled" : "is-enabled"}" data-action="quick-redeem" data-reward-id="${escapeHtml(reward.id)}" data-user-id="${escapeHtml(user.id)}" ${disabled ? "disabled" : ""}>
-            <div class="quick-card-status quick-card-status-plain">${isLocked ? "Locked" : canAfford ? "Redeem" : "Need points"}</div>
+            <div class="quick-card-status quick-card-status-plain">${isLocked ? t(lang, "locked") : canAfford ? t(lang, "redeem") : t(lang, "needPoints")}</div>
             <strong>${escapeHtml(reward.title)}</strong>
-            <div class="muted">Cost ${reward.cost} | Unlock @ ${reward.unlock_at_total}</div>
+            <div class="muted">${t(lang, "cost")} ${reward.cost} | ${t(lang, "unlockAt")} ${reward.unlock_at_total}</div>
           </button>`;
         })
         .join("");
       const spanClass = rows.length >= 3 ? "quick-category-span-2" : "";
       return `
       <section class="category-block quick-category ${spanClass}">
-        <h3 class="category-title">${escapeHtml(category)}</h3>
+        <h3 class="category-title">${escapeHtml(displayCategory(lang, category))}</h3>
         <div class="quick-items">${cards}</div>
       </section>`;
     })
     .join("");
 
   return `
-    ${renderUserWorkspaceTabs(user.id, "dashboard", user.name)}
+    ${renderUserWorkspaceTabs(user.id, "dashboard", displayUserName(lang, user), lang)}
     <section class="card">
       <div class="inline-row">
-        <span class="badge">Balance: ${totals.balance}</span>
-        <span class="badge">Earned total: ${totals.earned_total}</span>
+        <span class="badge">${t(lang, "balance")}: ${totals.balance}</span>
+        <span class="badge">${t(lang, "earnedTotal")}: ${totals.earned_total}</span>
       </div>
-      ${renderPointsGrid(totals.balance)}
+      ${renderPointsGrid(totals.balance, lang)}
       <div class="progress-wrap">
-        <div class="muted">${unlock.next_threshold === null ? "All unlock milestones reached" : `Progress to next unlock (${unlock.next_threshold})`}</div>
+        <div class="muted">${unlock.next_threshold === null ? t(lang, "allUnlockMilestonesReached") : `${t(lang, "unlockAt")} ${unlock.next_threshold}`}</div>
         <div class="progress-bar"><div class="progress-fill" style="width:${unlock.pct.toFixed(0)}%"></div></div>
       </div>
     </section>
     <section class="card">
-      <h2>Redeem</h2>
-      <p class="muted">All enabled redeem events for this user.</p>
-      <div class="quick-categories">${quickRewardHtml || '<p class="muted">No rewards enabled.</p>'}</div>
+      <h2>${t(lang, "redeem")}</h2>
+      <p class="muted">${t(lang, "allEnabledRedeemEvents")}</p>
+      <div class="quick-categories">${quickRewardHtml || `<p class="muted">${t(lang, "noRewardsEnabled")}</p>`}</div>
     </section>
     <section class="card">
-      <h2>Earn</h2>
-      <p class="muted">All enabled earning events for this user.</p>
-      <div class="quick-categories">${quickEarnHtml || '<p class="muted">No earning events enabled.</p>'}</div>
+      <h2>${t(lang, "earn")}</h2>
+      <p class="muted">${t(lang, "allEnabledEarningEvents")}</p>
+      <div class="quick-categories">${quickEarnHtml || `<p class="muted">${t(lang, "earningEventsConfiguredEmpty")}</p>`}</div>
     </section>
   `;
 }
 
-function renderCategoryCards(items, type, userId) {
+function renderCategoryCards(items, type, userId, lang = "en") {
   const categories = listCategories(items);
   const grouped = groupByCategory(items);
 
@@ -217,8 +224,8 @@ function renderCategoryCards(items, type, userId) {
                   ${item.description ? `<div class="muted">${escapeHtml(item.description)}</div>` : ""}
                 </div>
                 <div class="item-footer">
-                  <span class="badge">${escapeHtml(item.category)}</span>
-                  <button class="btn-primary" data-action="achieve-event" data-user-id="${escapeHtml(userId)}" data-event-id="${escapeHtml(item.id)}">Earn</button>
+                  <span class="badge">${escapeHtml(displayCategory(lang, item.category))}</span>
+                  <button class="btn-primary" data-action="achieve-event" data-user-id="${escapeHtml(userId)}" data-event-id="${escapeHtml(item.id)}">${t(lang, "earn")}</button>
                 </div>
               </article>
             `;
@@ -231,8 +238,8 @@ function renderCategoryCards(items, type, userId) {
                 <div class="muted">Cost: ${item.cost} | Unlock @ ${item.unlock_at_total}</div>
               </div>
               <div class="item-footer">
-                <span class="badge">${escapeHtml(item.category)}</span>
-                <button class="btn-primary" data-action="redeem-reward" data-user-id="${escapeHtml(userId)}" data-reward-id="${escapeHtml(item.id)}">Redeem</button>
+                <span class="badge">${escapeHtml(displayCategory(lang, item.category))}</span>
+                <button class="btn-primary" data-action="redeem-reward" data-user-id="${escapeHtml(userId)}" data-reward-id="${escapeHtml(item.id)}">${t(lang, "redeem")}</button>
               </div>
             </article>
           `;
@@ -274,8 +281,9 @@ function filterUserLedger(state, userId, filters) {
 }
 
 export function renderUserHistory(state, userId, filters) {
+  const lang = getLanguage(state);
   const user = getUserById(state, userId);
-  if (!user) return `<section class="empty">User not found.</section>`;
+  if (!user) return `<section class="empty">${t(lang, "userNotFound")}</section>`;
   const categories = [...new Set([...getAllEventCategories(state), ...getAllRewardCategories(state)])].sort((a, b) => a.localeCompare(b));
   const rows = filterUserLedger(state, userId, filters);
   const tr = rows
@@ -284,8 +292,8 @@ export function renderUserHistory(state, userId, filters) {
       const displayType = entry.type === "spend" ? "redeem" : entry.type;
       return `
       <tr>
-        <td>${escapeHtml(formatDate(entry.ts))}</td>
-        <td>${escapeHtml(displayType)}</td>
+        <td>${escapeHtml(formatDateForLanguage(lang, entry.ts))}</td>
+        <td>${displayType === "redeem" ? t(lang, "redeem") : t(lang, "earn")}</td>
         <td>${escapeHtml(resolveRefTitle(state, entry))}</td>
         <td>${escapeHtml(pts)}</td>
         <td>${escapeHtml(entry.note || "")}</td>
@@ -294,36 +302,36 @@ export function renderUserHistory(state, userId, filters) {
     .join("");
 
   return `
-    ${renderUserWorkspaceTabs(user.id, "history", user.name)}
+    ${renderUserWorkspaceTabs(user.id, "history", displayUserName(lang, user), lang)}
     <section class="card">
-      <h2>History</h2>
+      <h2>${t(lang, "history")}</h2>
       <div class="filters">
         <select id="history-type-filter">
-          <option value="all" ${filters.type === "all" ? "selected" : ""}>All types</option>
-          <option value="earn" ${filters.type === "earn" ? "selected" : ""}>Earn</option>
-          <option value="spend" ${filters.type === "spend" ? "selected" : ""}>Redeem</option>
+          <option value="all" ${filters.type === "all" ? "selected" : ""}>${t(lang, "allTypes")}</option>
+          <option value="earn" ${filters.type === "earn" ? "selected" : ""}>${t(lang, "earn")}</option>
+          <option value="spend" ${filters.type === "spend" ? "selected" : ""}>${t(lang, "redeem")}</option>
         </select>
         <select id="history-range-filter">
-          <option value="7" ${filters.range === "7" ? "selected" : ""}>Last 7 days</option>
-          <option value="30" ${filters.range === "30" ? "selected" : ""}>Last 30 days</option>
-          <option value="all" ${filters.range === "all" ? "selected" : ""}>All time</option>
+          <option value="7" ${filters.range === "7" ? "selected" : ""}>${t(lang, "last7Days")}</option>
+          <option value="30" ${filters.range === "30" ? "selected" : ""}>${t(lang, "last30Days")}</option>
+          <option value="all" ${filters.range === "all" ? "selected" : ""}>${t(lang, "allTime")}</option>
         </select>
         <select id="history-category-filter">
-          <option value="all">All categories</option>
-          ${categories.map((c) => `<option value="${escapeHtml(c)}" ${filters.category === c ? "selected" : ""}>${escapeHtml(c)}</option>`).join("")}
+          <option value="all">${t(lang, "allCategories")}</option>
+          ${categories.map((c) => `<option value="${escapeHtml(c)}" ${filters.category === c ? "selected" : ""}>${escapeHtml(displayCategory(lang, c))}</option>`).join("")}
         </select>
       </div>
     </section>
     <section class="card table-wrap">
-      ${rows.length ? `<table><thead><tr><th>Time</th><th>Type</th><th>Item</th><th>Points</th><th>Note</th></tr></thead><tbody>${tr}</tbody></table>` : '<div class="empty">No ledger entries match current filters.</div>'}
+      ${rows.length ? `<table><thead><tr><th>${t(lang, "time")}</th><th>${t(lang, "type")}</th><th>${t(lang, "item")}</th><th>${t(lang, "points")}</th><th>${t(lang, "note")}</th></tr></thead><tbody>${tr}</tbody></table>` : `<div class="empty">${t(lang, "noLedgerMatches")}</div>`}
     </section>
   `;
 }
 
-function renderWeightTrend(records) {
+function renderWeightTrend(records, lang) {
   const oldest = [...records].sort((a, b) => a.ts - b.ts).slice(-12);
   if (!oldest.length) {
-    return '<div class="empty health-empty">No weight records yet.</div>';
+    return `<div class="empty health-empty">${t(lang, "noWeightRecords")}</div>`;
   }
   const min = Math.min(...oldest.map((record) => record.kg));
   const max = Math.max(...oldest.map((record) => record.kg));
@@ -336,29 +344,29 @@ function renderWeightTrend(records) {
     })
     .join(" ");
   return `
-    <div class="health-trend" aria-label="Weight trend">
+    <div class="health-trend" aria-label="${t(lang, "weightTrend")}">
       <svg viewBox="0 0 100 100" role="img" aria-hidden="true">
         <polyline points="${points}" />
         ${oldest
           .map((record, index) => {
             const x = oldest.length === 1 ? 50 : 8 + (index / (oldest.length - 1)) * 84;
             const y = 84 - ((record.kg - min) / span) * 68;
-            return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.4"><title>${escapeHtml(formatShortDate(record.ts))}: ${record.kg} kg</title></circle>`;
+            return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.4"><title>${escapeHtml(formatShortDateForLanguage(lang, record.ts))}: ${record.kg} kg</title></circle>`;
           })
           .join("")}
       </svg>
       <div class="health-trend-labels">
-        <span>${escapeHtml(formatShortDate(oldest[0].ts))}</span>
+        <span>${escapeHtml(formatShortDateForLanguage(lang, oldest[0].ts))}</span>
         <strong>${oldest[oldest.length - 1].kg} kg</strong>
-        <span>${escapeHtml(formatShortDate(oldest[oldest.length - 1].ts))}</span>
+        <span>${escapeHtml(formatShortDateForLanguage(lang, oldest[oldest.length - 1].ts))}</span>
       </div>
     </div>
   `;
 }
 
-function renderWeightRows(records, userId) {
+function renderWeightRows(records, userId, lang) {
   if (!records.length) {
-    return '<div class="empty">No weight records yet.</div>';
+    return `<div class="empty">${t(lang, "noWeightRecords")}</div>`;
   }
   return `
     <div class="health-list">
@@ -368,10 +376,10 @@ function renderWeightRows(records, userId) {
         <article class="health-record-row">
           <div>
             <strong>${record.kg} kg</strong>
-            <div class="muted">${escapeHtml(formatDate(record.ts))}</div>
+            <div class="muted">${escapeHtml(formatDateForLanguage(lang, record.ts))}</div>
             ${record.note ? `<div class="muted">${escapeHtml(record.note)}</div>` : ""}
           </div>
-          <button class="btn-delete-subtle" data-action="delete-weight-record" data-user-id="${escapeHtml(userId)}" data-record-id="${escapeHtml(record.id)}">delete</button>
+          <button class="btn-delete-subtle" data-action="delete-weight-record" data-user-id="${escapeHtml(userId)}" data-record-id="${escapeHtml(record.id)}">${t(lang, "delete")}</button>
         </article>
       `
         )
@@ -380,9 +388,9 @@ function renderWeightRows(records, userId) {
   `;
 }
 
-function renderBloodPressureRows(records, userId) {
+function renderBloodPressureRows(records, userId, lang) {
   if (!records.length) {
-    return '<div class="empty">No blood pressure records yet.</div>';
+    return `<div class="empty">${t(lang, "noBloodPressureRecords")}</div>`;
   }
   return `
     <div class="health-list">
@@ -392,10 +400,10 @@ function renderBloodPressureRows(records, userId) {
         <article class="health-record-row">
           <div>
             <strong>${record.systolic}/${record.diastolic} mmHg</strong>
-            <div class="muted">Pulse ${record.pulse} | ${escapeHtml(formatDate(record.ts))}</div>
-            <div class="muted">${formatBloodPressureDetails(record)}</div>
+            <div class="muted">${t(lang, "pulse")} ${record.pulse} | ${escapeHtml(formatDateForLanguage(lang, record.ts))}</div>
+            <div class="muted">${formatBloodPressureDetails(record, lang)}</div>
           </div>
-          <button class="btn-delete-subtle" data-action="delete-bp-record" data-user-id="${escapeHtml(userId)}" data-record-id="${escapeHtml(record.id)}">delete</button>
+          <button class="btn-delete-subtle" data-action="delete-bp-record" data-user-id="${escapeHtml(userId)}" data-record-id="${escapeHtml(record.id)}">${t(lang, "delete")}</button>
         </article>
       `
         )
@@ -404,44 +412,45 @@ function renderBloodPressureRows(records, userId) {
   `;
 }
 
-function formatBloodPressureDetails(record) {
-  const meal = { before_meal: "before meal", after_meal: "after meal", unknown: "meal unknown" }[record.mealStatus] || "meal unknown";
-  const context = { resting: "resting", post_exercise: "post exercise", unknown: "context unknown" }[record.measurementContext] || "context unknown";
+function formatBloodPressureDetails(record, lang) {
+  const meal = { before_meal: t(lang, "beforeMeal"), after_meal: t(lang, "afterMeal"), unknown: t(lang, "mealUnknown") }[record.mealStatus] || t(lang, "mealUnknown");
+  const context = { resting: t(lang, "resting"), post_exercise: t(lang, "postExercise"), unknown: t(lang, "contextUnknown") }[record.measurementContext] || t(lang, "contextUnknown");
   const symptoms = [];
-  if (record.hadDizziness) symptoms.push("dizzy");
-  if (record.hadBreathlessness) symptoms.push("breathless");
-  if (record.hadChestTightness) symptoms.push("chest tightness");
-  if (record.hadVisionChange) symptoms.push("vision change");
-  const medicine = record.medicationTaken ? `medicine taken${record.medicationDose ? `: ${escapeHtml(record.medicationDose)}` : ""}` : "no medicine";
+  if (record.hadDizziness) symptoms.push(t(lang, "dizzy"));
+  if (record.hadBreathlessness) symptoms.push(t(lang, "breathless"));
+  if (record.hadChestTightness) symptoms.push(t(lang, "chestTightness"));
+  if (record.hadVisionChange) symptoms.push(t(lang, "visionChange"));
+  const medicine = record.medicationTaken ? `${t(lang, "medicineTaken")}${record.medicationDose ? `: ${escapeHtml(record.medicationDose)}` : ""}` : t(lang, "noMedicine");
   const note = record.note ? ` | ${escapeHtml(record.note)}` : "";
-  return `${meal} | ${context} | ${medicine} | symptoms: ${symptoms.length ? symptoms.join(", ") : "none"}${note}`;
+  return `${meal} | ${context} | ${medicine} | ${symptoms.length ? symptoms.join(", ") : t(lang, "none")}${note}`;
 }
 
 export function renderUserHealth(state, userId) {
+  const lang = getLanguage(state);
   const user = getUserById(state, userId);
-  if (!user) return `<section class="empty">User not found.</section>`;
+  if (!user) return `<section class="empty">${t(lang, "userNotFound")}</section>`;
   const weightRecords = getUserWeightRecords(state, userId);
   const bpRecords = getUserBloodPressureRecords(state, userId);
   const latestWeight = weightRecords[0];
   const isGrandpa = userId === "grandpa";
 
   return `
-    ${renderUserWorkspaceTabs(user.id, "health", user.name)}
+    ${renderUserWorkspaceTabs(user.id, "health", displayUserName(lang, user), lang)}
     <section class="card">
       <div class="health-header">
         <div>
-          <h2>Weight</h2>
-          <p class="muted">Track ${escapeHtml(user.name)}'s weight in kg.</p>
+          <h2>${t(lang, "weight")}</h2>
+          <p class="muted">${t(lang, "trackWeightKg", { name: escapeHtml(displayUserName(lang, user)) })}</p>
         </div>
-        <span class="badge">${latestWeight ? `${latestWeight.kg} kg latest` : "No records"}</span>
+        <span class="badge">${latestWeight ? t(lang, "kgLatest", { kg: latestWeight.kg }) : t(lang, "noRecords")}</span>
       </div>
       <form class="health-form" data-action="add-weight-record" data-user-id="${escapeHtml(user.id)}">
         <input name="kg" type="number" min="1" max="500" step="0.1" placeholder="kg" required />
-        <input name="note" type="text" maxlength="120" placeholder="note optional" />
-        <button class="btn-primary" type="submit">Add Weight</button>
+        <input name="note" type="text" maxlength="120" placeholder="${t(lang, "noteOptional")}" />
+        <button class="btn-primary" type="submit">${t(lang, "addWeight")}</button>
       </form>
-      ${renderWeightTrend(weightRecords)}
-      ${renderWeightRows(weightRecords, user.id)}
+      ${renderWeightTrend(weightRecords, lang)}
+      ${renderWeightRows(weightRecords, user.id, lang)}
     </section>
     ${
       isGrandpa
@@ -449,43 +458,43 @@ export function renderUserHealth(state, userId) {
       <section class="card">
         <div class="health-header">
           <div>
-            <h2>Blood Pressure</h2>
-            <p class="muted">Grandpa-only blood pressure, pulse, medicine, and symptom tracking.</p>
+            <h2>${t(lang, "bloodPressure")}</h2>
+            <p class="muted">${t(lang, "bloodPressureOnlyGrandpa")}</p>
           </div>
-          <span class="badge">${bpRecords[0] ? `${bpRecords[0].systolic}/${bpRecords[0].diastolic} latest` : "No records"}</span>
+          <span class="badge">${bpRecords[0] ? t(lang, "latestBp", { systolic: bpRecords[0].systolic, diastolic: bpRecords[0].diastolic }) : t(lang, "noRecords")}</span>
         </div>
         <form class="health-form health-form-grid" data-action="add-bp-record" data-user-id="${escapeHtml(user.id)}">
-          <input name="systolic" type="number" min="60" max="250" step="1" placeholder="systolic" required />
-          <input name="diastolic" type="number" min="30" max="150" step="1" placeholder="diastolic" required />
-          <input name="pulse" type="number" min="30" max="220" step="1" placeholder="pulse" required />
+          <input name="systolic" type="number" min="60" max="250" step="1" placeholder="${t(lang, "systolic")}" required />
+          <input name="diastolic" type="number" min="30" max="150" step="1" placeholder="${t(lang, "diastolic")}" required />
+          <input name="pulse" type="number" min="30" max="220" step="1" placeholder="${t(lang, "pulse")}" required />
           <select name="mealStatus">
-            <option value="unknown">meal unknown</option>
-            <option value="before_meal">before meal</option>
-            <option value="after_meal">after meal</option>
+            <option value="unknown">${t(lang, "mealUnknown")}</option>
+            <option value="before_meal">${t(lang, "beforeMeal")}</option>
+            <option value="after_meal">${t(lang, "afterMeal")}</option>
           </select>
           <select name="medicationTaken">
-            <option value="false">no medicine</option>
-            <option value="true">medicine taken</option>
+            <option value="false">${t(lang, "noMedicine")}</option>
+            <option value="true">${t(lang, "medicineTaken")}</option>
           </select>
-          <input name="medicationDose" type="text" maxlength="120" placeholder="medicine note" />
+          <input name="medicationDose" type="text" maxlength="120" placeholder="${t(lang, "medicineNote")}" />
           <select name="energyChange">
-            <option value="unchanged">energy unchanged</option>
-            <option value="better">energy better</option>
-            <option value="worse">energy worse</option>
+            <option value="unchanged">${t(lang, "energyUnchanged")}</option>
+            <option value="better">${t(lang, "energyBetter")}</option>
+            <option value="worse">${t(lang, "energyWorse")}</option>
           </select>
           <select name="measurementContext">
-            <option value="resting">resting</option>
-            <option value="post_exercise">post exercise</option>
-            <option value="unknown">context unknown</option>
+            <option value="resting">${t(lang, "resting")}</option>
+            <option value="post_exercise">${t(lang, "postExercise")}</option>
+            <option value="unknown">${t(lang, "contextUnknown")}</option>
           </select>
-          <label><input name="hadDizziness" type="checkbox" /> dizzy</label>
-          <label><input name="hadBreathlessness" type="checkbox" /> breathless</label>
-          <label><input name="hadChestTightness" type="checkbox" /> chest tightness</label>
-          <label><input name="hadVisionChange" type="checkbox" /> vision change</label>
-          <input class="health-form-wide" name="note" type="text" maxlength="240" placeholder="note optional" />
-          <button class="btn-primary health-form-wide" type="submit">Add Blood Pressure</button>
+          <label><input name="hadDizziness" type="checkbox" /> ${t(lang, "dizzy")}</label>
+          <label><input name="hadBreathlessness" type="checkbox" /> ${t(lang, "breathless")}</label>
+          <label><input name="hadChestTightness" type="checkbox" /> ${t(lang, "chestTightness")}</label>
+          <label><input name="hadVisionChange" type="checkbox" /> ${t(lang, "visionChange")}</label>
+          <input class="health-form-wide" name="note" type="text" maxlength="240" placeholder="${t(lang, "noteOptional")}" />
+          <button class="btn-primary health-form-wide" type="submit">${t(lang, "addBloodPressure")}</button>
         </form>
-        ${renderBloodPressureRows(bpRecords, user.id)}
+        ${renderBloodPressureRows(bpRecords, user.id, lang)}
       </section>`
         : ""
     }
@@ -493,8 +502,9 @@ export function renderUserHealth(state, userId) {
 }
 
 export function renderManageEvents(state, userId) {
+  const lang = getLanguage(state);
   const user = getUserById(state, userId);
-  if (!user) return `<section class="empty">User not found.</section>`;
+  if (!user) return `<section class="empty">${t(lang, "userNotFound")}</section>`;
   const compareByCategoryThenTitle = (a, b) => {
     const aCategory = String(a.category || "").trim();
     const bCategory = String(b.category || "").trim();
@@ -511,14 +521,14 @@ export function renderManageEvents(state, userId) {
       (item) => `
       <article class="item-card manage-card" data-kind="event" data-item-id="${escapeHtml(item.id)}" data-user-id="${escapeHtml(user.id)}">
         <div class="inline-row">
-          <input data-field="title" type="text" value="${escapeHtml(item.title)}" placeholder="Title" />
-          <input data-field="category" type="text" value="${escapeHtml(item.category)}" placeholder="Category" />
-          <input data-field="points" type="number" min="1" step="1" value="${item.points}" placeholder="Points" />
-          <label><input data-field="enabled" type="checkbox" ${item.enabled ? "checked" : ""} /> Enabled</label>
+          <input data-field="title" type="text" value="${escapeHtml(item.title)}" placeholder="${t(lang, "title")}" />
+          <input data-field="category" type="text" value="${escapeHtml(item.category)}" placeholder="${t(lang, "category")}" />
+          <input data-field="points" type="number" min="1" step="1" value="${item.points}" placeholder="${t(lang, "points")}" />
+          <label><input data-field="enabled" type="checkbox" ${item.enabled ? "checked" : ""} /> ${t(lang, "pinEnabled")}</label>
         </div>
-        <input data-field="description" type="text" value="${escapeHtml(item.description || "")}" placeholder="Description (optional)" />
+        <input data-field="description" type="text" value="${escapeHtml(item.description || "")}" placeholder="${t(lang, "descriptionOptional")}" />
         <div class="inline-row">
-          <button class="btn-delete-subtle" data-action="delete-event" data-user-id="${escapeHtml(user.id)}" data-item-id="${escapeHtml(item.id)}">delete</button>
+          <button class="btn-delete-subtle" data-action="delete-event" data-user-id="${escapeHtml(user.id)}" data-item-id="${escapeHtml(item.id)}">${t(lang, "delete")}</button>
           <span class="muted">id: ${escapeHtml(item.id)}</span>
         </div>
       </article>
@@ -531,14 +541,14 @@ export function renderManageEvents(state, userId) {
       (item) => `
       <article class="item-card manage-card" data-kind="reward" data-user-id="${escapeHtml(user.id)}" data-item-id="${escapeHtml(item.id)}">
         <div class="inline-row">
-          <input data-field="title" type="text" value="${escapeHtml(item.title)}" placeholder="Title" />
-          <input data-field="category" type="text" value="${escapeHtml(item.category)}" placeholder="Category" />
-          <input data-field="cost" type="number" min="1" step="1" value="${item.cost}" placeholder="Cost" />
-          <input data-field="unlock_at_total" type="number" min="0" step="1" value="${item.unlock_at_total}" placeholder="Unlock at" />
-          <label><input data-field="enabled" type="checkbox" ${item.enabled ? "checked" : ""} /> Enabled</label>
+          <input data-field="title" type="text" value="${escapeHtml(item.title)}" placeholder="${t(lang, "title")}" />
+          <input data-field="category" type="text" value="${escapeHtml(item.category)}" placeholder="${t(lang, "category")}" />
+          <input data-field="cost" type="number" min="1" step="1" value="${item.cost}" placeholder="${t(lang, "cost")}" />
+          <input data-field="unlock_at_total" type="number" min="0" step="1" value="${item.unlock_at_total}" placeholder="${t(lang, "unlockAt")}" />
+          <label><input data-field="enabled" type="checkbox" ${item.enabled ? "checked" : ""} /> ${t(lang, "pinEnabled")}</label>
         </div>
         <div class="inline-row">
-          <button class="btn-delete-subtle" data-action="delete-reward" data-user-id="${escapeHtml(user.id)}" data-item-id="${escapeHtml(item.id)}">delete</button>
+          <button class="btn-delete-subtle" data-action="delete-reward" data-user-id="${escapeHtml(user.id)}" data-item-id="${escapeHtml(item.id)}">${t(lang, "delete")}</button>
           <span class="muted">id: ${escapeHtml(item.id)}</span>
         </div>
       </article>
@@ -547,50 +557,51 @@ export function renderManageEvents(state, userId) {
     .join("");
 
   return `
-    ${renderUserWorkspaceTabs(user.id, "manage-events", user.name)}
+    ${renderUserWorkspaceTabs(user.id, "manage-events", displayUserName(lang, user), lang)}
     <section class="card">
-      <h2>Manage Events</h2>
-      <p class="muted">Manage Earning and Redeem events for ${escapeHtml(user.name)}.</p>
+      <h2>${t(lang, "manageEvents")}</h2>
+      <p class="muted">${t(lang, "manageEventsForUser", { name: escapeHtml(displayUserName(lang, user)) })}</p>
       <section class="card manage-subsection">
-        <h3>Redeem</h3>
+        <h3>${t(lang, "redeem")}</h3>
         <article class="item-card redeem-new-card">
           <div class="inline-row">
-            <input id="new-reward-title" type="text" placeholder="Title" />
-            <input id="new-reward-category" type="text" placeholder="category" />
+            <input id="new-reward-title" type="text" placeholder="${t(lang, "title")}" />
+            <input id="new-reward-category" type="text" placeholder="${t(lang, "category")}" />
             <input id="new-reward-cost" type="number" min="1" step="1" value="1" />
             <input id="new-reward-unlock" type="number" min="0" step="1" value="0" />
-            <label><input id="new-reward-enabled" type="checkbox" checked /> Enabled</label>
+            <label><input id="new-reward-enabled" type="checkbox" checked /> ${t(lang, "pinEnabled")}</label>
           </div>
-          <button class="btn-primary" data-action="add-reward" data-user-id="${escapeHtml(user.id)}">Add New Redeem Event</button>
+          <button class="btn-primary" data-action="add-reward" data-user-id="${escapeHtml(user.id)}">${t(lang, "addNewRedeemEvent")}</button>
         </article>
         <div class="section-divider" aria-hidden="true"></div>
-        <div class="manage-list">${rewardRows || '<div class="empty">No redeem events configured.</div>'}</div>
-        <button class="btn-primary btn-block" data-action="save-all-rewards" data-user-id="${escapeHtml(user.id)}">Save All Redeem Events</button>
+        <div class="manage-list">${rewardRows || `<div class="empty">${t(lang, "redeemEventsConfiguredEmpty")}</div>`}</div>
+        <button class="btn-primary btn-block" data-action="save-all-rewards" data-user-id="${escapeHtml(user.id)}">${t(lang, "saveAllRedeemEvents")}</button>
       </section>
 
       <div class="manage-block-divider" aria-hidden="true"></div>
 
       <section class="card manage-subsection">
-        <h3>Earning</h3>
+        <h3>${t(lang, "earning")}</h3>
         <article class="item-card earning-new-card">
           <div class="inline-row">
-            <input id="new-event-title" type="text" placeholder="Title" />
-            <input id="new-event-category" type="text" placeholder="category" />
+            <input id="new-event-title" type="text" placeholder="${t(lang, "title")}" />
+            <input id="new-event-category" type="text" placeholder="${t(lang, "category")}" />
             <input id="new-event-points" type="number" min="1" step="1" value="1" />
-            <label><input id="new-event-enabled" type="checkbox" checked /> Enabled</label>
+            <label><input id="new-event-enabled" type="checkbox" checked /> ${t(lang, "pinEnabled")}</label>
           </div>
-          <input id="new-event-description" type="text" placeholder="Description (optional)" />
-          <button class="btn-primary" data-action="add-event" data-user-id="${escapeHtml(user.id)}">Add New Earning Event</button>
+          <input id="new-event-description" type="text" placeholder="${t(lang, "descriptionOptional")}" />
+          <button class="btn-primary" data-action="add-event" data-user-id="${escapeHtml(user.id)}">${t(lang, "addNewEarningEvent")}</button>
         </article>
         <div class="section-divider" aria-hidden="true"></div>
-        <div class="manage-list">${eventRows || '<div class="empty">No earning events configured.</div>'}</div>
-        <button class="btn-primary btn-block" data-action="save-all-events" data-user-id="${escapeHtml(user.id)}">Save All Earning Events</button>
+        <div class="manage-list">${eventRows || `<div class="empty">${t(lang, "earningEventsConfiguredEmpty")}</div>`}</div>
+        <button class="btn-primary btn-block" data-action="save-all-events" data-user-id="${escapeHtml(user.id)}">${t(lang, "saveAllEarningEvents")}</button>
       </section>
     </section>
   `;
 }
 
 export function renderSettings(state, syncMeta = {}) {
+  const lang = getLanguage(state);
   const hasPin = Boolean(state.settings.parent_pin_hash);
   const syncUrl = String(state.settings?.github_sync_url || "");
   const autoSyncOn = Boolean(syncUrl);
@@ -598,49 +609,57 @@ export function renderSettings(state, syncMeta = {}) {
 
   return `
     <section class="card">
-      <h1 class="page-title">Settings</h1>
-      <p class="muted">Backup, restore, and safety controls.</p>
+      <h1 class="page-title">${t(lang, "settings")}</h1>
+      <p class="muted">${t(lang, "backupRestoreSafety")}</p>
     </section>
 
     <section class="card">
-      <h2>Import / Export</h2>
+      <h2>${t(lang, "language")}</h2>
       <div class="inline-row">
-        <button class="btn-primary" data-action="export-json">Export JSON</button>
-        <label class="btn-secondary" for="import-file" role="button" tabindex="0">Choose Import File</label>
-        <input id="import-file" type="file" accept="application/json" style="display:none" />
-        <button class="btn-secondary" data-action="import-json">Import Selected JSON</button>
+        <button class="btn-secondary ${lang === "en" ? "active" : ""}" data-action="switch-language" data-language="en">${t(lang, "languageEnglish")}</button>
+        <button class="btn-secondary ${lang === ZH_TW_LANGUAGE ? "active" : ""}" data-action="switch-language" data-language="${ZH_TW_LANGUAGE}">${t(lang, "languageTaiwan")}</button>
       </div>
-      <p class="muted">Import replaces the full current dataset.</p>
     </section>
 
     <section class="card">
-      <h2>GitHub Sync</h2>
-      <p class="muted">Save current data to your GitHub repo through Cloudflare Worker. Auto sync: <strong>${autoSyncOn ? "On" : "Off"}</strong>. Sync lock: <strong>${syncKeySet ? "Unlocked" : "Locked"}</strong>.</p>
-      <p class="muted">SYNC_KEY is kept in memory only and is cleared on page reload.</p>
-      ${!syncKeySet ? '<p class="muted"><strong>First-time setup:</strong> sync stays locked until you enter SYNC_KEY.</p>' : ""}
+      <h2>${t(lang, "importExport")}</h2>
+      <div class="inline-row">
+        <button class="btn-primary" data-action="export-json">${t(lang, "exportJson")}</button>
+        <label class="btn-secondary" for="import-file" role="button" tabindex="0">${t(lang, "chooseImportFile")}</label>
+        <input id="import-file" type="file" accept="application/json" style="display:none" />
+        <button class="btn-secondary" data-action="import-json">${t(lang, "importSelectedJson")}</button>
+      </div>
+      <p class="muted">${t(lang, "importReplacesDataset")}</p>
+    </section>
+
+    <section class="card">
+      <h2>${t(lang, "githubSync")}</h2>
+      <p class="muted">${t(lang, "saveCurrentToGithub")} ${t(lang, "autoSync")}: <strong>${autoSyncOn ? t(lang, "on") : t(lang, "off")}</strong>. ${t(lang, "syncLock")}: <strong>${syncKeySet ? t(lang, "unlocked") : t(lang, "locked")}</strong>.</p>
+      <p class="muted">${t(lang, "syncKeyMemory")}</p>
+      ${!syncKeySet ? `<p class="muted"><strong>${t(lang, "firstTimeSetup")}</strong> ${t(lang, "firstTimeSetupText")}</p>` : ""}
       <div class="inline-row">
         <input id="github-sync-url" type="text" placeholder="https://your-worker.workers.dev" value="${escapeHtml(syncUrl)}" />
         <input id="github-sync-key" type="password" placeholder="SYNC_KEY" value="" />
-        <button class="btn-secondary" data-action="save-sync-url">Save URL</button>
-        <button class="btn-secondary" data-action="save-sync-key">Save Key</button>
-        ${!syncKeySet ? '<button class="btn-secondary" data-action="prompt-sync-key">Unlock Sync</button>' : ""}
-        <button class="btn-primary" data-action="sync-github">Sync to GitHub</button>
+        <button class="btn-secondary" data-action="save-sync-url">${t(lang, "saveUrl")}</button>
+        <button class="btn-secondary" data-action="save-sync-key">${t(lang, "saveKey")}</button>
+        ${!syncKeySet ? `<button class="btn-secondary" data-action="prompt-sync-key">${t(lang, "unlockSync")}</button>` : ""}
+        <button class="btn-primary" data-action="sync-github">${t(lang, "syncToGithub")}</button>
       </div>
     </section>
 
     <section class="card">
-      <h2>Parent PIN</h2>
-      <p class="muted">PIN currently: <strong>${hasPin ? "Enabled" : "Disabled"}</strong>. PIN guards Import and Reset.</p>
+      <h2>${t(lang, "parentPin")}</h2>
+      <p class="muted">${t(lang, "pinCurrent")}: <strong>${hasPin ? t(lang, "pinEnabled") : t(lang, "pinDisabled")}</strong>. ${t(lang, "pinGuards")}</p>
       <div class="inline-row">
         <input id="parent-pin-input" type="password" inputmode="numeric" maxlength="4" placeholder="4-digit PIN" />
-        <button class="btn-secondary" data-action="set-pin">Save PIN</button>
-        <button class="btn-secondary" data-action="clear-pin">Clear PIN</button>
+        <button class="btn-secondary" data-action="set-pin">${t(lang, "savePin")}</button>
+        <button class="btn-secondary" data-action="clear-pin">${t(lang, "clearPin")}</button>
       </div>
     </section>
 
     <section class="card">
-      <h2>Danger Zone</h2>
-      <button class="btn-danger" data-action="reset-state">Reset To Factory Defaults</button>
+      <h2>${t(lang, "dangerZone")}</h2>
+      <button class="btn-danger" data-action="reset-state">${t(lang, "resetFactory")}</button>
     </section>
   `;
 }
