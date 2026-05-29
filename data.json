@@ -4338,6 +4338,16 @@
       "ref_id": "pick_family_dish",
       "points": 1,
       "note": "Pick family dish"
+    },
+    {
+      "id": "c5d2b303-9ba4-45c4-9b7c-dac1852d17d0",
+      "ts": 1780018522908,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "eat_8_pieces_of_fruits",
+      "points": 1,
+      "note": "Eat 8 pieces of fruits"
     }
   ],
   "settings": {
