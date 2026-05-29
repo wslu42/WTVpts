@@ -4178,6 +4178,16 @@
       "ref_id": "pick_up_or_drop_off_willow",
       "points": 1,
       "note": "Pick up or Drop off Willow"
+    },
+    {
+      "id": "e747f1eb-a566-4332-a22b-5e67ce96b67d",
+      "ts": 1780018181239,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "help_cooking_a_dish",
+      "points": 1,
+      "note": "Help cooking a dish"
     }
   ],
   "settings": {
@@ -4185,7 +4195,7 @@
     "sound_enabled": false,
     "github_sync_url": "https://wtvpts-sync.wslu42-wtvpts.workers.dev",
     "language": "zh-Hant-TW",
-    "active_user_id": "grandpa",
+    "active_user_id": "will",
     "cleanup_non_willow_done": true,
     "cleanup_willow_done": true,
     "apply_willow_templates_done": true,
