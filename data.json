@@ -4348,6 +4348,16 @@
       "ref_id": "eat_8_pieces_of_fruits",
       "points": 1,
       "note": "Eat 8 pieces of fruits"
+    },
+    {
+      "id": "33b998bd-628b-4e30-8755-728b9fa9bd95",
+      "ts": 1780018540237,
+      "user_id": "will",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "pick_family_dish",
+      "points": 1,
+      "note": "Pick family dish"
     }
   ],
   "settings": {
