@@ -4328,6 +4328,16 @@
       "ref_id": "wash_dishes",
       "points": 1,
       "note": "Wash dishes"
+    },
+    {
+      "id": "6186864f-a877-4359-99b6-1acf586b1609",
+      "ts": 1780018501313,
+      "user_id": "will",
+      "type": "spend",
+      "ref_kind": "reward",
+      "ref_id": "pick_family_dish",
+      "points": 1,
+      "note": "Pick family dish"
     }
   ],
   "settings": {
