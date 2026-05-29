@@ -4318,6 +4318,16 @@
       "ref_id": "help_cooking_a_dish",
       "points": 1,
       "note": "Help cooking a dish"
+    },
+    {
+      "id": "e9c1c9a4-a3dd-486b-bfcd-44da9a587c72",
+      "ts": 1780018491698,
+      "user_id": "will",
+      "type": "earn",
+      "ref_kind": "event",
+      "ref_id": "wash_dishes",
+      "points": 1,
+      "note": "Wash dishes"
     }
   ],
   "settings": {
