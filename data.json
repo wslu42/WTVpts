@@ -23,7 +23,7 @@
     },
     {
       "id": "niece",
-      "name": "Niece"
+      "name": "Guest"
     }
   ],
   "events_by_user": {

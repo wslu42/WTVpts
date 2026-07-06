@@ -21,6 +21,7 @@ import {
   addBloodPressureRecord,
   deleteBloodPressureRecord,
   upsertCalendarEvent,
+  importCalendarEvents,
   toggleCalendarEventDone,
   deleteCalendarEvent
 } from "./state.js";
@@ -199,6 +200,93 @@ function ensureUserHash(userId, section = "dashboard") {
     return;
   }
   window.location.hash = `#/user/${userId}/${section}`;
+}
+
+function unfoldIcsLines(text) {
+  return String(text || "").replace(/\r?\n[ \t]/g, "").split(/\r?\n/);
+}
+
+function splitIcsProperty(line) {
+  const index = line.indexOf(":");
+  if (index < 0) return null;
+  const left = line.slice(0, index);
+  const value = line.slice(index + 1);
+  const [name, ...params] = left.split(";");
+  return {
+    name: String(name || "").toUpperCase(),
+    params,
+    value
+  };
+}
+
+function unescapeIcsText(value) {
+  return String(value || "")
+    .replace(/\\n/gi, "\n")
+    .replace(/\\,/g, ",")
+    .replace(/\\;/g, ";")
+    .replace(/\\\\/g, "\\")
+    .trim();
+}
+
+function parseIcsDate(value) {
+  const raw = String(value || "").trim();
+  if (/^\d{8}$/.test(raw)) {
+    return { date: `${raw.slice(0, 4)}-${raw.slice(4, 6)}-${raw.slice(6, 8)}`, time: "" };
+  }
+  const match = raw.match(/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})?(Z)?$/);
+  if (!match) return { date: "", time: "" };
+  if (match[7]) {
+    const date = new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3]), Number(match[4]), Number(match[5]), Number(match[6] || 0)));
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, "0");
+    const dd = String(date.getDate()).padStart(2, "0");
+    const hh = String(date.getHours()).padStart(2, "0");
+    const min = String(date.getMinutes()).padStart(2, "0");
+    return { date: `${yyyy}-${mm}-${dd}`, time: `${hh}:${min}` };
+  }
+  return {
+    date: `${match[1]}-${match[2]}-${match[3]}`,
+    time: `${match[4]}:${match[5]}`
+  };
+}
+
+function parseIcsCalendarEvents(text) {
+  const lines = unfoldIcsLines(text);
+  const events = [];
+  let current = null;
+  for (const line of lines) {
+    const trimmed = String(line || "").trim();
+    if (trimmed === "BEGIN:VEVENT") {
+      current = {};
+      continue;
+    }
+    if (trimmed === "END:VEVENT") {
+      if (current) {
+        const start = parseIcsDate(current.DTSTART || "");
+        const noteParts = [current.DESCRIPTION, current.LOCATION ? `${current.LOCATION}` : ""].filter(Boolean);
+        events.push({
+          id: current.UID ? `ics_${current.UID.replace(/[^a-zA-Z0-9_-]+/g, "_").slice(0, 80)}` : undefined,
+          title: current.SUMMARY || current.DESCRIPTION || "Imported event",
+          date: start.date,
+          time: start.time,
+          category: current.CATEGORIES || "Imported",
+          assigned_to: [],
+          done: false,
+          repeat: "none",
+          note: noteParts.join("\n")
+        });
+      }
+      current = null;
+      continue;
+    }
+    if (!current) continue;
+    const prop = splitIcsProperty(trimmed);
+    if (!prop) continue;
+    if (["UID", "SUMMARY", "DESCRIPTION", "LOCATION", "CATEGORIES", "DTSTART"].includes(prop.name)) {
+      current[prop.name] = unescapeIcsText(prop.value);
+    }
+  }
+  return events.filter((event) => event.title && event.date);
 }
 
 export function createController(getState, setState, rerender) {
@@ -627,6 +715,24 @@ export function createController(getState, setState, rerender) {
       if (!result.ok) return showToast(localizedError(state, result.error), true);
       applyState(result.state);
       showToast(t(lang, "calendarEventDeleted"));
+      return;
+    }
+
+    if (action === "import-ics") {
+      const input = document.getElementById("calendar-ics-file");
+      const file = input?.files?.[0];
+      if (!file) return showToast(t(lang, "selectIcsFirst"), true);
+      const reader = new FileReader();
+      reader.onload = () => {
+        const events = parseIcsCalendarEvents(String(reader.result || ""));
+        const result = importCalendarEvents(getState(), events);
+        if (!result.ok) return showToast(t(getLanguage(getState()), "noIcsEventsFound"), true);
+        applyState(result.state);
+        if (input) input.value = "";
+        showToast(t(getLanguage(result.state), "icsImportCompleted", { count: result.count }));
+      };
+      reader.onerror = () => showToast(t(lang, "icsImportFailed"), true);
+      reader.readAsText(file);
       return;
     }
 

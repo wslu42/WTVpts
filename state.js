@@ -45,7 +45,7 @@ function makeDefaultUsers() {
     { id: "will", name: "Willow" },
     { id: "grandpa", name: "Grandpa" },
     { id: "grandma", name: "Grandma" },
-    { id: "niece", name: "Niece" }
+    { id: "niece", name: "Guest" }
   ];
 }
 
@@ -411,6 +411,7 @@ function migrate(input) {
     let name = rawName || defaultName;
     if (id === "will" && /^will$/i.test(name)) name = "Willow";
     if (id === "grandpa" && /^guest$/i.test(name)) name = "Grandpa";
+    if (id === "niece" && /^niece$/i.test(name)) name = "Guest";
     if (!usersById.has(id)) {
       usersById.set(id, { ...rawUser, id, name });
     }
@@ -811,6 +812,25 @@ export function upsertCalendarEvent(state, payload) {
       calendar_events: nextEvents.sort(sortCalendarEvents)
     },
     event
+  };
+}
+
+export function importCalendarEvents(state, events) {
+  const rows = Array.isArray(events) ? events : [];
+  let nextState = state;
+  let imported = 0;
+  for (const payload of rows) {
+    if (!isValidCalendarEvent(payload)) continue;
+    const result = upsertCalendarEvent(nextState, payload);
+    if (!result.ok) continue;
+    nextState = result.state;
+    imported += 1;
+  }
+  return {
+    ok: imported > 0,
+    state: nextState,
+    count: imported,
+    error: imported > 0 ? "" : "No calendar events found."
   };
 }
 

@@ -3,7 +3,7 @@
 A pure static, vanilla HTML/CSS/JS app for a family points and rewards system.
 
 ## Features
-- Multi-user profiles (default demo: Mom, Dad, Willow, Grandpa, Grandma, Niece)
+- Multi-user profiles (default demo: Mom, Dad, Willow, Grandpa, Grandma, Guest)
 - Balance vs lifetime earned totals
 - User-specific event tables (each user has independent earning/redeem lists)
 - Dashboard sections: `Redeem` and `Earn` (category-grouped, full-card click actions)

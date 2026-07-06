@@ -244,6 +244,20 @@ function renderCalendarForm(state, dateKey, lang) {
   `;
 }
 
+function renderCalendarImport(lang) {
+  return `
+    <section class="calendar-import">
+      <h2>${t(lang, "importIcs")}</h2>
+      <div class="inline-row">
+        <label class="btn-secondary" for="calendar-ics-file" role="button" tabindex="0">${t(lang, "chooseIcsFile")}</label>
+        <input id="calendar-ics-file" type="file" accept=".ics,text/calendar" style="display:none" />
+        <button class="btn-secondary" data-action="import-ics">${t(lang, "importIcs")}</button>
+      </div>
+      <p class="muted">${t(lang, "importIcsDescription")}</p>
+    </section>
+  `;
+}
+
 export function renderOverview(state) {
   const lang = getLanguage(state);
   const todayKey = toLocalDateKey(new Date());
@@ -323,6 +337,8 @@ export function renderCalendarToday(state) {
       <div class="section-divider" aria-hidden="true"></div>
       <h2>${t(lang, "addCalendarEvent")}</h2>
       ${renderCalendarForm(state, todayKey, lang)}
+      <div class="section-divider" aria-hidden="true"></div>
+      ${renderCalendarImport(lang)}
     </section>
   `;
 }
@@ -353,6 +369,8 @@ export function renderCalendarWeek(state) {
       <div class="section-divider" aria-hidden="true"></div>
       <h2>${t(lang, "addCalendarEvent")}</h2>
       ${renderCalendarForm(state, todayKey, lang)}
+      <div class="section-divider" aria-hidden="true"></div>
+      ${renderCalendarImport(lang)}
     </section>
   `;
 }
@@ -365,6 +383,16 @@ function renderLinksByCategory(links, lang, options = {}) {
   const linkTitle = (link) => displayLocalizedField(lang, link, "title");
   const linkCategory = (link) => displayLocalizedField(lang, link, "category");
   const linkNote = (link) => displayLocalizedField(lang, link, "note");
+  const guideLinkIcon = (link) =>
+    ({
+      acnh_flower_breeding: "\u{1F338}",
+      acnh_flower_guide: "\u{1F33C}",
+      acnh_turnip_price: "\u{1F5BC}\uFE0F",
+      acnh_mystery_islands: "\u{1F3DD}\uFE0F",
+      acnh_bugs: "\u{1FAB2}",
+      acnh_fish: "\u{1F41F}",
+      tos_guide: "\u{1F9E9}"
+    })[link.id] || "";
   const categories = [...new Set(links.map(linkCategory))].sort((a, b) => a.localeCompare(b));
   return categories
     .map((category) => {
@@ -377,7 +405,7 @@ function renderLinksByCategory(links, lang, options = {}) {
               .map(
                 (link) => `
               <a class="link-card" href="${escapeHtml(link.url)}" target="_blank" rel="noreferrer">
-                <strong>${escapeHtml(linkTitle(link))}</strong>
+                <strong>${compact && guideLinkIcon(link) ? `${guideLinkIcon(link)} ` : ""}${escapeHtml(linkTitle(link))}</strong>
                 ${
                   compact
                     ? ""

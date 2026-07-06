@@ -397,6 +397,20 @@ dictionaries.en.thisWeek = "This week";
 dictionaries.en.todayTaskCount = "{count} open today";
 dictionaries.en.todayTasks = "Today Tasks";
 dictionaries.en.todayTasksDescription = "Only today's calendar events, ready for quick check-off.";
+dictionaries.en.chooseIcsFile = "Choose ICS File";
+dictionaries.en.importIcs = "Import ICS";
+dictionaries.en.importIcsDescription = "Import single events from an .ics calendar file. Recurring rules are not expanded yet.";
+dictionaries.en.icsImportCompleted = "Imported {count} calendar event(s).";
+dictionaries.en.icsImportFailed = "ICS import failed.";
+dictionaries.en.noIcsEventsFound = "No calendar events found in this ICS file.";
+dictionaries.en.selectIcsFirst = "Select an ICS file first.";
+dictionaries["zh-Hant-TW"].chooseIcsFile = "選擇 ICS 檔案";
+dictionaries["zh-Hant-TW"].importIcs = "匯入 ICS";
+dictionaries["zh-Hant-TW"].importIcsDescription = "從 .ics 行事曆檔匯入單次事件；目前不展開重複規則。";
+dictionaries["zh-Hant-TW"].icsImportCompleted = "已匯入 {count} 筆行事曆事件。";
+dictionaries["zh-Hant-TW"].icsImportFailed = "ICS 匯入失敗。";
+dictionaries["zh-Hant-TW"].noIcsEventsFound = "這個 ICS 檔案中找不到行事曆事件。";
+dictionaries["zh-Hant-TW"].selectIcsFirst = "請先選擇 ICS 檔案。";
 dictionaries["zh-Hant-TW"].addCalendarEvent = "新增行事曆事件";
 dictionaries["zh-Hant-TW"].calendarEventDeleted = "行事曆事件已刪除。";
 dictionaries["zh-Hant-TW"].calendarEventSaved = "行事曆事件已儲存。";
@@ -429,6 +443,9 @@ dictionaries["zh-Hant-TW"].eventTitleRequired = "請輸入得分項目標題。"
 dictionaries["zh-Hant-TW"].rewardCostPositive = "兌換花費必須是正整數。";
 dictionaries["zh-Hant-TW"].rewardTitleRequired = "請輸入兌換項目標題。";
 dictionaries["zh-Hant-TW"].unlockThreshold = "解鎖門檻必須為 0 或更高。";
+
+dictionaries["zh-Hant-TW"].bloodPressureOnlyGrandpa = "\u963f\u516c\u5c08\u7528\u7684\u8840\u58d3\u3001\u8108\u640f\u3001\u7528\u85e5\u8207\u75c7\u72c0\u7d00\u9304\u3002";
+dictionaries["zh-Hant-TW"].bloodPressureTrackingOnlyGrandpa = "\u8840\u58d3\u8ffd\u8e64\u76ee\u524d\u53ea\u958b\u653e\u7d66\u963f\u516c\u4f7f\u7528\u3002";
 
 export function normalizeLanguage(value) {
   return value === ZH_TW_LANGUAGE ? ZH_TW_LANGUAGE : DEFAULT_LANGUAGE;
@@ -469,6 +486,10 @@ const userNamesZhTw = {
   niece: "姪女"
 };
 
+userNamesZhTw.grandpa = "\u963f\u516c";
+userNamesZhTw.grandma = "\u963f\u5b24";
+userNamesZhTw.niece = "\u8a2a\u5ba2";
+
 const categoryZhTw = {
   Chores: "家事",
   Family: "家庭",
@@ -480,6 +501,7 @@ const categoryZhTw = {
 };
 
 export function displayUserName(language, user) {
+  if (normalizeLanguage(language) !== ZH_TW_LANGUAGE && user?.id === "niece") return "Guest";
   if (normalizeLanguage(language) !== ZH_TW_LANGUAGE) return user?.name || "";
   return userNamesZhTw[user?.id] || user?.name || "";
 }

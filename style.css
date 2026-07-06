@@ -801,6 +801,15 @@ th {
   grid-column: span 2;
 }
 
+.calendar-import {
+  display: grid;
+  gap: 8px;
+}
+
+.calendar-import h2 {
+  margin-bottom: 0;
+}
+
 .health-header {
   display: flex;
   justify-content: space-between;
