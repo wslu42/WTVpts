@@ -64,6 +64,7 @@ python -m http.server 8000
 - Health records are stored per-user in `health_by_user`
 - Calendar events are stored in `calendar_events`
 - Favorite links are stored in `favorite_links`
+- Guide links are stored in `guide_links`
 - UI language is stored in `settings.language` as `en` or `zh-Hant-TW`
 - Export creates `data.json` with the exact current state
 - Import validates shape and replaces current state

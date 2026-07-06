@@ -76,6 +76,7 @@ function cloneSeedState() {
     health_by_user: makeDefaultHealthByUser(users),
     calendar_events: [],
     favorite_links: makeDefaultFavoriteLinks(),
+    guide_links: makeDefaultGuideLinks(),
     settings: {
       parent_pin_hash: "",
       sound_enabled: false,
@@ -87,11 +88,15 @@ function cloneSeedState() {
 }
 
 function makeDefaultFavoriteLinks() {
+  return [];
+}
+
+function makeDefaultGuideLinks() {
   return [
     {
       id: "acnh_flower_breeding",
       title: "Animal Crossing flower breeding chart",
-      title_zh: "動物森友會：花朵雜交表",
+      title_zh: "動森：花色圖(可能有誤)",
       url: "https://truth.bahamut.com.tw/s01/202004/53515a36c2eec732d17fbab797c024d6.JPG",
       category: "Game Guides",
       category_zh: "遊戲攻略",
@@ -101,7 +106,7 @@ function makeDefaultFavoriteLinks() {
     {
       id: "acnh_flower_guide",
       title: "Animal Crossing flower guide",
-      title_zh: "動物森友會：花朵攻略",
+      title_zh: "動森：花色培育",
       url: "https://vocus.cc/article/6a0dd8acfd89780001adb745",
       category: "Game Guides",
       category_zh: "遊戲攻略",
@@ -111,7 +116,7 @@ function makeDefaultFavoriteLinks() {
     {
       id: "acnh_turnip_price",
       title: "Animal Crossing turnip price guide",
-      title_zh: "動物森友會：大頭菜價格",
+      title_zh: "動森：美術品",
       url: "https://forum.gamer.com.tw/C.php?bsn=7287&snA=7276",
       category: "Game Guides",
       category_zh: "遊戲攻略",
@@ -121,7 +126,7 @@ function makeDefaultFavoriteLinks() {
     {
       id: "acnh_mystery_islands",
       title: "Animal Crossing mystery islands",
-      title_zh: "動物森友會：素材島整理",
+      title_zh: "動森：素材島",
       url: "https://www.tech-girlz.com/2020/05/ac-mystery-islands.html",
       category: "Game Guides",
       category_zh: "遊戲攻略",
@@ -313,13 +318,18 @@ function isValidFavoriteLink(link) {
   return Boolean(link && typeof link === "object" && String(link.title || "").trim() && /^https?:\/\//i.test(String(link.url || "")));
 }
 
-function normalizeFavoriteLinks(links) {
-  const rows = Array.isArray(links) ? links : makeDefaultFavoriteLinks();
+function normalizeFavoriteLinks(links, fallbackLinks = makeDefaultFavoriteLinks()) {
+  const rows = Array.isArray(links) ? links : fallbackLinks;
   return rows.filter(isValidFavoriteLink).map(normalizeFavoriteLink).sort((a, b) => {
     const byCategory = a.category.localeCompare(b.category, undefined, { sensitivity: "base" });
     if (byCategory !== 0) return byCategory;
     return a.title.localeCompare(b.title, undefined, { sensitivity: "base" });
   });
+}
+
+function linkLooksLikeGuide(link) {
+  const haystack = `${link?.category || ""} ${link?.category_zh || ""} ${link?.title || ""} ${link?.title_zh || ""}`;
+  return /game|guide/i.test(haystack) || haystack.includes("\u653b\u7565");
 }
 
 function roundToTenth(value) {
@@ -422,7 +432,19 @@ function migrate(input) {
   };
   output.health_by_user = normalizeHealthForUsers(input.health_by_user, users);
   output.calendar_events = normalizeCalendarEvents(input.calendar_events);
-  output.favorite_links = normalizeFavoriteLinks(input.favorite_links);
+  const inputFavoriteLinks = Array.isArray(input.favorite_links) ? input.favorite_links : null;
+  const inputGuideLinks = Array.isArray(input.guide_links) ? input.guide_links : null;
+  if (inputGuideLinks) {
+    output.favorite_links = normalizeFavoriteLinks(input.favorite_links, makeDefaultFavoriteLinks());
+    output.guide_links = normalizeFavoriteLinks(input.guide_links, makeDefaultGuideLinks());
+  } else if (inputFavoriteLinks) {
+    const guideCandidates = inputFavoriteLinks.filter(linkLooksLikeGuide);
+    output.favorite_links = normalizeFavoriteLinks(inputFavoriteLinks.filter((link) => !linkLooksLikeGuide(link)), makeDefaultFavoriteLinks());
+    output.guide_links = normalizeFavoriteLinks(guideCandidates.length ? guideCandidates : undefined, makeDefaultGuideLinks());
+  } else {
+    output.favorite_links = normalizeFavoriteLinks(undefined, makeDefaultFavoriteLinks());
+    output.guide_links = normalizeFavoriteLinks(undefined, makeDefaultGuideLinks());
+  }
 
   if (output.settings.active_user_id === "guest") {
     output.settings.active_user_id = "grandpa";
@@ -601,14 +623,11 @@ export function getCalendarEventsForWeek(state, date = new Date()) {
 }
 
 export function getFavoriteLinks(state) {
-  return normalizeFavoriteLinks(state.favorite_links);
+  return normalizeFavoriteLinks(state.favorite_links, makeDefaultFavoriteLinks());
 }
 
 export function getGuideLinks(state) {
-  return getFavoriteLinks(state).filter((link) => {
-    const haystack = `${link.category} ${link.category_zh} ${link.title} ${link.title_zh}`;
-    return /game|guide/i.test(haystack) || haystack.includes("\u653b\u7565");
-  });
+  return normalizeFavoriteLinks(state.guide_links, makeDefaultGuideLinks());
 }
 
 export function getAllEventCategories(state) {
