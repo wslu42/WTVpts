@@ -136,7 +136,7 @@ function makeDefaultGuideLinks() {
     {
       id: "acnh_bugs",
       title: "Animal Crossing bugs",
-      title_zh: "動物森友會：昆蟲圖鑑",
+      title_zh: "動森：昆蟲圖鑑",
       url: "https://animalcrossing.fandom.com/zh/wiki/%E6%98%86%E8%9F%B2_(%E9%9B%86%E5%90%88%E5%95%A6%EF%BC%81%E5%8B%95%E7%89%A9%E6%A3%AE%E5%8F%8B%E6%9C%83)",
       category: "Game Guides",
       category_zh: "遊戲攻略",
@@ -146,7 +146,7 @@ function makeDefaultGuideLinks() {
     {
       id: "acnh_fish",
       title: "Animal Crossing fish",
-      title_zh: "動物森友會：魚類圖鑑",
+      title_zh: "動森：魚類圖鑑",
       url: "https://animalcrossing.fandom.com/zh/wiki/%E9%AD%9A%E9%A1%9E_(%E9%9B%86%E5%90%88%E5%95%A6%EF%BC%81%E5%8B%95%E7%89%A9%E6%A3%AE%E5%8F%8B%E6%9C%83)",
       category: "Game Guides",
       category_zh: "遊戲攻略",
@@ -1229,3 +1229,4 @@ export function setParentPin(state, newPin) {
 }
 
 export { STORAGE_KEY };
+
