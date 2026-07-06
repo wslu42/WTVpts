@@ -688,6 +688,119 @@ th {
   gap: 8px;
 }
 
+.portal-nav {
+  margin: 12px 0;
+}
+
+.sub-nav {
+  margin: 8px 0 14px;
+}
+
+.portal-grid,
+.link-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.portal-card,
+.link-card {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  min-height: 132px;
+  text-decoration: none;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  padding: 14px;
+  box-shadow: 0 3px 12px rgba(20, 35, 42, 0.05);
+}
+
+.portal-card:hover,
+.link-card:hover {
+  border-color: var(--active-border);
+  background: var(--surface-alt);
+}
+
+.portal-card strong,
+.link-card strong {
+  font-size: 1.12rem;
+}
+
+.calendar-week {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(150px, 1fr));
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.calendar-day {
+  min-width: 150px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fbfdff;
+  padding: 10px;
+}
+
+.calendar-day.is-today {
+  border-color: var(--active-border);
+  background: var(--active-bg);
+}
+
+.calendar-day h3 {
+  margin-top: 0;
+  font-size: 1rem;
+}
+
+.calendar-event-list {
+  display: grid;
+  gap: 8px;
+}
+
+.calendar-event {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  padding: 9px;
+}
+
+.calendar-event.is-done {
+  opacity: 0.65;
+}
+
+.calendar-event.is-done strong {
+  text-decoration: line-through;
+}
+
+.calendar-event-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+}
+
+.calendar-event-check span {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.calendar-form {
+  display: grid;
+  grid-template-columns: minmax(180px, 2fr) minmax(140px, 1fr) minmax(110px, 0.8fr) minmax(130px, 1fr);
+  gap: 8px;
+  align-items: center;
+}
+
+.calendar-form input[name="note"] {
+  grid-column: span 2;
+}
+
 .health-header {
   display: flex;
   justify-content: space-between;
@@ -846,8 +959,18 @@ th {
   }
 
   .health-form,
-  .health-form-grid {
+  .health-form-grid,
+  .calendar-form {
     grid-template-columns: 1fr;
+  }
+
+  .portal-grid,
+  .link-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .calendar-form input[name="note"] {
+    grid-column: auto;
   }
 
   .health-record-row {

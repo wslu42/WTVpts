@@ -19,11 +19,19 @@ import {
   addWeightRecord,
   deleteWeightRecord,
   addBloodPressureRecord,
-  deleteBloodPressureRecord
+  deleteBloodPressureRecord,
+  upsertCalendarEvent,
+  toggleCalendarEventDone,
+  deleteCalendarEvent
 } from "./state.js";
 import {
   renderNavActive,
+  renderOverview,
   renderHome,
+  renderCalendarToday,
+  renderCalendarWeek,
+  renderFavoriteLinks,
+  renderGuideCenter,
   renderUserDashboard,
   renderUserHealth,
   renderUserHistory,
@@ -93,7 +101,7 @@ async function syncAmbientAudio(enabled, fromUserGesture = false, state = null) 
 }
 
 function parseRoute(hash) {
-  const raw = hash.replace(/^#/, "") || "/home";
+  const raw = hash.replace(/^#/, "") || "/overview";
   const path = raw.startsWith("/") ? raw : `/${raw}`;
   const parts = path.split("/").filter(Boolean);
 
@@ -110,8 +118,15 @@ function parseRoute(hash) {
     };
   }
 
+  if (parts[0] === "overview" || parts.length === 0) return { kind: "overview", raw: path, top: "overview" };
+  if (parts[0] === "calendar") {
+    const section = parts[1] === "today" ? "today" : "week";
+    return { kind: "calendar", section, raw: path, top: "calendar" };
+  }
+  if (parts[0] === "links") return { kind: "links", raw: path, top: "links" };
+  if (parts[0] === "guides") return { kind: "guides", raw: path, top: "guides" };
   if (parts[0] === "settings") return { kind: "settings", raw: path, top: "settings" };
-  if (parts[0] === "home" || parts.length === 0) return { kind: "home", raw: path, top: "home" };
+  if (parts[0] === "home") return { kind: "home", raw: path, top: "home" };
   return { kind: "alias", alias: parts[0], raw: path, top: parts[0] === "manage-events" ? "manage" : parts[0] };
 }
 
@@ -422,7 +437,7 @@ export function createController(getState, setState, rerender) {
     const form = event.target;
     if (!(form instanceof HTMLFormElement)) return;
     const action = form.getAttribute("data-action");
-    if (action !== "add-weight-record" && action !== "add-bp-record") return;
+    if (action !== "add-weight-record" && action !== "add-bp-record" && action !== "add-calendar-event") return;
     event.preventDefault();
 
     const state = getState();
@@ -432,6 +447,25 @@ export function createController(getState, setState, rerender) {
     const lang = getLanguage(state);
     const userId = form.getAttribute("data-user-id") || state.settings.active_user_id;
     const data = formDataObject(form);
+
+    if (action === "add-calendar-event") {
+      const assignedTo = String(data.assigned_to || "").trim();
+      const result = upsertCalendarEvent(state, {
+        title: data.title,
+        date: data.date,
+        time: data.time,
+        category: data.category,
+        assigned_to: assignedTo ? [assignedTo] : [],
+        note: data.note
+      });
+      if (!result.ok) return showToast(localizedError(state, result.error), true);
+      applyState(result.state);
+      resetSubmittedForm(form);
+      const dateInput = form.querySelector("[name='date']");
+      if (dateInput instanceof HTMLInputElement) dateInput.value = result.event.date;
+      showToast(t(lang, "calendarEventSaved"));
+      return;
+    }
 
     if (action === "add-weight-record") {
       const result = addWeightRecord(state, userId, {
@@ -573,6 +607,26 @@ export function createController(getState, setState, rerender) {
       if (!result.ok) return showToast(localizedError(state, result.error), true);
       applyState(result.state);
       showToast(t(lang, "bloodPressureDeleted"));
+      return;
+    }
+
+    if (action === "toggle-calendar-event") {
+      const eventId = target.getAttribute("data-event-id");
+      if (!eventId) return;
+      const result = toggleCalendarEventDone(state, eventId);
+      if (!result.ok) return showToast(localizedError(state, result.error), true);
+      applyState(result.state);
+      return;
+    }
+
+    if (action === "delete-calendar-event") {
+      const eventId = target.getAttribute("data-event-id");
+      if (!eventId) return;
+      if (!window.confirm(t(lang, "deleteCalendarEventConfirm"))) return;
+      const result = deleteCalendarEvent(state, eventId);
+      if (!result.ok) return showToast(localizedError(state, result.error), true);
+      applyState(result.state);
+      showToast(t(lang, "calendarEventDeleted"));
       return;
     }
 
@@ -861,7 +915,7 @@ export function createController(getState, setState, rerender) {
     const state = getState();
     enforceSyncKeyPromptIfNeeded();
     ensureAutoSyncLoop();
-    const route = parseRoute(window.location.hash || "#/home");
+    const route = parseRoute(window.location.hash || "#/overview");
     const activeUserId = state.settings.active_user_id;
 
     if (route.kind === "alias") {
@@ -881,14 +935,38 @@ export function createController(getState, setState, rerender) {
 
     renderNavActive(route, activeUserId);
 
+    if (route.kind === "overview") {
+      app.innerHTML = renderOverview(state);
+      syncAmbientAudio(Boolean(state.settings?.sound_enabled), false, state);
+      return;
+    }
+
     if (route.kind === "home") {
       app.innerHTML = renderHome(state);
       syncAmbientAudio(Boolean(state.settings?.sound_enabled), false, state);
       return;
     }
 
+    if (route.kind === "calendar") {
+      app.innerHTML = route.section === "today" ? renderCalendarToday(state) : renderCalendarWeek(state);
+      syncAmbientAudio(Boolean(state.settings?.sound_enabled), false, state);
+      return;
+    }
+
+    if (route.kind === "links") {
+      app.innerHTML = renderFavoriteLinks(state);
+      syncAmbientAudio(Boolean(state.settings?.sound_enabled), false, state);
+      return;
+    }
+
+    if (route.kind === "guides") {
+      app.innerHTML = renderGuideCenter(state);
+      syncAmbientAudio(Boolean(state.settings?.sound_enabled), false, state);
+      return;
+    }
+
     if (route.kind === "settings") {
-      app.innerHTML = renderHome(state, renderSettings(state, { syncKeySet: Boolean(getSyncKey()) }));
+      app.innerHTML = renderSettings(state, { syncKeySet: Boolean(getSyncKey()) });
       syncAmbientAudio(Boolean(state.settings?.sound_enabled), false, state);
       return;
     }

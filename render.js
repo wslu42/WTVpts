@@ -7,6 +7,11 @@ import {
   getUserRewards,
   getUserWeightRecords,
   getUserBloodPressureRecords,
+  getCalendarEventsForDate,
+  getCalendarEventsForWeek,
+  getFavoriteLinks,
+  getGuideLinks,
+  toLocalDateKey,
   getAllEventCategories,
   getAllRewardCategories,
   listCategories,
@@ -17,6 +22,7 @@ import {
 import {
   ZH_TW_LANGUAGE,
   displayCategory,
+  displayLocalizedField,
   displayUserName,
   formatDateForLanguage,
   formatShortDateForLanguage,
@@ -67,10 +73,63 @@ function userSummaryCard(state, user) {
   `;
 }
 
+function renderPortalNav(activeKey, lang) {
+  const icon = (key) =>
+    ({
+      overview: "🏠",
+      calendar: "📅",
+      home: "⭐",
+      links: "🔗",
+      guides: "🎮",
+      settings: "⚙️"
+    })[key] || "";
+  const tabs = [
+    { key: "overview", label: t(lang, "overview"), href: "#/overview" },
+    { key: "calendar", label: t(lang, "familyCalendar"), href: "#/calendar/week" },
+    { key: "home", label: t(lang, "familyDashboard"), href: "#/home" },
+    { key: "links", label: t(lang, "favoriteLinks"), href: "#/links" },
+    { key: "guides", label: t(lang, "guideCenter"), href: "#/guides" },
+    { key: "settings", label: t(lang, "settings"), href: "#/settings" }
+  ];
+  return `
+    <nav class="nav-links portal-nav" aria-label="${t(lang, "overview")}">
+      ${tabs.map((tab) => `<a href="${tab.href}" class="${activeKey === tab.key ? "active" : ""}">${icon(tab.key)} ${tab.label}</a>`).join("")}
+    </nav>
+  `;
+}
+
+function renderPortalHeader(state, activeKey, title, description = "") {
+  const lang = getLanguage(state);
+  const nextLang = lang === ZH_TW_LANGUAGE ? "en" : ZH_TW_LANGUAGE;
+  const nextLangLabel = lang === ZH_TW_LANGUAGE ? t(lang, "languageEnglish") : t(lang, "languageTaiwan");
+  const icon =
+    {
+      overview: "🏠",
+      calendar: "📅",
+      home: "⭐",
+      links: "🔗",
+      guides: "🎮",
+      settings: "⚙️"
+    }[activeKey] || "";
+  return `
+    <div class="home-header">
+      <div>
+        <h1 class="page-title">${icon ? `${icon} ` : ""}${title}</h1>
+        ${description ? `<p class="muted">${description}</p>` : ""}
+      </div>
+      <div class="inline-row">
+        <button class="btn-secondary home-settings-btn" data-action="switch-language" data-language="${nextLang}">${nextLangLabel}</button>
+        <a class="btn-secondary home-settings-btn" href="#/settings">${t(lang, "settings")}</a>
+      </div>
+    </div>
+    ${renderPortalNav(activeKey, lang)}
+  `;
+}
+
 export function renderNavActive(route, activeUserId) {
   if (route.top === "settings") {
     document.body.setAttribute("data-user-theme", "system");
-  } else if (route.kind === "home") {
+  } else if (route.kind === "home" || route.kind === "overview" || route.kind === "calendar" || route.kind === "links" || route.kind === "guides") {
     document.body.setAttribute("data-user-theme", "system");
   } else if (route.kind === "user" && route.userId) {
     document.body.setAttribute("data-user-theme", route.userId);
@@ -105,16 +164,236 @@ export function renderHome(state, embeddedHtml = "") {
   return `
     <section class="card">
       <div class="home-header">
-        <h1 class="page-title"><a class="home-title-link" href="#/home">${t(lang, "dashboardHome")}</a></h1>
+        <h1 class="page-title"><a class="home-title-link" href="#/home">⭐ ${t(lang, "familyDashboard")}</a></h1>
         <div class="inline-row">
           <button class="btn-secondary home-settings-btn" data-action="switch-language" data-language="${nextLang}">${nextLangLabel}</button>
           <button class="btn-secondary home-settings-btn" data-action="toggle-sound" aria-pressed="${soundEnabled ? "true" : "false"}">${soundEnabled ? t(lang, "soundOn") : t(lang, "soundOff")}</button>
           <a class="btn-secondary home-settings-btn" href="#/settings">${t(lang, "settings")}</a>
         </div>
       </div>
+      ${renderPortalNav("home", lang)}
       <p class="muted">${t(lang, "chooseUserCard")}</p>
       <div class="grid-2">${cards}</div>
       ${embeddedHtml ? `<div class="section-divider" aria-hidden="true"></div><div class="home-embedded">${embeddedHtml}</div>` : ""}
+    </section>
+  `;
+}
+
+function formatDateHeading(lang, dateKey) {
+  const date = new Date(`${dateKey}T00:00:00`);
+  return date.toLocaleDateString(lang === ZH_TW_LANGUAGE ? "zh-TW" : undefined, {
+    weekday: "short",
+    month: "short",
+    day: "numeric"
+  });
+}
+
+function renderCalendarEventList(events, lang) {
+  if (!events.length) {
+    return `<div class="empty">${t(lang, "noCalendarEvents")}</div>`;
+  }
+  return `
+    <div class="calendar-event-list">
+      ${events
+        .map(
+          (event) => `
+        <article class="calendar-event ${event.done ? "is-done" : ""}">
+          <label class="calendar-event-check">
+            <input type="checkbox" data-action="toggle-calendar-event" data-event-id="${escapeHtml(event.id)}" ${event.done ? "checked" : ""} />
+            <span>
+              <strong>${escapeHtml(event.title)}</strong>
+              <span class="muted">${event.time ? `${escapeHtml(event.time)} | ` : ""}${escapeHtml(event.category)}</span>
+              ${event.note ? `<span class="muted">${escapeHtml(event.note)}</span>` : ""}
+            </span>
+          </label>
+          <button class="btn-delete-subtle" data-action="delete-calendar-event" data-event-id="${escapeHtml(event.id)}">${t(lang, "delete")}</button>
+        </article>
+      `
+        )
+        .join("")}
+    </div>
+  `;
+}
+
+function renderCalendarForm(state, dateKey, lang) {
+  return `
+    <form class="calendar-form" data-action="add-calendar-event">
+      <input name="title" type="text" maxlength="120" placeholder="${t(lang, "title")}" required />
+      <input name="date" type="date" value="${escapeHtml(dateKey)}" required />
+      <input name="time" type="time" />
+      <input name="category" type="text" maxlength="60" placeholder="${t(lang, "category")}" value="${t(lang, "family")}" />
+      <select name="assigned_to">
+        <option value="">${t(lang, "everyone")}</option>
+        ${state.users.map((user) => `<option value="${escapeHtml(user.id)}">${escapeHtml(displayUserName(lang, user))}</option>`).join("")}
+      </select>
+      <input name="note" type="text" maxlength="180" placeholder="${t(lang, "noteOptional")}" />
+      <button class="btn-primary" type="submit">${t(lang, "addCalendarEvent")}</button>
+    </form>
+  `;
+}
+
+export function renderOverview(state) {
+  const lang = getLanguage(state);
+  const todayKey = toLocalDateKey(new Date());
+  const todayEvents = getCalendarEventsForDate(state, todayKey);
+  const remaining = todayEvents.filter((event) => !event.done).length;
+  const cards = [
+    {
+      href: "#/calendar/today",
+      title: t(lang, "todayTasks"),
+      meta: t(lang, "todayTaskCount", { count: remaining }),
+      body: t(lang, "todayTasksDescription")
+    },
+    {
+      href: "#/calendar/week",
+      title: t(lang, "familyCalendar"),
+      meta: t(lang, "thisWeek"),
+      body: t(lang, "familyCalendarDescription")
+    },
+    {
+      href: "#/home",
+      title: t(lang, "familyDashboard"),
+      meta: t(lang, "pointsRewards"),
+      body: t(lang, "familyDashboardDescription")
+    },
+    {
+      href: "#/links",
+      title: t(lang, "favoriteLinks"),
+      meta: t(lang, "quickAccess"),
+      body: t(lang, "favoriteLinksDescription")
+    },
+    {
+      href: "#/guides",
+      title: t(lang, "guideCenter"),
+      meta: t(lang, "gameGuides"),
+      body: t(lang, "guideCenterDescription")
+    },
+    {
+      href: "#/settings",
+      title: t(lang, "settings"),
+      meta: t(lang, "importExport"),
+      body: t(lang, "settingsDescription")
+    }
+  ];
+  return `
+    <section class="card">
+      ${renderPortalHeader(state, "overview", t(lang, "familyPortal"), t(lang, "familyPortalDescription"))}
+      <div class="portal-grid">
+        ${cards
+          .map(
+            (card) => `
+          <a class="portal-card" href="${card.href}">
+            <span class="badge">${card.meta}</span>
+            <strong>${card.title}</strong>
+            <span class="muted">${card.body}</span>
+          </a>
+        `
+          )
+          .join("")}
+      </div>
+    </section>
+  `;
+}
+
+export function renderCalendarToday(state) {
+  const lang = getLanguage(state);
+  const todayKey = toLocalDateKey(new Date());
+  const events = getCalendarEventsForDate(state, todayKey);
+  return `
+    <section class="card">
+      ${renderPortalHeader(state, "calendar", t(lang, "todayTasks"), formatDateHeading(lang, todayKey))}
+      ${renderCalendarEventList(events, lang)}
+      <div class="section-divider" aria-hidden="true"></div>
+      <h2>${t(lang, "addCalendarEvent")}</h2>
+      ${renderCalendarForm(state, todayKey, lang)}
+    </section>
+  `;
+}
+
+export function renderCalendarWeek(state) {
+  const lang = getLanguage(state);
+  const todayKey = toLocalDateKey(new Date());
+  const days = getCalendarEventsForWeek(state);
+  return `
+    <section class="card">
+      ${renderPortalHeader(state, "calendar", t(lang, "familyCalendar"), t(lang, "familyCalendarDescription"))}
+      <nav class="nav-links sub-nav" aria-label="${t(lang, "familyCalendar")}">
+        <a href="#/calendar/today">${t(lang, "todayTasks")}</a>
+        <a class="active" href="#/calendar/week">${t(lang, "thisWeek")}</a>
+      </nav>
+      <div class="calendar-week">
+        ${days
+          .map(
+            (day) => `
+          <section class="calendar-day ${day.date === todayKey ? "is-today" : ""}">
+            <h3>${escapeHtml(formatDateHeading(lang, day.date))}</h3>
+            ${renderCalendarEventList(day.events, lang)}
+          </section>
+        `
+          )
+          .join("")}
+      </div>
+      <div class="section-divider" aria-hidden="true"></div>
+      <h2>${t(lang, "addCalendarEvent")}</h2>
+      ${renderCalendarForm(state, todayKey, lang)}
+    </section>
+  `;
+}
+
+function renderLinksByCategory(links, lang, options = {}) {
+  const compact = Boolean(options.compact);
+  if (!links.length) {
+    return `<div class="empty">${t(lang, "noFavoriteLinks")}</div>`;
+  }
+  const linkTitle = (link) => displayLocalizedField(lang, link, "title");
+  const linkCategory = (link) => displayLocalizedField(lang, link, "category");
+  const linkNote = (link) => displayLocalizedField(lang, link, "note");
+  const categories = [...new Set(links.map(linkCategory))].sort((a, b) => a.localeCompare(b));
+  return categories
+    .map((category) => {
+      const rows = links.filter((link) => linkCategory(link) === category);
+      return `
+        <section class="category-block">
+          <h2 class="category-title">${escapeHtml(category)}</h2>
+          <div class="link-grid">
+            ${rows
+              .map(
+                (link) => `
+              <a class="link-card" href="${escapeHtml(link.url)}" target="_blank" rel="noreferrer">
+                <strong>${escapeHtml(linkTitle(link))}</strong>
+                ${
+                  compact
+                    ? ""
+                    : `${linkNote(link) ? `<span class="muted">${escapeHtml(linkNote(link))}</span>` : ""}
+                <span class="muted">${escapeHtml(link.url)}</span>`
+                }
+              </a>
+            `
+              )
+              .join("")}
+          </div>
+        </section>
+      `;
+    })
+    .join("");
+}
+
+export function renderFavoriteLinks(state) {
+  const lang = getLanguage(state);
+  return `
+    <section class="card">
+      ${renderPortalHeader(state, "links", t(lang, "favoriteLinks"), t(lang, "favoriteLinksDescription"))}
+      ${renderLinksByCategory(getFavoriteLinks(state), lang)}
+    </section>
+  `;
+}
+
+export function renderGuideCenter(state) {
+  const lang = getLanguage(state);
+  return `
+    <section class="card">
+      ${renderPortalHeader(state, "guides", t(lang, "guideCenter"), t(lang, "guideCenterDescription"))}
+      ${renderLinksByCategory(getGuideLinks(state), lang, { compact: true })}
     </section>
   `;
 }
@@ -609,8 +888,7 @@ export function renderSettings(state, syncMeta = {}) {
 
   return `
     <section class="card">
-      <h1 class="page-title">${t(lang, "settings")}</h1>
-      <p class="muted">${t(lang, "backupRestoreSafety")}</p>
+      ${renderPortalHeader(state, "settings", t(lang, "settings"), t(lang, "backupRestoreSafety"))}
     </section>
 
     <section class="card">

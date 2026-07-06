@@ -22,7 +22,7 @@ function boot() {
   controller = createController(getState, setState, rerender);
 
   if (!window.location.hash) {
-    window.location.hash = "#/home";
+    window.location.hash = "#/overview";
   }
 
   window.addEventListener("hashchange", controller.onRouteChange);

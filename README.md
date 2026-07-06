@@ -10,6 +10,9 @@ A pure static, vanilla HTML/CSS/JS app for a family points and rewards system.
 - Per-user history with filters and newest-first sort
 - User workspace flow: Home -> User -> Dashboard / History / Manage Events
 - User health tracking: kg weight records for every user, plus Grandpa-only blood pressure records
+- Family portal overview for iPad/phone use
+- Family calendar with Today and This Week views
+- Favorite links and guide center pages
 - English and Traditional Chinese (Taiwan) UI language support
 - Settings panel for JSON export/import, reset, and optional parent PIN guard
 - `Manage Events` includes both per-user `Redeem` and `Earning` event management
@@ -31,10 +34,15 @@ python -m http.server 8000
 3. Under `Build and deployment`, choose `Deploy from a branch`.
 4. Select branch (usually `main`) and folder (`/root` or `/docs`).
 5. Save and wait for deployment.
-6. Visit your Pages URL and use routes like `#/home`, `#/user/will`, `#/user/will/manage-events`, etc.
+6. Visit your Pages URL and use routes like `#/overview`, `#/home`, `#/calendar/today`, `#/user/will`, `#/user/will/manage-events`, etc.
 
 ## Routes
+- `#/overview`
 - `#/home`
+- `#/calendar/today`
+- `#/calendar/week`
+- `#/links`
+- `#/guides`
 - `#/user/<id>` (user dashboard)
 - `#/user/<id>/health`
 - `#/user/<id>/history`
@@ -54,6 +62,8 @@ python -m http.server 8000
 - Events are stored per-user in `events_by_user`
 - Rewards are stored per-user in `rewards_by_user`
 - Health records are stored per-user in `health_by_user`
+- Calendar events are stored in `calendar_events`
+- Favorite links are stored in `favorite_links`
 - UI language is stored in `settings.language` as `en` or `zh-Hant-TW`
 - Export creates `data.json` with the exact current state
 - Import validates shape and replaces current state

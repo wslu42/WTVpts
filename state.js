@@ -1,5 +1,5 @@
-import { seedState } from "./seed-data.js";
 import { DEFAULT_LANGUAGE, normalizeLanguage } from "./i18n.js";
+import { seedState } from "./seed-data.js";
 
 const STORAGE_KEY = "family_points_v2_seed_data_json";
 const DEFAULT_SYNC_URL = "https://wtvpts-sync.wslu42-wtvpts.workers.dev";
@@ -74,6 +74,8 @@ function cloneSeedState() {
     ...cloned,
     users,
     health_by_user: makeDefaultHealthByUser(users),
+    calendar_events: [],
+    favorite_links: makeDefaultFavoriteLinks(),
     settings: {
       parent_pin_hash: "",
       sound_enabled: false,
@@ -84,6 +86,80 @@ function cloneSeedState() {
   };
 }
 
+function makeDefaultFavoriteLinks() {
+  return [
+    {
+      id: "acnh_flower_breeding",
+      title: "Animal Crossing flower breeding chart",
+      title_zh: "動物森友會：花朵雜交表",
+      url: "https://truth.bahamut.com.tw/s01/202004/53515a36c2eec732d17fbab797c024d6.JPG",
+      category: "Game Guides",
+      category_zh: "遊戲攻略",
+      note: "Animal Crossing: New Horizons",
+      note_zh: "集合啦！動物森友會"
+    },
+    {
+      id: "acnh_flower_guide",
+      title: "Animal Crossing flower guide",
+      title_zh: "動物森友會：花朵攻略",
+      url: "https://vocus.cc/article/6a0dd8acfd89780001adb745",
+      category: "Game Guides",
+      category_zh: "遊戲攻略",
+      note: "Animal Crossing: New Horizons",
+      note_zh: "集合啦！動物森友會"
+    },
+    {
+      id: "acnh_turnip_price",
+      title: "Animal Crossing turnip price guide",
+      title_zh: "動物森友會：大頭菜價格",
+      url: "https://forum.gamer.com.tw/C.php?bsn=7287&snA=7276",
+      category: "Game Guides",
+      category_zh: "遊戲攻略",
+      note: "Animal Crossing: New Horizons",
+      note_zh: "集合啦！動物森友會"
+    },
+    {
+      id: "acnh_mystery_islands",
+      title: "Animal Crossing mystery islands",
+      title_zh: "動物森友會：素材島整理",
+      url: "https://www.tech-girlz.com/2020/05/ac-mystery-islands.html",
+      category: "Game Guides",
+      category_zh: "遊戲攻略",
+      note: "Animal Crossing: New Horizons",
+      note_zh: "集合啦！動物森友會"
+    },
+    {
+      id: "acnh_bugs",
+      title: "Animal Crossing bugs",
+      title_zh: "動物森友會：昆蟲圖鑑",
+      url: "https://animalcrossing.fandom.com/zh/wiki/%E6%98%86%E8%9F%B2_(%E9%9B%86%E5%90%88%E5%95%A6%EF%BC%81%E5%8B%95%E7%89%A9%E6%A3%AE%E5%8F%8B%E6%9C%83)",
+      category: "Game Guides",
+      category_zh: "遊戲攻略",
+      note: "Animal Crossing: New Horizons",
+      note_zh: "集合啦！動物森友會"
+    },
+    {
+      id: "acnh_fish",
+      title: "Animal Crossing fish",
+      title_zh: "動物森友會：魚類圖鑑",
+      url: "https://animalcrossing.fandom.com/zh/wiki/%E9%AD%9A%E9%A1%9E_(%E9%9B%86%E5%90%88%E5%95%A6%EF%BC%81%E5%8B%95%E7%89%A9%E6%A3%AE%E5%8F%8B%E6%9C%83)",
+      category: "Game Guides",
+      category_zh: "遊戲攻略",
+      note: "Animal Crossing: New Horizons",
+      note_zh: "集合啦！動物森友會"
+    },
+    {
+      id: "tos_guide",
+      title: "Tower of Saviors Guide",
+      title_zh: "神魔之塔攻略",
+      url: "https://towerofsaviors.fandom.com/wiki/Tower_of_Saviors_Wiki",
+      category: "Game Guides",
+      category_zh: "遊戲攻略",
+      note: "Tower of Saviors",
+      note_zh: "神魔之塔"
+    }
+  ];
+}
 function makeDefaultHealthByUser(users) {
   const out = {};
   for (const user of users) {
@@ -184,6 +260,68 @@ function normalizeHealthForUsers(inputHealthByUser, users) {
   return out;
 }
 
+function normalizeDateKey(value) {
+  const raw = String(value || "").trim();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
+  const parsed = new Date(raw);
+  if (!Number.isNaN(parsed.getTime())) return toLocalDateKey(parsed);
+  return toLocalDateKey(new Date());
+}
+
+function normalizeTimeValue(value) {
+  const raw = String(value || "").trim();
+  return /^\d{2}:\d{2}$/.test(raw) ? raw : "";
+}
+
+function normalizeCalendarEvent(event) {
+  return {
+    id: String(event?.id || createId()),
+    title: String(event?.title || "").trim(),
+    date: normalizeDateKey(event?.date),
+    time: normalizeTimeValue(event?.time),
+    category: String(event?.category || "Family").trim() || "Family",
+    assigned_to: Array.isArray(event?.assigned_to) ? event.assigned_to.map(String).filter(Boolean) : [],
+    done: toBoolean(event?.done),
+    repeat: "none",
+    note: String(event?.note || "").trim()
+  };
+}
+
+function isValidCalendarEvent(event) {
+  return Boolean(event && typeof event === "object" && String(event.title || "").trim());
+}
+
+function normalizeCalendarEvents(events) {
+  const rows = Array.isArray(events) ? events : [];
+  return rows.filter(isValidCalendarEvent).map(normalizeCalendarEvent).sort(sortCalendarEvents);
+}
+
+function normalizeFavoriteLink(link) {
+  return {
+    id: String(link?.id || createId()),
+    title: String(link?.title || "").trim(),
+    title_zh: String(link?.title_zh || "").trim(),
+    url: String(link?.url || "").trim(),
+    category: String(link?.category || "General").trim() || "General",
+    category_zh: String(link?.category_zh || "").trim(),
+    note: String(link?.note || "").trim(),
+    note_zh: String(link?.note_zh || "").trim()
+  };
+}
+
+function isValidFavoriteLink(link) {
+  return Boolean(link && typeof link === "object" && String(link.title || "").trim() && /^https?:\/\//i.test(String(link.url || "")));
+}
+
+function normalizeFavoriteLinks(links) {
+  const rows = Array.isArray(links) ? links : makeDefaultFavoriteLinks();
+  return rows.filter(isValidFavoriteLink).map(normalizeFavoriteLink).sort((a, b) => {
+    const byCategory = a.category.localeCompare(b.category, undefined, { sensitivity: "base" });
+    if (byCategory !== 0) return byCategory;
+    return a.title.localeCompare(b.title, undefined, { sensitivity: "base" });
+  });
+}
+
 function roundToTenth(value) {
   return Math.round(value * 10) / 10;
 }
@@ -197,6 +335,20 @@ function toBoolean(value) {
 
 function sortNewestByTs(a, b) {
   return b.ts - a.ts;
+}
+
+function sortCalendarEvents(a, b) {
+  if (a.date !== b.date) return a.date.localeCompare(b.date);
+  if (a.time !== b.time) return String(a.time || "99:99").localeCompare(String(b.time || "99:99"));
+  return String(a.title || "").localeCompare(String(b.title || ""), undefined, { sensitivity: "base" });
+}
+
+export function toLocalDateKey(date) {
+  const dt = date instanceof Date ? date : new Date(date);
+  const year = dt.getFullYear();
+  const month = String(dt.getMonth() + 1).padStart(2, "0");
+  const day = String(dt.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
 export function makeDefaultState() {
@@ -269,6 +421,8 @@ function migrate(input) {
     }
   };
   output.health_by_user = normalizeHealthForUsers(input.health_by_user, users);
+  output.calendar_events = normalizeCalendarEvents(input.calendar_events);
+  output.favorite_links = normalizeFavoriteLinks(input.favorite_links);
 
   if (output.settings.active_user_id === "guest") {
     output.settings.active_user_id = "grandpa";
@@ -344,7 +498,7 @@ function migrate(input) {
     );
   });
 
-  output.version = 2;
+  output.version = 3;
 
   return output;
 }
@@ -378,8 +532,8 @@ export function resetState() {
 }
 
 export function createId() {
-  if (window.crypto && typeof window.crypto.randomUUID === "function") {
-    return window.crypto.randomUUID();
+  if (globalThis.crypto && typeof globalThis.crypto.randomUUID === "function") {
+    return globalThis.crypto.randomUUID();
   }
   return `id_${Date.now()}_${Math.random().toString(16).slice(2)}`;
 }
@@ -415,6 +569,46 @@ export function getUserBloodPressureRecords(state, userId) {
   if (userId !== "grandpa") return [];
   const rows = getUserHealth(state, userId).blood_pressure_records;
   return Array.isArray(rows) ? [...rows].sort(sortNewestByTs) : [];
+}
+
+export function getCalendarEvents(state) {
+  return normalizeCalendarEvents(state.calendar_events);
+}
+
+export function getCalendarEventsForDate(state, dateKey) {
+  const target = normalizeDateKey(dateKey);
+  return getCalendarEvents(state).filter((event) => event.date === target);
+}
+
+export function getCalendarEventsForWeek(state, date = new Date()) {
+  const current = date instanceof Date ? new Date(date) : new Date(date);
+  current.setHours(0, 0, 0, 0);
+  const day = current.getDay();
+  const start = new Date(current);
+  start.setDate(current.getDate() - day);
+  const days = [];
+  const events = getCalendarEvents(state);
+  for (let i = 0; i < 7; i += 1) {
+    const dateObj = new Date(start);
+    dateObj.setDate(start.getDate() + i);
+    const key = toLocalDateKey(dateObj);
+    days.push({
+      date: key,
+      events: events.filter((event) => event.date === key)
+    });
+  }
+  return days;
+}
+
+export function getFavoriteLinks(state) {
+  return normalizeFavoriteLinks(state.favorite_links);
+}
+
+export function getGuideLinks(state) {
+  return getFavoriteLinks(state).filter((link) => {
+    const haystack = `${link.category} ${link.category_zh} ${link.title} ${link.title_zh}`;
+    return /game|guide/i.test(haystack) || haystack.includes("\u653b\u7565");
+  });
 }
 
 export function getAllEventCategories(state) {
@@ -576,6 +770,51 @@ export function setLanguage(state, language) {
     settings: {
       ...state.settings,
       language: normalizeLanguage(language)
+    }
+  };
+}
+
+export function upsertCalendarEvent(state, payload) {
+  if (!isValidCalendarEvent(payload)) {
+    return { ok: false, error: "Calendar event title is required." };
+  }
+  const current = getCalendarEvents(state);
+  const event = normalizeCalendarEvent({
+    ...payload,
+    id: payload?.id || createId()
+  });
+  const exists = current.some((row) => row.id === event.id);
+  const nextEvents = exists ? current.map((row) => (row.id === event.id ? event : row)) : [...current, event];
+  return {
+    ok: true,
+    state: {
+      ...state,
+      calendar_events: nextEvents.sort(sortCalendarEvents)
+    },
+    event
+  };
+}
+
+export function toggleCalendarEventDone(state, eventId) {
+  const current = getCalendarEvents(state);
+  const found = current.find((event) => event.id === eventId);
+  if (!found) return { ok: false, error: "Calendar event not found." };
+  return {
+    ok: true,
+    state: {
+      ...state,
+      calendar_events: current.map((event) => (event.id === eventId ? { ...event, done: !event.done } : event))
+    }
+  };
+}
+
+export function deleteCalendarEvent(state, eventId) {
+  const current = getCalendarEvents(state);
+  return {
+    ok: true,
+    state: {
+      ...state,
+      calendar_events: current.filter((event) => event.id !== eventId)
     }
   };
 }
