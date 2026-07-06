@@ -73,6 +73,18 @@ function userSummaryCard(state, user) {
   `;
 }
 
+function portalIcon(key) {
+  const icons = {
+    overview: "\u{1F3E0}",
+    calendar: "\u{1F4C5}",
+    home: "\u2B50",
+    links: "\u{1F517}",
+    guides: "\u{1F3AE}",
+    settings: "\u2699\uFE0F"
+  };
+  return icons[key] || "";
+}
+
 function renderPortalNav(activeKey, lang) {
   const icon = (key) =>
     ({
@@ -93,7 +105,7 @@ function renderPortalNav(activeKey, lang) {
   ];
   return `
     <nav class="nav-links portal-nav" aria-label="${t(lang, "overview")}">
-      ${tabs.map((tab) => `<a href="${tab.href}" class="${activeKey === tab.key ? "active" : ""}">${icon(tab.key)} ${tab.label}</a>`).join("")}
+      ${tabs.map((tab) => `<a href="${tab.href}" class="${activeKey === tab.key ? "active" : ""}">${portalIcon(tab.key)} ${tab.label}</a>`).join("")}
     </nav>
   `;
 }
@@ -114,7 +126,7 @@ function renderPortalHeader(state, activeKey, title, description = "") {
   return `
     <div class="home-header">
       <div>
-        <h1 class="page-title">${icon ? `${icon} ` : ""}${title}</h1>
+        <h1 class="page-title">${portalIcon(activeKey) ? `${portalIcon(activeKey)} ` : ""}${title}</h1>
         ${description ? `<p class="muted">${description}</p>` : ""}
       </div>
       <div class="inline-row">
@@ -246,30 +258,35 @@ export function renderOverview(state) {
     },
     {
       href: "#/calendar/week",
+      key: "calendar",
       title: t(lang, "familyCalendar"),
       meta: t(lang, "thisWeek"),
       body: t(lang, "familyCalendarDescription")
     },
     {
       href: "#/home",
+      key: "home",
       title: t(lang, "familyDashboard"),
       meta: t(lang, "pointsRewards"),
       body: t(lang, "familyDashboardDescription")
     },
     {
       href: "#/links",
+      key: "links",
       title: t(lang, "favoriteLinks"),
       meta: t(lang, "quickAccess"),
       body: t(lang, "favoriteLinksDescription")
     },
     {
       href: "#/guides",
+      key: "guides",
       title: t(lang, "guideCenter"),
       meta: t(lang, "gameGuides"),
       body: t(lang, "guideCenterDescription")
     },
     {
       href: "#/settings",
+      key: "settings",
       title: t(lang, "settings"),
       meta: t(lang, "importExport"),
       body: t(lang, "settingsDescription")
@@ -284,7 +301,7 @@ export function renderOverview(state) {
             (card) => `
           <a class="portal-card" href="${card.href}">
             <span class="badge">${card.meta}</span>
-            <strong>${card.title}</strong>
+            <strong>${card.key ? `${portalIcon(card.key)} ` : ""}${card.title}</strong>
             <span class="muted">${card.body}</span>
           </a>
         `
