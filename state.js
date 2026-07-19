@@ -134,6 +134,16 @@ function makeDefaultGuideLinks() {
       note_zh: "集合啦！動物森友會"
     },
     {
+      id: "acnh_special_islands",
+      title: "Animal Crossing special islands",
+      title_zh: "動森：航平島",
+      url: "https://www.entertainment14.net/blog/post/110975494-%e9%9b%86%e5%90%88%e5%95%a6-%e5%8b%95%e7%89%a9%e6%a3%ae%e5%8f%8b%e6%9c%83-%e8%88%aa%e5%b9%b3%e6%97%85%e8%a1%8c%e8%83%bd%e5%8e%bb%e7%9a%84%e7%89%b9%e6%ae%8a%e5%b3%b6%e4%b8%80%e8%a6%bd",
+      category: "Game Guides",
+      category_zh: "遊戲攻略",
+      note: "Animal Crossing: New Horizons",
+      note_zh: "集合啦！動物森友會"
+    },
+    {
       id: "acnh_bugs",
       title: "Animal Crossing bugs",
       title_zh: "動森：昆蟲圖鑑",
