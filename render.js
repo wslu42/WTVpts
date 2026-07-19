@@ -389,6 +389,7 @@ function renderLinksByCategory(links, lang, options = {}) {
       acnh_flower_guide: "\u{1F33C}",
       acnh_turnip_price: "\u{1F5BC}\uFE0F",
       acnh_mystery_islands: "\u{1F3DD}\uFE0F",
+      acnh_special_islands: "\u{1F6E5}\uFE0F",
       acnh_bugs: "\u{1FAB2}",
       acnh_fish: "\u{1F41F}",
       tos_guide: "\u{1F9E9}"
