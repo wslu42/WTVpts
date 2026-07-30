@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "users": [
     {
       "id": "mom",
@@ -4364,7 +4364,7 @@
     "parent_pin_hash": "",
     "sound_enabled": false,
     "github_sync_url": "https://wtvpts-sync.wslu42-wtvpts.workers.dev",
-    "language": "zh-Hant-TW",
+    "language": "en",
     "active_user_id": "will",
     "cleanup_non_willow_done": true,
     "cleanup_willow_done": true,
@@ -4391,5 +4391,89 @@
     "niece": {
       "weight_records": []
     }
-  }
+  },
+  "calendar_events": [],
+  "favorite_links": [],
+  "guide_links": [
+    {
+      "id": "acnh_bugs",
+      "title": "Animal Crossing bugs",
+      "title_zh": "動森：昆蟲圖鑑",
+      "url": "https://animalcrossing.fandom.com/zh/wiki/%E6%98%86%E8%9F%B2_(%E9%9B%86%E5%90%88%E5%95%A6%EF%BC%81%E5%8B%95%E7%89%A9%E6%A3%AE%E5%8F%8B%E6%9C%83)",
+      "category": "Game Guides",
+      "category_zh": "遊戲攻略",
+      "note": "Animal Crossing: New Horizons",
+      "note_zh": "集合啦！動物森友會"
+    },
+    {
+      "id": "acnh_fish",
+      "title": "Animal Crossing fish",
+      "title_zh": "動森：魚類圖鑑",
+      "url": "https://animalcrossing.fandom.com/zh/wiki/%E9%AD%9A%E9%A1%9E_(%E9%9B%86%E5%90%88%E5%95%A6%EF%BC%81%E5%8B%95%E7%89%A9%E6%A3%AE%E5%8F%8B%E6%9C%83)",
+      "category": "Game Guides",
+      "category_zh": "遊戲攻略",
+      "note": "Animal Crossing: New Horizons",
+      "note_zh": "集合啦！動物森友會"
+    },
+    {
+      "id": "acnh_flower_breeding",
+      "title": "Animal Crossing flower breeding chart",
+      "title_zh": "動森：花色圖(可能有誤)",
+      "url": "https://truth.bahamut.com.tw/s01/202004/53515a36c2eec732d17fbab797c024d6.JPG",
+      "category": "Game Guides",
+      "category_zh": "遊戲攻略",
+      "note": "Animal Crossing: New Horizons",
+      "note_zh": "集合啦！動物森友會"
+    },
+    {
+      "id": "acnh_flower_guide",
+      "title": "Animal Crossing flower guide",
+      "title_zh": "動森：花色培育",
+      "url": "https://vocus.cc/article/6a0dd8acfd89780001adb745",
+      "category": "Game Guides",
+      "category_zh": "遊戲攻略",
+      "note": "Animal Crossing: New Horizons",
+      "note_zh": "集合啦！動物森友會"
+    },
+    {
+      "id": "acnh_mystery_islands",
+      "title": "Animal Crossing mystery islands",
+      "title_zh": "動森：素材島",
+      "url": "https://www.tech-girlz.com/2020/05/ac-mystery-islands.html",
+      "category": "Game Guides",
+      "category_zh": "遊戲攻略",
+      "note": "Animal Crossing: New Horizons",
+      "note_zh": "集合啦！動物森友會"
+    },
+    {
+      "id": "acnh_special_islands",
+      "title": "Animal Crossing special islands",
+      "title_zh": "動森：航平島",
+      "url": "https://www.entertainment14.net/blog/post/110975494-%e9%9b%86%e5%90%88%e5%95%a6-%e5%8b%95%e7%89%a9%e6%a3%ae%e5%8f%8b%e6%9c%83-%e8%88%aa%e5%b9%b3%e6%97%85%e8%a1%8c%e8%83%bd%e5%8e%bb%e7%9a%84%e7%89%b9%e6%ae%8a%e5%b3%b6%e4%b8%80%e8%a6%bd",
+      "category": "Game Guides",
+      "category_zh": "遊戲攻略",
+      "note": "Animal Crossing: New Horizons",
+      "note_zh": "集合啦！動物森友會"
+    },
+    {
+      "id": "acnh_turnip_price",
+      "title": "Animal Crossing turnip price guide",
+      "title_zh": "動森：美術品",
+      "url": "https://forum.gamer.com.tw/C.php?bsn=7287&snA=7276",
+      "category": "Game Guides",
+      "category_zh": "遊戲攻略",
+      "note": "Animal Crossing: New Horizons",
+      "note_zh": "集合啦！動物森友會"
+    },
+    {
+      "id": "tos_guide",
+      "title": "Tower of Saviors Guide",
+      "title_zh": "神魔之塔攻略",
+      "url": "https://towerofsaviors.fandom.com/wiki/Tower_of_Saviors_Wiki",
+      "category": "Game Guides",
+      "category_zh": "遊戲攻略",
+      "note": "Tower of Saviors",
+      "note_zh": "神魔之塔"
+    }
+  ]
 }
